@@ -166,6 +166,7 @@ body {
 .rest-btn {
   &::after {
     content: url('/client-rest.svg');
+    top: 5px;
   }
 }
 
