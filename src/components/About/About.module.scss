@@ -1,0 +1,41 @@
+.description {
+  max-width: 740px;
+  text-align: center;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+
+  .team {
+    display: flex;
+    gap: 24px;
+
+    .member {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      justify-content: space-between;
+      padding: 25px 10px 10px;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 15px;
+      transition: all 0.2s ease-in;
+
+      &:hover {
+        background-color: rgba(181, 180, 255, 0.116);
+        color: rgb(199, 199, 199);
+      }
+
+      .disc {
+        font-size: 12px;
+      }
+
+      .photo {
+        border-radius: 20px;
+      }
+    }
+  }
+}
