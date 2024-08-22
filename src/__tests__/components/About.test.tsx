@@ -7,7 +7,7 @@ describe('About Component', () => {
   test('renders the main description', () => {
     render(<About />);
 
-    expect(screen.getByText(/Welcome to the home of DreamTeam!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome to the home/i)).toBeInTheDocument();
   });
 
   test('renders team members with their details and images', () => {

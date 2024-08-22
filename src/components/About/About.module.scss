@@ -9,6 +9,11 @@
   align-items: center;
   gap: 48px;
 
+  .strong {
+    color: #949494;
+    font-weight: 500;
+  }
+
   .team {
     display: flex;
     gap: 24px;

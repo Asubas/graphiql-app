@@ -5,10 +5,10 @@ export default function About() {
   return (
     <div className={styles.about}>
       <article className={styles.description}>
-        Welcome to the home of DreamTeam! We are a team of budding developers, unafraid of
-        challenges and always moving forward. Our application is built to assist others by enabling
-        requests to any open APIs. Whether you&apos;re making RESTful requests or diving into
-        GraphQL, our platform is designed to empower your projects.
+        Welcome to the home of <span className={styles.strong}>DreamTeam</span>! We are a team of
+        budding developers, unafraid of challenges and always moving forward. Our application is
+        built to assist others by enabling requests to any open APIs. Whether you&apos;re making
+        RESTful requests or diving into GraphQL, our platform is designed to empower your projects.
       </article>
       <div className={styles.team}>
         <a className={styles.member} href="https://github.com/Asubas" target="_blank">
