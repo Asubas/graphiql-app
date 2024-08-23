@@ -1,0 +1,54 @@
+.footer {
+  width: 100svw;
+  background-color: #1d1b1f;
+}
+
+.footerWrap {
+  max-width: 1024px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0.5rem 6rem;
+
+  @media (max-width: 1020px) {
+    padding: 4rem;
+  }
+
+  @media (max-width: 956px) {
+    padding: 2rem;
+  }
+
+  @media (max-width: 670px) {
+    padding: 1rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 0.5rem;
+
+    .linksWrap {
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      .link {
+        color: #8d81ff;
+        text-decoration: none;
+        transition: all 0.2s ease-in;
+
+        &:hover {
+          color: #655cb3;
+        }
+      }
+    }
+  }
+
+  a .rsLogo {
+    transition: all 0.5s ease-in-out;
+    &:hover {
+      transform: translateX(10px) rotate(1080deg);
+    }
+  }
+}
