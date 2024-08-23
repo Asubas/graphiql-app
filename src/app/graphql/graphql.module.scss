@@ -55,6 +55,9 @@
     color: #a64c01;
     background-color: #000000;
     border: 1px solid #f5deb3;
+    width: 100px;
+    align-self: center;
+
     &:hover {
       color: #f5deb3;
     }
@@ -69,6 +72,11 @@
 
 .header {
   display: block;
+  width: 100%;
+
+  &* {
+    width: 100%;
+  }
 }
 
 .form {

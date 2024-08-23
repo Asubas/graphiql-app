@@ -4,17 +4,40 @@ import pages from './graphql.module.scss';
 import { useState } from 'react';
 import { GraphQLResponse, FormData } from '@/src/components/interfaces/graphQlInterface';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
-import { Button } from '@mui/material';
+import { Button, TextField, styled } from '@mui/material';
+import { sendResponse } from './sendResponse';
+import MyTextField from './testTextField';
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& label': {
+    color: 'orange', // Цвет для label
+  },
+  '& .MuiInputBase-input': {
+    color: 'orange', // Цвет текста
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.warning.main, // Цвет границы в обычном состоянии
+  },
+  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.warning.main, // Цвет границы при наведении
+  },
+  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: theme.palette.warning.main, // Цвет границы при фокусе
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'orange', // Цвет label при фокусе
+  },
+}));
 
 const GraphQLClient = () => {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset, setValue } = useForm<FormData>();
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, sdlUrl, headers, query, variables } = data;
     const headersObj: Record<string, string> = {};
-    console.log('вызывалас');
+
     if (headers) {
       const headerArray = headers.split(',');
       headerArray.forEach((header: string) => {
@@ -23,23 +46,13 @@ const GraphQLClient = () => {
       });
     }
 
-    try {
-      const res = await fetch(endpointUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...headersObj,
-        },
-        body: JSON.stringify({
-          query,
-          variables: variables ? JSON.parse(variables) : null,
-        }),
-      });
-
-      const result = await res.json();
-      setResponse(result);
-      setStatus(res.status);
-    } catch (error) {
+    const { result, status } = await sendResponse(endpointUrl, headersObj, query, variables);
+    if (result) {
+      console.log(result);
+      setResponse(result as GraphQLResponse);
+      setStatus(status);
+      setValue('variables', JSON.stringify(result.variables, null, 2));
+    } else {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
     }
@@ -77,16 +90,19 @@ const GraphQLClient = () => {
         <div className={pages.response}>
           <p> Response: </p>
           <p>Status: {status ? status : 'null'}</p>
-          <TextFieldInput
-            label="Body:"
-            multilineArea
-            rows={20}
-            InputProps={{
-              readOnly: true,
-              variant: 'outlined-multiline-static',
-            }}
-            defaultValue={response ? JSON.stringify(response, null, 2) : 'null'}
-          />
+          {/* <TextField
+            className={`${pages.area}`}
+            id={'outlined-basic'}
+            label="Body: "
+            variant="outlined"
+            size="small"
+            color="warning"
+            multiline
+            rows={25}
+            defaultValue=""
+            value={response ? JSON.stringify(response, null, 2) : 'null'}
+          /> */}
+          <MyTextField response={response ? response : 'null'} />
         </div>
         <p>
           Documentation:{' '}
