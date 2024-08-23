@@ -22,7 +22,7 @@ export default function Welcome() {
       </div>
       <div className={styles.welcome}>
         <p className={styles.head}>Welcome back, {'< USERNAME >'}!</p>
-        <div className={styles.buttonWrap}>
+        <div className={styles.btnPrivate}>
           <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
           <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
           <PrivateBtn className="btnPrivate history-btn" label="History" />

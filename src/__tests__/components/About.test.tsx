@@ -46,7 +46,7 @@ describe('About Component', () => {
       { name: 'Daria (pdasya)', link: 'https://github.com/pdasya' },
     ];
 
-    const linkElements = screen.getAllByRole('link');
+    const linkElements = screen.getAllByTestId('team-member-link');
     members.forEach((member, index) => {
       const linkElement = linkElements[index];
       expect(linkElement).toHaveAttribute('href', member.link);
