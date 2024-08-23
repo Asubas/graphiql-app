@@ -1,0 +1,76 @@
+.graphql,
+.graphql-container,
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+  padding: 10px;
+
+  .graphql-container,
+  .response-container {
+    border: 1px solid white;
+    border-radius: 5px;
+    gap: 20px;
+    height: max-content;
+  }
+
+  .response-container {
+    flex: 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: max-content;
+    padding: 10px;
+  }
+
+  .response {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid white;
+    border-radius: 5px;
+    width: 70%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .endpoints {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      width: 100%;
+    }
+  }
+
+  .submit {
+    color: #a64c01;
+    background-color: #000000;
+    border: 1px solid #f5deb3;
+    &:hover {
+      color: #f5deb3;
+    }
+  }
+}
+
+.graphql {
+  width: 100%;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.header {
+  display: block;
+}
+
+.form {
+  align-items: unset;
+}
