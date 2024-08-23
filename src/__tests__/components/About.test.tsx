@@ -17,7 +17,7 @@ describe('About Component', () => {
       {
         name: 'Alex (Asubas)',
         details: 'Team lead, developer Russia, Yaroslavl',
-        altText: 'Photo of developer Anton',
+        altText: 'Photo of developer Alex',
       },
       {
         name: 'Anton (lipan4836)',
@@ -27,13 +27,13 @@ describe('About Component', () => {
       {
         name: 'Daria (pdasya)',
         details: 'developer Japan, Tsukuba',
-        altText: 'Photo of developer Anton',
+        altText: 'Photo of developer Daria',
       },
     ];
 
     members.forEach((member) => {
       expect(screen.getByRole('heading', { name: member.name })).toBeInTheDocument();
-      expect(screen.getAllByAltText(member.altText)).toHaveLength(3);
+      expect(screen.getByAltText(member.altText)).toBeInTheDocument();
     });
   });
 

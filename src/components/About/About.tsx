@@ -44,7 +44,7 @@ export default function About() {
               src="/photo-alexey.jpg"
               width={80}
               height={80}
-              alt="Photo of developer Anton"
+              alt="Photo of developer Alex"
             />
           </a>
           <a
@@ -88,7 +88,7 @@ export default function About() {
               src="/photo-daria.jpg"
               width={80}
               height={80}
-              alt="Photo of developer Anton"
+              alt="Photo of developer Daria"
             />
           </a>
         </div>
