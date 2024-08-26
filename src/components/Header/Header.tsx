@@ -31,6 +31,10 @@ export default function Header() {
     setMenuOpen(!menuOpen);
   };
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <header className={`${styles.header} ${shrink ? styles.shrink : ''}`}>
       <div className={styles.headerWrap}>
@@ -44,7 +48,35 @@ export default function Header() {
           />
           <h1 className={styles.heading}>API Client</h1>
         </Link>
-        <nav className={styles.nav}>
+        <svg
+          id="burger-icon"
+          className={`${styles.burgerIcon} ${menuOpen ? styles.active : ''}`}
+          onClick={toggleMenu}
+          viewBox="0 0 100 100"
+          width="40"
+          height="40"
+          data-testid="burger-icon"
+        >
+          <rect className={`${styles.line} ${styles.top}`} x="10" y="25" width="80" height="10" />
+          <rect
+            className={`${styles.line} ${styles.middle}`}
+            x="10"
+            y="45"
+            width="80"
+            height="10"
+          />
+          <rect
+            className={`${styles.line} ${styles.bottom}`}
+            x="10"
+            y="65"
+            width="80"
+            height="10"
+          />
+        </svg>
+        <nav
+          className={`${styles.nav} ${menuOpen ? styles.active : ''}`}
+          onClick={(e) => e.stopPropagation()} // Предотвращаем закрытие при клике на nav
+        >
           <div className={styles.buttonsLang}>
             <input type="radio" id="option-one" name="selector" />
             <label htmlFor="option-one">EN</label>
@@ -69,31 +101,9 @@ export default function Header() {
             />
           </div>
         </nav>
-        <svg
-          id="burger-icon"
-          className={`${styles.burgerIcon} ${menuOpen ? styles.active : ''}`}
-          onClick={toggleMenu}
-          viewBox="0 0 100 100"
-          width="40"
-          height="40"
-        >
-          <rect className={`${styles.line} ${styles.top}`} x="10" y="25" width="80" height="10" />
-          <rect
-            className={`${styles.line} ${styles.middle}`}
-            x="10"
-            y="45"
-            width="80"
-            height="10"
-          />
-          <rect
-            className={`${styles.line} ${styles.bottom}`}
-            x="10"
-            y="65"
-            width="80"
-            height="10"
-          />
-        </svg>
       </div>
+
+      {menuOpen && <div onClick={closeMenu} className={styles.overlay} data-testid="overlay"></div>}
     </header>
   );
 }
