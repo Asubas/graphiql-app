@@ -54,6 +54,11 @@ function TextFieldInput<TFieldValues extends FieldValues>({
       {...register}
       InputProps={{
         ...InputProps,
+        onChange: (e) => {
+          if (InputProps.onChange) {
+            InputProps.onChange(e);
+          }
+        },
       }}
       defaultValue={defaultValue}
     />

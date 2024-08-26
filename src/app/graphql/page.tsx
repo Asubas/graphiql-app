@@ -1,47 +1,26 @@
 'use client';
-import { useForm } from 'react-hook-form';
 import pages from './graphql.module.scss';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { GraphQLResponse, FormData } from '@/src/components/interfaces/graphQlInterface';
+import { Button, TextField } from '@mui/material';
+import { sendResponse } from '../../services/responses/sendResponse';
+import { RequestTextField } from '../../components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
-import { Button, TextField, styled } from '@mui/material';
-import { sendResponse } from './sendResponse';
-import MyTextField from './testTextField';
-
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  '& label': {
-    color: 'orange', // Цвет для label
-  },
-  '& .MuiInputBase-input': {
-    color: 'orange', // Цвет текста
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.warning.main, // Цвет границы в обычном состоянии
-  },
-  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.warning.main, // Цвет границы при наведении
-  },
-  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.warning.main, // Цвет границы при фокусе
-  },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: 'orange', // Цвет label при фокусе
-  },
-}));
 
 const GraphQLClient = () => {
   const { register, handleSubmit, reset, setValue } = useForm<FormData>();
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
-
+  const [headersList, setHeadersList] = useState<{ key: string; value: string }[]>([
+    { key: '', value: '' },
+  ]);
   const onSubmit = async (data: FormData) => {
-    const { endpointUrl, sdlUrl, headers, query, variables } = data;
+    const { endpointUrl, sdlUrl, headersKey, headersValue, query, variables } = data;
     const headersObj: Record<string, string> = {};
 
-    if (headers) {
-      const headerArray = headers.split(',');
-      headerArray.forEach((header: string) => {
-        const [key, value] = header.split(':');
+    if (headersKey && headersValue) {
+      headersList.forEach(({ key, value }: { key: string; value: string }) => {
         headersObj[key.trim()] = value.trim();
       });
     }
@@ -58,6 +37,20 @@ const GraphQLClient = () => {
     }
   };
 
+  const handleHeaderKeyChange = (index: number, value: string) => {
+    const newHeadersList = [...headersList];
+    newHeadersList[index].key = value;
+    if (value.trim() && newHeadersList.length === index + 1) {
+      newHeadersList.push({ key: '', value: '' });
+    }
+    setHeadersList(newHeadersList);
+  };
+  const handleHeaderValueChange = (index: number, value: string) => {
+    const newHeadersList = [...headersList];
+    newHeadersList[index].value = value;
+    setHeadersList(newHeadersList);
+  };
+
   return (
     <section className={pages.graphql}>
       <section className={pages['graphql-container']}>
@@ -67,11 +60,27 @@ const GraphQLClient = () => {
             <TextFieldInput label="Endpoint Url:" register={register('endpointUrl')} />
             <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
           </div>
-          <TextFieldInput
-            label="Headers(key: value):"
-            register={register('headers')}
-            customClass={pages.header}
-          />
+          <p className={pages.headerTitle}>Headers:</p>
+          <div className={pages.headers}>
+            {headersList.map((header, index) => (
+              <div key={index} className={pages.headersContainer}>
+                <TextFieldInput
+                  label="Key:"
+                  customClass={pages.header}
+                  InputProps={{
+                    onChange: (e) => handleHeaderKeyChange(index, e.target.value),
+                  }}
+                />
+                <TextFieldInput
+                  label="Value:"
+                  customClass={pages.header}
+                  InputProps={{
+                    onChange: (e) => handleHeaderValueChange(index, e.target.value),
+                  }}
+                />
+              </div>
+            ))}
+          </div>
           <Button className={pages.submit} variant="contained" type="submit">
             Submit
           </Button>
@@ -87,22 +96,10 @@ const GraphQLClient = () => {
         </form>
       </section>
       <section className={pages['response-container']}>
+        <p> Response</p>
         <div className={pages.response}>
-          <p> Response: </p>
-          <p>Status: {status ? status : 'null'}</p>
-          {/* <TextField
-            className={`${pages.area}`}
-            id={'outlined-basic'}
-            label="Body: "
-            variant="outlined"
-            size="small"
-            color="warning"
-            multiline
-            rows={25}
-            defaultValue=""
-            value={response ? JSON.stringify(response, null, 2) : 'null'}
-          /> */}
-          <MyTextField response={response ? response : 'null'} />
+          <p>Status: {status ? status : ''}</p>
+          <RequestTextField response={response ? response : ''} />
         </div>
         <p>
           Documentation:{' '}

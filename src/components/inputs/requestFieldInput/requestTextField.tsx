@@ -1,5 +1,4 @@
 import { TextField, styled } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& label': {
@@ -22,7 +21,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MyTextField({ response }) {
+function RequestTextField({ response }: { response: unknown }) {
   return (
     <StyledTextField
       id={'outlined-basic'}
@@ -32,10 +31,10 @@ function MyTextField({ response }) {
       color="warning"
       multiline
       rows={25}
-      defaultValue=""
-      value={response ? JSON.stringify(response, null, 2) : 'null'}
+      fullWidth={true}
+      value={response ? JSON.stringify(response, null, 2) : ''}
     />
   );
 }
 
-export default MyTextField;
+export { RequestTextField };
