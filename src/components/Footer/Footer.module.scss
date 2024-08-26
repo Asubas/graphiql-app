@@ -9,19 +9,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  padding: 0.5rem 6rem;
-
-  @media (max-width: 1020px) {
-    padding: 4rem;
-  }
-
-  @media (max-width: 956px) {
-    padding: 2rem;
-  }
-
-  @media (max-width: 670px) {
-    padding: 1rem;
-  }
+  padding: 0.5rem 0;
 
   .links {
     display: flex;
@@ -43,6 +31,10 @@
         }
       }
     }
+  }
+
+  .rsLink {
+    margin-left: 39.7px;
   }
 
   a .rsLogo {

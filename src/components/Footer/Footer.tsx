@@ -28,7 +28,7 @@ export default function Footer() {
         <time className={styles.created} dateTime="2024">
           2024
         </time>
-        <a href="https://rs.school/courses" target="_blank">
+        <a className={styles.rsLink} href="https://rs.school/courses" target="_blank">
           <Image
             className={styles.rsLogo}
             src="/rs-logo.svg"
