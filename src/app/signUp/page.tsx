@@ -17,9 +17,42 @@ import { db } from '../../utils/firestore';
 const SignUp: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setEmailError(null);
+    setPasswordError(null);
+
+    let isValid = true;
+
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email address');
+      isValid = false;
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError(
+        'Password must be at least 8 characters long, contain at least one letter, one digit, and one special character.',
+      );
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -32,9 +65,13 @@ const SignUp: FC = () => {
       });
 
       alert('User created successfully!');
+      setEmail('');
+      setPassword('');
     } catch (error) {
       console.error('Error signing up:', error);
       alert((error as Error).message);
+      setEmail('');
+      setPassword('');
     }
   };
 
@@ -49,10 +86,11 @@ const SignUp: FC = () => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        minHeight: '400px',
       }}
     >
       <h1 className={style.header}>Sign Up</h1>
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={handleSignUp} noValidate>
         <Grid container spacing={2} direction="column">
           <Grid item xs={12}>
             <TextField
@@ -61,7 +99,10 @@ const SignUp: FC = () => {
               variant="outlined"
               type="email"
               required
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={!!emailError}
+              helperText={emailError || ' '}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -78,7 +119,10 @@ const SignUp: FC = () => {
               variant="outlined"
               type="password"
               required
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={!!passwordError}
+              helperText={passwordError || ' '}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
