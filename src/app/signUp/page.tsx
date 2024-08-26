@@ -5,22 +5,28 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import style from './page.module.css';
 import InputAdornment from '@mui/material/InputAdornment';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
 import { auth } from '../../utils/auth';
 import { db } from '../../utils/firestore';
 import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
+import style from './page.module.css';
 
 const SignUp: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -125,7 +131,7 @@ const SignUp: FC = () => {
               fullWidth
               label="Password"
               variant="outlined"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -135,6 +141,17 @@ const SignUp: FC = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}

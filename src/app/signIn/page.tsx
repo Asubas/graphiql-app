@@ -8,6 +8,9 @@ import Container from '@mui/material/Container';
 import InputAdornment from '@mui/material/InputAdornment';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../utils/auth';
 import style from './page.module.css';
@@ -19,7 +22,9 @@ const SignIn: FC = () => {
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [generalError, setGeneralError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,7 +42,6 @@ const SignIn: FC = () => {
     let valid = true;
     setEmailError(null);
     setPasswordError(null);
-    setGeneralError(null);
 
     if (!validateEmail(email)) {
       setEmailError('Invalid email address');
@@ -117,7 +121,7 @@ const SignIn: FC = () => {
               fullWidth
               label="Password"
               variant="outlined"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -129,14 +133,20 @@ const SignIn: FC = () => {
                     <LockIcon />
                   </InputAdornment>
                 ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
           </Grid>
-          {generalError && (
-            <Grid item xs={12}>
-              <div style={{ color: 'red', textAlign: 'center' }}>{generalError}</div>
-            </Grid>
-          )}
           <Grid item xs={12}>
             <Button fullWidth variant="contained" color="primary" type="submit">
               Submit
