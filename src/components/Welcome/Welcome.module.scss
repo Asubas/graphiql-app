@@ -1,0 +1,23 @@
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+
+  .head {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .buttonWrap,
+  .btnPrivate {
+    display: flex;
+    gap: 24px;
+  }
+
+  .btnPrivate {
+    @media (max-width: 670px) {
+      flex-direction: column;
+    }
+  }
+}
