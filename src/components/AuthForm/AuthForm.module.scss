@@ -14,3 +14,12 @@
   transform: translate(-50%, -50%);
   min-height: 350px;
 }
+
+.navigationLink {
+  display: flex;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

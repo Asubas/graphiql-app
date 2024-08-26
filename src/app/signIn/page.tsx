@@ -6,12 +6,16 @@ import { auth } from '../../utils/auth';
 import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
+import { useRouter } from 'next/navigation';
 
 const SignIn: React.FC = () => {
+  const router = useRouter();
+
   const handleSignIn = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success('You are successfully logged in');
+      router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
