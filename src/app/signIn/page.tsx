@@ -11,6 +11,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../utils/auth';
 import style from './page.module.css';
+import { toast } from 'react-toastify';
+import { FirebaseError } from 'firebase/app';
 
 const SignIn: FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -55,10 +57,21 @@ const SignIn: FC = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert('Logged in successfully!');
+      toast.success('You are successfully logged in');
     } catch (error) {
-      setGeneralError('Invalid email or password');
-      console.error('Error signing in:', error);
+      const firebaseError = error as FirebaseError;
+      if (firebaseError) {
+        console.log(firebaseError.code);
+        if (firebaseError.code === 'auth/invalid-credential') {
+          toast.error(
+            'User with this credentials is not exist. Please check the email and password.',
+          );
+        } else if (firebaseError.code === 'auth/too-many-requests') {
+          toast.error('Too many requests at the same time. Please try later.');
+        }
+      } else {
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
