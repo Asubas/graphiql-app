@@ -16,7 +16,10 @@ const SignUp: FC = () => {
         backgroundColor: '#f5f5f5',
         padding: 5,
         borderRadius: 2,
-        marginTop: 40,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       <h1 className={style.header}>Sign In</h1>
