@@ -15,6 +15,7 @@
   .headerWrap {
     max-width: 1024px;
     margin: 0 auto;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -82,6 +83,28 @@
         gap: 1rem;
         justify-content: space-between;
       }
+    }
+  }
+
+  .burgerIcon {
+    cursor: pointer;
+    .line {
+      fill: white;
+      transition: all 0.3s ease;
+    }
+  }
+
+  .active {
+    .top {
+      transform: translateX(36px) translateY(-5px) rotate(45deg);
+    }
+
+    .middle {
+      opacity: 0;
+    }
+
+    .bottom {
+      transform: translateX(-34px) translateY(35px) rotate(-45deg);
     }
   }
 }

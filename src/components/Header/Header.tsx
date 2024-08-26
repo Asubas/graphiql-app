@@ -8,6 +8,7 @@ import HeaderAuthBtn from '../Buttons/HeaderAuthBtn/HeaderAuthBtn';
 
 export default function Header() {
   const [shrink, setShrink] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,10 @@ export default function Header() {
 
   const handleClick = () => {
     console.log('header click');
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
   return (
@@ -64,6 +69,30 @@ export default function Header() {
             />
           </div>
         </nav>
+        <svg
+          id="burger-icon"
+          className={`${styles.burgerIcon} ${menuOpen ? styles.active : ''}`}
+          onClick={toggleMenu}
+          viewBox="0 0 100 100"
+          width="40"
+          height="40"
+        >
+          <rect className={`${styles.line} ${styles.top}`} x="10" y="25" width="80" height="10" />
+          <rect
+            className={`${styles.line} ${styles.middle}`}
+            x="10"
+            y="45"
+            width="80"
+            height="10"
+          />
+          <rect
+            className={`${styles.line} ${styles.bottom}`}
+            x="10"
+            y="65"
+            width="80"
+            height="10"
+          />
+        </svg>
       </div>
     </header>
   );
