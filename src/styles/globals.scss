@@ -289,3 +289,14 @@ body {
     content: url('/history.svg');
   }
 }
+
+// ------------------- тестовая кнопка
+
+.btnTest {
+  position: fixed;
+  top: 100px;
+  left: 50px;
+  padding: 10px;
+  background: #2b2bff;
+  color: #d3d3d3;
+}

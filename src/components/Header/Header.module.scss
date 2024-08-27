@@ -101,6 +101,7 @@
     .headerBtn {
       display: flex;
       gap: 1rem;
+      align-items: center;
       justify-content: space-between;
     }
   }
@@ -145,6 +146,11 @@
   .burgerIcon.active .bottom {
     transform: translateX(-34px) translateY(35px) rotate(-45deg);
   }
+}
+
+.userName {
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .overlay {

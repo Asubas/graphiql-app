@@ -1,11 +1,33 @@
-import Header from '@/src/components/Header/Header';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Header from '@/src/components/Header/Header';
 
-window.scrollTo = jest.fn();
+interface MockProps {
+  onClick: () => void;
+  className: string;
+  'data-testid'?: string;
+}
 
-describe('Header component', () => {
+jest.mock('../../components/Buttons/HeaderAuthBtn/HeaderAuthBtn', () => {
+  const MockHeaderAuthBtn = ({ onClick, className, 'data-testid': testId }: MockProps) => (
+    <button className={className} onClick={onClick} data-testid={testId}>
+      Mock Button
+    </button>
+  );
+
+  MockHeaderAuthBtn.displayName = 'HeaderAuthBtn';
+
+  return MockHeaderAuthBtn;
+});
+
+describe('Header Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders the logo and heading', () => {
-    render(<Header />);
+    render(<Header isLogined={false} userName={null} />);
 
     const logo = screen.getByAltText('Client logo');
     expect(logo).toBeInTheDocument();
@@ -15,7 +37,7 @@ describe('Header component', () => {
   });
 
   it('renders language options', () => {
-    render(<Header />);
+    render(<Header isLogined={false} userName={null} />);
 
     const englishLabel = screen.getByLabelText('EN');
     const russianLabel = screen.getByLabelText('RU');
@@ -24,7 +46,7 @@ describe('Header component', () => {
   });
 
   it('shrinks the header on scroll', () => {
-    render(<Header />);
+    render(<Header isLogined={false} userName={null} />);
 
     const header = screen.getByRole('banner');
     expect(header).not.toHaveClass('shrink');
@@ -34,9 +56,9 @@ describe('Header component', () => {
     expect(header).toHaveClass('shrink');
   });
 
-  it('calls handleClick when header buttons are clicked', () => {
+  it('calls handleClick when signin/signup buttons are clicked when user is not logged in', () => {
     const consoleSpy = jest.spyOn(console, 'log');
-    render(<Header />);
+    render(<Header isLogined={false} userName={null} />);
 
     const signinButton = screen.getByTestId('signin-btn');
     fireEvent.click(signinButton);
@@ -46,6 +68,23 @@ describe('Header component', () => {
     fireEvent.click(signupButton);
     expect(consoleSpy).toHaveBeenCalledWith('header click');
 
+    consoleSpy.mockRestore();
+  });
+
+  it('renders username and logout button when user is logged in', () => {
+    render(<Header isLogined={true} userName="John Doe" />);
+
+    const userNameElement = screen.getByText('John Doe');
+    expect(userNameElement).toBeInTheDocument();
+
+    const logoutButton = screen.getByTestId('logout-btn');
+    expect(logoutButton).toBeInTheDocument();
+  });
+
+  it('calls handleClick when logout button is clicked when user is logged in', () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    render(<Header isLogined={true} userName="John Doe" />);
+
     const logoutButton = screen.getByTestId('logout-btn');
     fireEvent.click(logoutButton);
     expect(consoleSpy).toHaveBeenCalledWith('header click');
@@ -53,36 +92,34 @@ describe('Header component', () => {
     consoleSpy.mockRestore();
   });
 
-  it('toggles the nav menu when the burger icon is clicked', () => {
-    render(<Header />);
-
-    global.innerWidth = 500;
+  it('toggles menu on burger icon click', () => {
+    render(<Header isLogined={false} userName={null} />);
 
     const burgerIcon = screen.getByTestId('burger-icon');
-    const nav = screen.getByRole('navigation');
+    let overlay = screen.queryByTestId('overlay');
 
-    expect(nav).not.toHaveClass('active');
-
-    fireEvent.click(burgerIcon);
-    expect(nav).toHaveClass('active');
+    expect(overlay).not.toBeInTheDocument();
 
     fireEvent.click(burgerIcon);
-    expect(nav).not.toHaveClass('active');
+    overlay = screen.getByTestId('overlay');
+    expect(overlay).toBeInTheDocument();
+
+    fireEvent.click(burgerIcon);
+    overlay = screen.queryByTestId('overlay');
+    expect(overlay).not.toBeInTheDocument();
   });
 
-  it('closes the nav menu when clicking outside of it', () => {
-    render(<Header />);
-
-    global.innerWidth = 500;
+  it('locks scroll when menu is open', () => {
+    render(<Header isLogined={false} userName={null} />);
 
     const burgerIcon = screen.getByTestId('burger-icon');
-    const nav = screen.getByRole('navigation');
 
     fireEvent.click(burgerIcon);
-    expect(nav).toHaveClass('active');
+    expect(document.body).toHaveClass('bodyLock');
+    expect(document.documentElement).toHaveClass('bodyLock');
 
-    const overlay = screen.getByTestId('overlay');
-    fireEvent.click(overlay);
-    expect(nav).not.toHaveClass('active');
+    fireEvent.click(burgerIcon);
+    expect(document.body).not.toHaveClass('bodyLock');
+    expect(document.documentElement).not.toHaveClass('bodyLock');
   });
 });

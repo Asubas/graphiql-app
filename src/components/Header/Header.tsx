@@ -6,7 +6,12 @@ import styles from './Header.module.scss';
 import { useEffect, useState } from 'react';
 import HeaderAuthBtn from '../Buttons/HeaderAuthBtn/HeaderAuthBtn';
 
-export default function Header() {
+interface HeaderProps {
+  isLogined: boolean;
+  userName: string | null;
+}
+
+export default function Header({ isLogined, userName }: HeaderProps) {
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -94,21 +99,30 @@ export default function Header() {
             <label htmlFor="option-two">RU</label>
           </div>
           <div className={`buttonWrap ${styles.headerBtn}`}>
-            <HeaderAuthBtn
-              className="btnHeadSignin"
-              onClick={handleClick}
-              data-testid="signin-btn"
-            />
-            <HeaderAuthBtn
-              className="btnHeadSignup"
-              onClick={handleClick}
-              data-testid="signup-btn"
-            />
-            <HeaderAuthBtn
-              className="btnHeadLogout"
-              onClick={handleClick}
-              data-testid="logout-btn"
-            />
+            {!isLogined && (
+              <>
+                <HeaderAuthBtn
+                  className="btnHeadSignin"
+                  onClick={handleClick}
+                  data-testid="signin-btn"
+                />
+                <HeaderAuthBtn
+                  className="btnHeadSignup"
+                  onClick={handleClick}
+                  data-testid="signup-btn"
+                />
+              </>
+            )}
+            {isLogined && (
+              <>
+                <span className={styles.userName}>{userName}</span>
+                <HeaderAuthBtn
+                  className="btnHeadLogout"
+                  onClick={handleClick}
+                  data-testid="logout-btn"
+                />
+              </>
+            )}
           </div>
         </nav>
       </div>
