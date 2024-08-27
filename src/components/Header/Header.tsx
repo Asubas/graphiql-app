@@ -4,7 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import { useEffect, useState } from 'react';
-import HeaderAuthBtn from '../Buttons/HeaderAuthBtn/HeaderAuthBtn';
+import HeaderAuthBtn from '@/src/components/Buttons/HeaderAuthBtn/HeaderAuthBtn';
+import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
 
 interface HeaderProps {
   isLogined: boolean;
@@ -124,6 +125,22 @@ export default function Header({ isLogined, userName }: HeaderProps) {
               </>
             )}
           </div>
+          {isLogined && (
+            <div className={styles.btnsPrivateBurger}>
+              <PrivateBtn
+                className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}
+                label="REST Client"
+              />
+              <PrivateBtn
+                className={`btnPrivate graphql-btn ${styles.btnBurgerGraphql}`}
+                label="GraphQL Client"
+              />
+              <PrivateBtn
+                className={`btnPrivate history-btn ${styles.btnBurgerHistory}`}
+                label="History"
+              />
+            </div>
+          )}
         </nav>
       </div>
 

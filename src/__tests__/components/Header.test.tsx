@@ -21,6 +21,16 @@ jest.mock('../../components/Buttons/HeaderAuthBtn/HeaderAuthBtn', () => {
   return MockHeaderAuthBtn;
 });
 
+jest.mock('../../components/Buttons/PrivateBtn/PrivateBtn', () => {
+  const MockPrivateBtn = ({ className, label }: { className: string; label: string }) => (
+    <button className={className}>{label}</button>
+  );
+
+  MockPrivateBtn.displayName = 'PrivateBtn';
+
+  return MockPrivateBtn;
+});
+
 describe('Header Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -121,5 +131,20 @@ describe('Header Component', () => {
     fireEvent.click(burgerIcon);
     expect(document.body).not.toHaveClass('bodyLock');
     expect(document.documentElement).not.toHaveClass('bodyLock');
+  });
+
+  it('renders private buttons when user is logged in and menu is open', () => {
+    render(<Header isLogined={true} userName="John Doe" />);
+
+    const burgerIcon = screen.getByTestId('burger-icon');
+    fireEvent.click(burgerIcon);
+
+    const restBtn = screen.getByText('REST Client');
+    const graphqlBtn = screen.getByText('GraphQL Client');
+    const historyBtn = screen.getByText('History');
+
+    expect(restBtn).toBeInTheDocument();
+    expect(graphqlBtn).toBeInTheDocument();
+    expect(historyBtn).toBeInTheDocument();
   });
 });
