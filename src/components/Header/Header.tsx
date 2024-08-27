@@ -29,10 +29,20 @@ export default function Header() {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+
+    if (!menuOpen) {
+      document.body.classList.add(styles.bodyLock);
+      document.documentElement.classList.add(styles.bodyLock);
+    } else {
+      document.body.classList.remove(styles.bodyLock);
+      document.documentElement.classList.remove(styles.bodyLock);
+    }
   };
 
   const closeMenu = () => {
     setMenuOpen(false);
+    document.body.classList.remove(styles.bodyLock);
+    document.documentElement.classList.remove(styles.bodyLock);
   };
 
   return (
@@ -75,7 +85,7 @@ export default function Header() {
         </svg>
         <nav
           className={`${styles.nav} ${menuOpen ? styles.active : ''}`}
-          onClick={(e) => e.stopPropagation()} // Предотвращаем закрытие при клике на nav
+          onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.buttonsLang}>
             <input type="radio" id="option-one" name="selector" />

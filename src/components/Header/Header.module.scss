@@ -1,116 +1,10 @@
-// .header {
-//   width: 100%;
-//   background: #1d1b1f;
-//   padding: 1rem 0;
-//   position: fixed;
-//   top: 0;
-//   z-index: 20;
-//   transition: all 0.2s ease-in;
-
-//   &.shrink {
-//     height: 72px;
-//     padding: 0;
-//   }
-
-//   .headerWrap {
-//     max-width: 1024px;
-//     margin: 0 auto;
-//     padding: 0 10px;
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-
-//     .logo {
-//       width: 320px;
-//       display: flex;
-//       align-items: center;
-//       gap: 1rem;
-//       text-decoration: none;
-//       background:
-//         url('/header-bg-01.svg') no-repeat scroll 180px,
-//         url('/header-bg-03.svg') no-repeat scroll 250px;
-//       background-size: 90px, 60px;
-
-//       &:hover .heading {
-//         color: #f0eab3;
-//         transform: translateX(5px);
-//       }
-
-//       .heading {
-//         margin: 0;
-//         color: #f7f7f7;
-//         transition: all 0.2s ease-in;
-//       }
-//     }
-
-//     .nav {
-//       display: flex;
-//       align-items: center;
-
-//       .buttonsLang {
-//         border: solid 3px lighten(#332f35, 20%);
-//         display: inline-block;
-//         margin: 20px;
-//         border-radius: 10px;
-//         overflow: hidden;
-
-//         input[type='radio'] {
-//           position: absolute;
-//           visibility: hidden;
-//           display: none;
-//         }
-
-//         label {
-//           color: lighten(#332f35, 40%);
-//           display: inline-block;
-//           cursor: pointer;
-//           font-weight: bold;
-//           padding: 5px 20px;
-//         }
-
-//         input[type='radio']:checked + label {
-//           color: lighten(#332f35, 60%);
-//           background: lighten(#332f35, 20%);
-//         }
-
-//         label + input[type='radio'] + label {
-//           border-left: solid 3px lighten(#332f35, 20%);
-//         }
-//       }
-
-//       .headerBtn {
-//         display: flex;
-//         gap: 1rem;
-//         justify-content: space-between;
-//       }
-//     }
-//   }
-
-//   .burgerIcon {
-//     cursor: pointer;
-//     .line {
-//       fill: white;
-//       transition: all 0.3s ease;
-//     }
-//   }
-
-//   .active {
-//     .top {
-//       transform: translateX(36px) translateY(-5px) rotate(45deg);
-//     }
-
-//     .middle {
-//       opacity: 0;
-//     }
-
-//     .bottom {
-//       transform: translateX(-34px) translateY(35px) rotate(-45deg);
-//     }
-//   }
-// }
+.bodyLock {
+  overflow: hidden;
+}
 
 .header {
   width: 100%;
+  height: 88px;
   background: #1d1b1f;
   padding: 1rem 0;
   position: fixed;
@@ -119,12 +13,14 @@
   transition: all 0.2s ease-in;
 
   &.shrink {
-    height: 72px;
+    height: 56px;
     padding: 0;
+    background: #1d1b1fe3;
   }
 
   .headerWrap {
     max-width: 1024px;
+    height: 56px;
     margin: 0 auto;
     padding: 0 10px;
     display: flex;
@@ -155,9 +51,9 @@
     }
 
     .burgerIcon {
-      display: none; /* Изначально скрываем бургер-меню */
+      display: none;
       cursor: pointer;
-      z-index: 30; /* Обеспечивает, что бургер будет выше nav */
+      z-index: 30;
       .line {
         fill: white;
         transition: all 0.3s ease;
@@ -169,7 +65,7 @@
     display: flex;
     align-items: center;
     transition: transform 0.3s ease;
-    transform: translateX(0); /* Изначально nav на своем месте */
+    transform: translateX(0);
 
     .buttonsLang {
       border: solid 3px lighten(#332f35, 20%);
@@ -214,26 +110,26 @@
       justify-content: space-between;
 
       .burgerIcon {
-        display: block; /* Показываем бургер-меню на маленьких экранах */
+        display: block;
       }
 
       .nav {
         position: fixed;
-        top: 50px;
+        top: 0;
         right: 0;
-        // height: 100%;
         width: 250px;
         background-color: #1d1b1f;
-        transform: translateX(100%); /* Прячем nav за экраном справа */
+        transform: translateX(100%);
         transition: transform 0.3s ease;
         flex-direction: column;
         align-items: center;
         padding: 2rem;
+        padding-top: 80px;
         z-index: 20;
       }
 
       .nav.active {
-        transform: translateX(0); /* Nav выезжает при активации */
+        transform: translateX(0);
       }
     }
   }
@@ -258,4 +154,6 @@
   left: 0;
   height: 100svh;
   z-index: 18;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
 }

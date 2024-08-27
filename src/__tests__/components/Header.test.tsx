@@ -56,20 +56,16 @@ describe('Header component', () => {
   it('toggles the nav menu when the burger icon is clicked', () => {
     render(<Header />);
 
-    // Simulate a small screen
     global.innerWidth = 500;
 
     const burgerIcon = screen.getByTestId('burger-icon');
     const nav = screen.getByRole('navigation');
 
-    // Initially, the nav menu should be hidden
     expect(nav).not.toHaveClass('active');
 
-    // Click the burger icon to open the menu
     fireEvent.click(burgerIcon);
     expect(nav).toHaveClass('active');
 
-    // Click the burger icon again to close the menu
     fireEvent.click(burgerIcon);
     expect(nav).not.toHaveClass('active');
   });
@@ -77,17 +73,14 @@ describe('Header component', () => {
   it('closes the nav menu when clicking outside of it', () => {
     render(<Header />);
 
-    // Simulate a small screen
     global.innerWidth = 500;
 
     const burgerIcon = screen.getByTestId('burger-icon');
     const nav = screen.getByRole('navigation');
 
-    // Open the menu
     fireEvent.click(burgerIcon);
     expect(nav).toHaveClass('active');
 
-    // Click outside of the nav to close it
     const overlay = screen.getByTestId('overlay');
     fireEvent.click(overlay);
     expect(nav).not.toHaveClass('active');

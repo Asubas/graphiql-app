@@ -18,9 +18,9 @@ jest.mock('../components/Welcome/Welcome', () => {
 describe('Home Component', () => {
   it('renders the main container with correct styles', () => {
     render(<Home />);
-    const mainElement = screen.getByRole('main'); // Используем getByRole для нахождения <main>
+    const mainElement = screen.getByRole('main');
 
-    expect(mainElement).toHaveClass('main'); // styles.main Это предполагаемое имя класса
+    expect(mainElement).toHaveClass('main');
   });
 
   it('renders the About component', () => {
