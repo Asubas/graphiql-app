@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
 import { auth } from '../../utils/auth';
@@ -9,12 +9,15 @@ import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import { useRouter } from 'next/navigation';
+import Loader from '@/src/components/Loader/Loader';
 
 const SignUp: React.FC = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSignUp = async (email: string, password: string, username?: string) => {
     try {
+      setIsLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
@@ -42,10 +45,17 @@ const SignUp: React.FC = () => {
       } else {
         toast.error('An unexpected error occurred. Please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return <AuthForm title="Sign Up" onSubmit={handleSignUp} />;
+  return (
+    <>
+      {isLoading && <Loader />}
+      <AuthForm title="Sign Up" onSubmit={handleSignUp} />
+    </>
+  );
 };
 
 export default SignUp;
