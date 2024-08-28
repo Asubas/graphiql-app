@@ -6,7 +6,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import style from './AuthForm.module.scss';
 import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
-import { validateEmail, validatePassword } from '@/src/utils/validation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { validationSchema } from '@/src/utils/validation';
 
 interface AuthFormProps {
   title: string;
@@ -28,7 +29,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<FormInputs>();
+  } = useForm<FormInputs>({ resolver: yupResolver(validationSchema) });
   const [showPassword, setShowPassword] = useState(false);
 
   const isSignIn = title === 'Sign In';
@@ -99,7 +100,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
               startIcon={<EmailRounded />}
               register={register('email', {
                 required: 'Email is required',
-                validate: validateEmail,
+                // validate: validateEmail,
               })}
             />
           </Grid>
@@ -113,7 +114,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
               onTogglePasswordVisibility={handleClickShowPassword}
               register={register('password', {
                 required: 'Password is required',
-                validate: validatePassword,
+                // validate: validatePassword,
               })}
             />
           </Grid>
