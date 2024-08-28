@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 const SignUp: React.FC = () => {
   const router = useRouter();
 
-  const handleSignUp = async (email: string, password: string, username: string) => {
+  const handleSignUp = async (email: string, password: string, username?: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;

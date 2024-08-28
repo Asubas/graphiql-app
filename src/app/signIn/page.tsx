@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../utils/auth';
 import { toast } from 'react-toastify';
@@ -14,8 +14,8 @@ const SignIn: React.FC = () => {
   const handleSignIn = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success('You are successfully logged in');
       router.push('/');
+      toast.success('You are successfully logged in');
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
