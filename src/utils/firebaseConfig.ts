@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB8kTL5CaWugn_chBDSV7Mvev_h7wc1TUg',
-  authDomain: 'graphiql-app-f6d98.firebaseapp.com',
-  projectId: 'graphiql-app-f6d98',
-  storageBucket: 'graphiql-app-f6d98.appspot.com',
-  messagingSenderId: '815569632859',
-  appId: '1:815569632859:web:c7a3aa36eb1a8873b3897e',
-  measurementId: 'G-Z7LCFSVCT8',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
