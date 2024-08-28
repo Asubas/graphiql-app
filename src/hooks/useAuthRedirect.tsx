@@ -15,11 +15,23 @@ import { FirebaseError } from 'firebase/app';
 
 export function useAuth() {
   const [loading, setLoading] = useState(true);
+  const [tokenExpirationTime, setTokenExpirationTime] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const idTokenResult = await user.getIdTokenResult();
+        console.log(idTokenResult);
+        const expirationTime = new Date(idTokenResult.expirationTime).getTime();
+
+        setTokenExpirationTime(expirationTime);
+
+        const timeUntilExpiration = expirationTime - new Date().getTime();
+        setTimeout(() => {
+          handleTokenExpiration();
+        }, timeUntilExpiration);
+
         router.push('/');
       } else {
         setLoading(false);
@@ -28,6 +40,11 @@ export function useAuth() {
 
     return () => unsubscribe();
   }, [router]);
+
+  const handleTokenExpiration = () => {
+    toast.info('Your session has expired. You will be redirected to the main page.');
+    router.push('/');
+  };
 
   const signUp = async (email: string, password: string, username?: string) => {
     setLoading(true);
@@ -66,6 +83,20 @@ export function useAuth() {
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+
+      if (user) {
+        const idTokenResult = await user.getIdTokenResult();
+        const expirationTime = new Date(idTokenResult.expirationTime).getTime();
+
+        setTokenExpirationTime(expirationTime);
+
+        const timeUntilExpiration = expirationTime - new Date().getTime();
+        setTimeout(() => {
+          handleTokenExpiration();
+        }, timeUntilExpiration);
+      }
+
       router.push('/');
       toast.success('You are successfully logged in');
     } catch (error) {
@@ -73,7 +104,7 @@ export function useAuth() {
       if (firebaseError) {
         if (firebaseError.code === 'auth/invalid-credential') {
           toast.error(
-            'User with this credentials is not exist. Please check the email and password.',
+            'User with these credentials does not exist. Please check the email and password.',
           );
         } else if (firebaseError.code === 'auth/too-many-requests') {
           toast.error('Too many requests at the same time. Please try later.');
