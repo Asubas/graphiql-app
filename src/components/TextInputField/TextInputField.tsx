@@ -3,27 +3,26 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface TextInputFieldProps {
   label: string;
   type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | null;
   startIcon: React.ReactNode;
   showPasswordToggle?: boolean;
   onTogglePasswordVisibility?: () => void;
+  register: UseFormRegisterReturn;
 }
 
 const TextInputField: React.FC<TextInputFieldProps> = ({
   label,
   type,
-  value,
-  onChange,
   error,
   startIcon,
   showPasswordToggle,
   onTogglePasswordVisibility,
+  register,
 }) => {
   return (
     <TextField
@@ -32,8 +31,6 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
       variant="outlined"
       type={type}
       required
-      value={value}
-      onChange={onChange}
       error={!!error}
       helperText={error || ' '}
       InputProps={{
@@ -50,6 +47,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
           </InputAdornment>
         ),
       }}
+      {...register}
     />
   );
 };

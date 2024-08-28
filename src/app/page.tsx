@@ -27,7 +27,7 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
-        setDisplayName(user.email);
+        setDisplayName(user.displayName);
       } else {
         setIsAuthenticated(false);
         setDisplayName(null);

@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
 import { Grid, Button, Container, Link } from '@mui/material';
 import { EmailRounded, Lock } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import style from './AuthForm.module.scss';
-import { validateEmail, validatePassword } from '@/src/utils/validation';
 import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
+import { validateEmail, validatePassword } from '@/src/utils/validation';
 
 interface AuthFormProps {
   title: string;
-  onSubmit: (email: string, password: string) => void;
+  onSubmit: (email: string, password: string, username: string) => void;
+}
+
+interface FormInputs {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [isSignIn, setIsSignIn] = useState<boolean>(title === 'Sign In');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<FormInputs>();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const isSignIn = title === 'Sign In';
   const router = useRouter();
 
   const handleLinkClick = () => {
@@ -27,63 +40,99 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
     } else {
       router.push('/signIn');
     }
-    setIsSignIn(!isSignIn);
+  };
+
+  const onSubmitForm: SubmitHandler<FormInputs> = (data) => {
+    const { email, password, username } = data;
+    onSubmit(email, password, username);
   };
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setEmailError(null);
-    setPasswordError(null);
-
-    let isValid = true;
-
-    if (!validateEmail(email)) {
-      setEmailError('Invalid email address');
-      isValid = false;
-    }
-
-    if (!validatePassword(password)) {
-      setPasswordError(
-        'Password must be at least 8 characters long, contain at least one letter, one digit, and one special character.',
-      );
-      isValid = false;
-    }
-
-    if (isValid) {
-      onSubmit(email, password);
-    }
-  };
-
   return (
     <Container maxWidth="sm" className={style.authWrapper}>
       <h1 className={style.header}>{title}</h1>
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit(onSubmitForm)} noValidate>
         <Grid container spacing={2} direction="column">
+          {!isSignIn && (
+            <>
+              <Grid item xs={12}>
+                <TextInputField
+                  label="Username"
+                  type="text"
+                  error={errors.username?.message || ''}
+                  startIcon={<PersonIcon />}
+                  register={register('username', {
+                    required: 'Username is required',
+                  })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInputField
+                  label="First name"
+                  type="text"
+                  error={errors.firstName?.message || ''}
+                  startIcon={<PersonIcon />}
+                  register={register('firstName', {
+                    required: 'First name is required',
+                  })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextInputField
+                  label="Last name"
+                  type="text"
+                  error={errors.lastName?.message || ''}
+                  startIcon={<PersonIcon />}
+                  register={register('lastName', {
+                    required: 'Last name is required',
+                  })}
+                />
+              </Grid>
+            </>
+          )}
           <Grid item xs={12}>
             <TextInputField
               label="Email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={emailError}
+              error={errors.email?.message || ''}
               startIcon={<EmailRounded />}
+              register={register('email', {
+                required: 'Email is required',
+                validate: validateEmail,
+              })}
             />
           </Grid>
           <Grid item xs={12}>
             <TextInputField
               label="Password"
               type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={passwordError}
+              error={errors.password?.message || ''}
               startIcon={<Lock />}
               showPasswordToggle
               onTogglePasswordVisibility={handleClickShowPassword}
+              register={register('password', {
+                required: 'Password is required',
+                validate: validatePassword,
+              })}
             />
           </Grid>
+          {!isSignIn && (
+            <Grid item xs={12}>
+              <TextInputField
+                label="Confirm Password"
+                type={showPassword ? 'text' : 'password'}
+                error={errors.confirmPassword?.message || ''}
+                startIcon={<Lock />}
+                showPasswordToggle
+                onTogglePasswordVisibility={handleClickShowPassword}
+                register={register('confirmPassword', {
+                  required: 'Please confirm your password',
+                  validate: (value) => value === watch('password') || 'Passwords do not match',
+                })}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <Button fullWidth variant="contained" color="primary" type="submit">
               Submit
