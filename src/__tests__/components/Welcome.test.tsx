@@ -20,11 +20,15 @@ jest.mock('../../components/Buttons/PrivateBtn/PrivateBtn', () => {
 });
 
 describe('Welcome Component', () => {
-  beforeEach(() => {
-    render(<Welcome />);
+  const consoleSpy = jest.spyOn(console, 'log');
+
+  afterEach(() => {
+    consoleSpy.mockClear();
   });
 
   it('renders welcome message for new users', () => {
+    render(<Welcome isLogined={false} userName={null} />);
+
     expect(screen.getByText('Welcome!!')).toBeInTheDocument();
     expect(
       screen.getByText('If you want to try playground, please sign in or sign up'),
@@ -32,29 +36,37 @@ describe('Welcome Component', () => {
   });
 
   it('renders Sign In and Sign Up buttons', () => {
+    render(<Welcome isLogined={false} userName={null} />);
+
     expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
   });
 
   it('renders welcome back message for returning users', () => {
-    expect(screen.getByText('Welcome back, < USERNAME >!')).toBeInTheDocument();
+    render(<Welcome isLogined={true} userName="John Doe" />);
+
+    expect(screen.getByText('Welcome back, John Doe!')).toBeInTheDocument();
   });
 
   it('renders REST, GraphQL, and History buttons', () => {
+    render(<Welcome isLogined={true} userName="John Doe" />);
+
     expect(screen.getByRole('button', { name: /REST Client/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /GraphQL Client/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /History/i })).toBeInTheDocument();
   });
 
   it('handles Sign In button click', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
+    render(<Welcome isLogined={false} userName={null} />);
+
     const signInButton = screen.getByRole('button', { name: /Sign In/i });
     fireEvent.click(signInButton);
     expect(consoleSpy).toHaveBeenCalledWith('btn click');
   });
 
   it('handles Sign Up button click', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
+    render(<Welcome isLogined={false} userName={null} />);
+
     const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
     fireEvent.click(signUpButton);
     expect(consoleSpy).toHaveBeenCalledWith('btn click');

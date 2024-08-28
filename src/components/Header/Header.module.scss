@@ -1,0 +1,189 @@
+.bodyLock {
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  height: 88px;
+  background: #1d1b1f;
+  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  z-index: 20;
+  transition: all 0.2s ease-in;
+
+  &.shrink {
+    height: 56px;
+    padding: 0;
+    background: #1d1b1fe3;
+  }
+
+  .headerWrap {
+    max-width: 1024px;
+    height: 56px;
+    margin: 0 auto;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      width: 320px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      background:
+        url('/header-bg-01.svg') no-repeat scroll 180px,
+        url('/header-bg-03.svg') no-repeat scroll 250px;
+      background-size: 90px, 60px;
+
+      &:hover .heading {
+        color: #f0eab3;
+        transform: translateX(5px);
+      }
+
+      .heading {
+        margin: 0;
+        color: #f7f7f7;
+        transition: all 0.2s ease-in;
+      }
+    }
+
+    .burgerIcon {
+      display: none;
+      cursor: pointer;
+      z-index: 30;
+      .line {
+        fill: white;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+
+    .buttonsLang {
+      border: solid 3px lighten(#332f35, 20%);
+      display: inline-block;
+      margin: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+
+      input[type='radio'] {
+        position: absolute;
+        visibility: hidden;
+        display: none;
+      }
+
+      label {
+        color: lighten(#332f35, 40%);
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 5px 20px;
+      }
+
+      input[type='radio']:checked + label {
+        color: lighten(#332f35, 60%);
+        background: lighten(#332f35, 20%);
+      }
+
+      label + input[type='radio'] + label {
+        border-left: solid 3px lighten(#332f35, 20%);
+      }
+    }
+
+    .headerBtn {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btnsPrivateBurger {
+      display: none;
+      visibility: hidden;
+      margin-top: 20px;
+
+      @media (max-width: 700px) {
+        display: flex;
+        visibility: visible;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .btnBurgerRest,
+      .btnBurgerGraphql,
+      .btnBurgerHistory {
+        font-size: 12px;
+
+        &::after {
+          transform: scale(0.5);
+          top: -5px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    .headerWrap {
+      justify-content: space-between;
+
+      .burgerIcon {
+        display: block;
+      }
+
+      .nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 250px;
+        background-color: #1d1b1f;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        padding-top: 80px;
+        z-index: 20;
+      }
+
+      .nav.active {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  .burgerIcon.active .top {
+    transform: translateX(36px) translateY(-5px) rotate(45deg);
+  }
+
+  .burgerIcon.active .middle {
+    opacity: 0;
+  }
+
+  .burgerIcon.active .bottom {
+    transform: translateX(-34px) translateY(35px) rotate(-45deg);
+  }
+}
+
+.userName {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100svh;
+  z-index: 18;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.1);
+}
