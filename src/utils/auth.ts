@@ -19,10 +19,9 @@ const signInWithGoogle = async () => {
     return user;
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Authentication error:', err);
       alert(err.message);
     } else {
-      console.error('Unexpected error:', err);
+      alert(`Unexpected error:${err}`);
     }
   }
 };

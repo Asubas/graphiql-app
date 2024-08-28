@@ -16,7 +16,7 @@ const addUserToFirestore = async (user: any) => {
       });
     }
   } catch (err) {
-    console.error(err);
+    alert(err);
   }
 };
 
