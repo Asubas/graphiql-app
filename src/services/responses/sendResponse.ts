@@ -4,18 +4,29 @@ export async function sendResponse(
   query: string,
   variables: string,
 ) {
-  const res = await fetch(endpointUrl, {
+  const encodedUrl = btoa(endpointUrl);
+  const body = {
+    query,
+    variables: variables ? JSON.parse(variables) : null,
+  };
+  const encodedBody = btoa(JSON.stringify(body));
+
+  const encodedHeaders = Object.entries(headersObj)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+
+  const baseUrl = 'http://localhost:3000/api/graphql';
+  const finalUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedUrl}/${encodedBody}?${encodedHeaders}`;
+
+  const res = await fetch(baseUrl, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       ...headersObj,
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      query,
-      variables: variables ? JSON.parse(variables) : null,
-    }),
+    body: JSON.stringify({ endpointUrl, headersObj, query, variables: body.variables }),
   });
-  const result = await res.json();
 
-  return { result, status: res.status };
+  const result = await res.json();
+  return { finalUrl, result, status: res.status };
 }

@@ -7,6 +7,8 @@ import { Button, TextField } from '@mui/material';
 import { sendResponse } from '../../services/responses/sendResponse';
 import { RequestTextField } from '../../components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
+import { handleHeaderKeyChange, handleHeaderValueChange } from '@/src/utils/handlers';
+import { useRouter } from 'next/navigation';
 
 const GraphQLClient = () => {
   const { register, handleSubmit, reset, setValue } = useForm<FormData>();
@@ -15,6 +17,7 @@ const GraphQLClient = () => {
   const [headersList, setHeadersList] = useState<{ key: string; value: string }[]>([
     { key: '', value: '' },
   ]);
+  const router = useRouter();
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, sdlUrl, headersKey, headersValue, query, variables } = data;
     const headersObj: Record<string, string> = {};
@@ -25,30 +28,23 @@ const GraphQLClient = () => {
       });
     }
 
-    const { result, status } = await sendResponse(endpointUrl, headersObj, query, variables);
+    const { finalUrl, result, status } = await sendResponse(
+      endpointUrl,
+      headersObj,
+      query,
+      variables,
+    );
     if (result) {
-      console.log(result);
+      console.log(result, 'ет резултат');
+      console.log(finalUrl);
       setResponse(result as GraphQLResponse);
       setStatus(status);
       setValue('variables', JSON.stringify(result.variables, null, 2));
+      window.history.pushState({}, '', finalUrl);
     } else {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
     }
-  };
-
-  const handleHeaderKeyChange = (index: number, value: string) => {
-    const newHeadersList = [...headersList];
-    newHeadersList[index].key = value;
-    if (value.trim() && newHeadersList.length === index + 1) {
-      newHeadersList.push({ key: '', value: '' });
-    }
-    setHeadersList(newHeadersList);
-  };
-  const handleHeaderValueChange = (index: number, value: string) => {
-    const newHeadersList = [...headersList];
-    newHeadersList[index].value = value;
-    setHeadersList(newHeadersList);
   };
 
   return (
@@ -68,14 +64,16 @@ const GraphQLClient = () => {
                   label="Key:"
                   customClass={pages.header}
                   InputProps={{
-                    onChange: (e) => handleHeaderKeyChange(index, e.target.value),
+                    onChange: (e) =>
+                      handleHeaderKeyChange(index, e.target.value, headersList, setHeadersList),
                   }}
                 />
                 <TextFieldInput
                   label="Value:"
                   customClass={pages.header}
                   InputProps={{
-                    onChange: (e) => handleHeaderValueChange(index, e.target.value),
+                    onChange: (e) =>
+                      handleHeaderValueChange(index, e.target.value, headersList, setHeadersList),
                   }}
                 />
               </div>
