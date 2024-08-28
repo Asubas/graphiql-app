@@ -25,12 +25,12 @@ function RequestTextField({ response }: { response: unknown }) {
   return (
     <StyledTextField
       id={'outlined-basic'}
-      label="Body: "
+      label="Response: "
       variant="outlined"
       size="small"
       color="warning"
       multiline
-      rows={25}
+      rows={20}
       fullWidth={true}
       value={response ? JSON.stringify(response, null, 2) : ''}
     />

@@ -3,7 +3,7 @@ import pages from './graphql.module.scss';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { GraphQLResponse, FormData } from '@/src/components/interfaces/graphQlInterface';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import { sendResponse } from '../../services/responses/sendResponse';
 import { RequestTextField } from '../../components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 
 const GraphQLClient = () => {
   const { register, handleSubmit, reset, setValue } = useForm<FormData>();
+  const [showHeaders, setShowHeaders] = useState(false);
+  const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const [headersList, setHeadersList] = useState<{ key: string; value: string }[]>([
@@ -47,65 +49,83 @@ const GraphQLClient = () => {
     }
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const target = event.currentTarget.getAttribute('data-type');
+    if (target === 'headers') {
+      setShowHeaders((prevState) => !prevState);
+    } else {
+      setShowVariables((prevState) => !prevState);
+    }
+  };
+
   return (
     <section className={pages.graphql}>
-      <section className={pages['graphql-container']}>
-        <p>GraphQL Client</p>
-        <form onSubmit={handleSubmit(onSubmit)} className={pages.form}>
-          <div className={pages.endpoints}>
-            <TextFieldInput label="Endpoint Url:" register={register('endpointUrl')} />
-            <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
+      <p>GraphQL Client</p>
+      <form onSubmit={handleSubmit(onSubmit)} className={pages.form}>
+        <div className={pages.endpoints}>
+          <TextFieldInput label="Endpoint Url:" register={register('endpointUrl')} />
+          <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
+        </div>
+        <div className={pages.area}>
+          <TextFieldInput
+            customClass={pages.query}
+            label="Query:"
+            register={register('query')}
+            multilineArea
+            rows={20}
+          />
+          <div className={pages.response}>
+            <p>Status: {status ? status : ''}</p>
+            <RequestTextField response={response ? response : ''} />
           </div>
-          <p className={pages.headerTitle}>Headers:</p>
-          <div className={pages.headers}>
-            {headersList.map((header, index) => (
-              <div key={index} className={pages.headersContainer}>
-                <TextFieldInput
-                  label="Key:"
-                  customClass={pages.header}
-                  InputProps={{
-                    onChange: (e) =>
-                      handleHeaderKeyChange(index, e.target.value, headersList, setHeadersList),
-                  }}
-                />
-                <TextFieldInput
-                  label="Value:"
-                  customClass={pages.header}
-                  InputProps={{
-                    onChange: (e) =>
-                      handleHeaderValueChange(index, e.target.value, headersList, setHeadersList),
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <Button className={pages.submit} variant="contained" type="submit">
+        </div>
+        <div className={pages.documentation}>
+          <Button
+            className={pages.queryButton}
+            variant="contained"
+            type="button"
+            onClick={handleClick}
+          >
+            Add variables
+          </Button>
+          <Button
+            className={pages.queryButton}
+            variant="contained"
+            type="button"
+            data-type="headers"
+            onClick={handleClick}
+          >
+            Add headers
+          </Button>
+          <p>
+            Documentation:{' '}
+            {response && response.data
+              ? 'Link to documentation here'
+              : 'If response success show link to documentation'}
+          </p>
+          <Button className={pages.queryButton} variant="contained" type="submit">
             Submit
           </Button>
-          <div className={pages.area}>
-            <TextFieldInput label="Query:" register={register('query')} multilineArea rows={20} />
-            <TextFieldInput
-              label="Variables (JSON format):"
-              register={register('variables')}
-              multilineArea
-              rows={20}
-            />
-          </div>
-        </form>
-      </section>
-      <section className={pages['response-container']}>
-        <p> Response</p>
-        <div className={pages.response}>
-          <p>Status: {status ? status : ''}</p>
-          <RequestTextField response={response ? response : ''} />
         </div>
-        <p>
-          Documentation:{' '}
-          {response && response.data
-            ? 'Link to documentation here'
-            : 'If response success show link to documentation'}
-        </p>
-      </section>
+        <div className={pages.variables}>
+          <TextFieldInput
+            label="Variables (JSON format):"
+            register={register('variables')}
+            multilineArea
+            rows={5}
+            customClass={showVariables ? pages.show : pages.hidden}
+            placeholder="{ variables }"
+          />
+          <TextFieldInput
+            label="Headers: "
+            register={register('headersValue')}
+            multilineArea
+            rows={5}
+            customClass={showHeaders ? pages.show : pages.hidden}
+            placeholder="{ headers }"
+          />
+        </div>
+      </form>
     </section>
   );
 };

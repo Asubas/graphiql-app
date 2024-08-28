@@ -31,6 +31,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   InputProps = {},
   defaultValue = '',
   customClass = '',
+  placeholder = '',
 }: {
   label?: string;
   register?: ReturnType<UseFormRegister<TFieldValues>>;
@@ -39,6 +40,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   InputProps?: Partial<InputProps> & { variant?: CustomTextFieldVariants };
   defaultValue?: string | null;
   customClass?: string;
+  placeholder?: string;
 }) {
   const theme = useTheme();
   return (
@@ -61,6 +63,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
         },
       }}
       defaultValue={defaultValue}
+      placeholder={placeholder}
     />
   );
 }

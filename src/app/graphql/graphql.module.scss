@@ -1,57 +1,38 @@
 .graphql,
-.graphql-container,
 .form {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 20px;
   padding: 10px;
+  width: 100%;
 
-  .graphql-container,
   .response-container {
     border: 1px solid white;
     border-radius: 5px;
     gap: 20px;
-    height: max-content;
-  }
-
-  .response-container {
     flex: 1 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: max-content;
     padding: 10px;
-  }
-
-  .response {
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
-    display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    border: 1px solid white;
-    border-radius: 5px;
-    width: 70%;
-    height: auto;
-    padding: 20px;
   }
 
   .endpoints {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    gap: 10px;
 
     div {
       width: 100%;
     }
   }
 
-  .submit,
+  .queryButton,
   .addHeader {
     color: #a64c01;
     background-color: #000000;
@@ -65,29 +46,24 @@
   }
 }
 
-.graphql {
-  width: 100%;
-  flex-direction: row;
-  height: 100%;
-}
-
 .headers,
 .headersContainer {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 .headers {
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
   max-width: 950px;
   max-height: 100px;
   overflow-y: scroll;
   margin: 0 auto;
   position: relative;
   left: 10px;
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .headerTitle {
@@ -98,11 +74,50 @@
   display: block;
   width: max-content;
 
-  &* {
+  & * {
     width: 100%;
   }
 }
 
-.form {
-  align-items: unset;
+form {
+  .area {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+
+    .pages,
+    .response {
+      width: 50%;
+    }
+
+    .response {
+      position: relative;
+
+      p {
+        position: absolute;
+        top: 5%;
+        right: 20%;
+      }
+    }
+  }
+
+  .variables,
+  .documentation {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.hidden {
+  display: none;
+
+  div {
+    display: none;
+    pointer-events: none;
+    user-select: none;
+  }
 }
