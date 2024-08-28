@@ -2,6 +2,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Welcome from '@/src/components/Welcome/Welcome';
+import { useRouter } from 'next/navigation';
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 jest.mock('../../components/Buttons/AuthBtn/AuthBtn', () => {
   const MockAuthBtn = (props: any) => (
@@ -20,8 +25,17 @@ jest.mock('../../components/Buttons/PrivateBtn/PrivateBtn', () => {
 });
 
 describe('Welcome Component', () => {
+  const mockPush = jest.fn();
+
   beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+    });
     render(<Welcome />);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('renders welcome message for new users', () => {
@@ -47,16 +61,14 @@ describe('Welcome Component', () => {
   });
 
   it('handles Sign In button click', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
     const signInButton = screen.getByRole('button', { name: /Sign In/i });
     fireEvent.click(signInButton);
-    expect(consoleSpy).toHaveBeenCalledWith('btn click');
+    expect(mockPush).toHaveBeenCalledWith('/signIn');
   });
 
   it('handles Sign Up button click', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
     const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
     fireEvent.click(signUpButton);
-    expect(consoleSpy).toHaveBeenCalledWith('btn click');
+    expect(mockPush).toHaveBeenCalledWith('/signUp');
   });
 });
