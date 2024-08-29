@@ -21,10 +21,14 @@
 html,
 body {
   max-width: 100vw;
+  min-height: 100svh;
   overflow-x: hidden;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: #2a272c;
   color: azure;
 }
