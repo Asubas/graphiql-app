@@ -7,42 +7,32 @@ import { Button } from '@mui/material';
 import { sendResponse } from '../../services/responses/sendResponse';
 import { RequestTextField } from '../../components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
-import { handleHeaderKeyChange, handleHeaderValueChange } from '@/src/utils/handlers';
 import { useRouter } from 'next/navigation';
+import { encodedUrl } from '@/src/services/responses/encodedUrl';
+import { handlerBlurInput } from '@/src/utils/handlers';
 
 const GraphQLClient = () => {
-  const { register, handleSubmit, reset, setValue } = useForm<FormData>();
+  const { register, handleSubmit, getValues, watch } = useForm<FormData>();
   const [showHeaders, setShowHeaders] = useState(false);
   const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
-  const [headersList, setHeadersList] = useState<{ key: string; value: string }[]>([
-    { key: '', value: '' },
-  ]);
   const router = useRouter();
+  const headersObj: Record<string, string> = {};
   const onSubmit = async (data: FormData) => {
-    const { endpointUrl, sdlUrl, headersKey, headersValue, query, variables } = data;
-    const headersObj: Record<string, string> = {};
+    const { endpointUrl, headersValue, query, variables } = data;
 
-    if (headersKey && headersValue) {
-      headersList.forEach(({ key, value }: { key: string; value: string }) => {
-        headersObj[key.trim()] = value.trim();
+    if (headersValue) {
+      const headers = JSON.parse(headersValue);
+      Object.keys(headers).forEach((key) => {
+        headersObj[key] = headers[key];
       });
     }
-
-    const { finalUrl, result, status } = await sendResponse(
-      endpointUrl,
-      headersObj,
-      query,
-      variables,
-    );
+    const { result, status } = await sendResponse(endpointUrl, headersObj, query, variables);
     if (result) {
-      console.log(result, 'ет резултат');
-      console.log(finalUrl);
       setResponse(result as GraphQLResponse);
       setStatus(status);
-      setValue('variables', JSON.stringify(result.variables, null, 2));
-      window.history.pushState({}, '', finalUrl);
+      encodedUrl(endpointUrl, headersObj, query, variables);
     } else {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
@@ -58,12 +48,21 @@ const GraphQLClient = () => {
     }
   };
 
+  const handlePushUrl = () => {
+    const { endpointUrl, headersValue, query, variables } = getValues();
+    handlerBlurInput(endpointUrl, headersValue, query, variables);
+  };
+
   return (
     <section className={pages.graphql}>
       <p>GraphQL Client</p>
       <form onSubmit={handleSubmit(onSubmit)} className={pages.form}>
         <div className={pages.endpoints}>
-          <TextFieldInput label="Endpoint Url:" register={register('endpointUrl')} />
+          <TextFieldInput
+            label="Endpoint Url:"
+            register={register('endpointUrl')}
+            onBlur={handlePushUrl}
+          />
           <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
         </div>
         <div className={pages.area}>
@@ -73,6 +72,7 @@ const GraphQLClient = () => {
             register={register('query')}
             multilineArea
             rows={20}
+            onBlur={handlePushUrl}
           />
           <div className={pages.response}>
             <p>Status: {status ? status : ''}</p>
@@ -115,6 +115,7 @@ const GraphQLClient = () => {
             rows={5}
             customClass={showVariables ? pages.show : pages.hidden}
             placeholder="{ variables }"
+            onBlur={handlePushUrl}
           />
           <TextFieldInput
             label="Headers: "
@@ -123,11 +124,11 @@ const GraphQLClient = () => {
             rows={5}
             customClass={showHeaders ? pages.show : pages.hidden}
             placeholder="{ headers }"
+            onBlur={handlePushUrl}
           />
         </div>
       </form>
     </section>
   );
 };
-
 export default GraphQLClient;

@@ -28,25 +28,25 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   register,
   multilineArea = false,
   rows = 0,
-  InputProps = {},
   defaultValue = '',
   customClass = '',
   placeholder = '',
+  onBlur,
 }: {
   label?: string;
   register?: ReturnType<UseFormRegister<TFieldValues>>;
   multilineArea?: boolean;
   rows?: number;
-  InputProps?: Partial<InputProps> & { variant?: CustomTextFieldVariants };
   defaultValue?: string | null;
   customClass?: string;
   placeholder?: string;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }) {
   const theme = useTheme();
   return (
     <StyledTextField
       className={`${input.text} ${multilineArea ? input.area : ''} ${customClass}`}
-      id={InputProps.variant || 'outlined-basic'}
+      id={'outlined-basic'}
       label={label}
       variant="outlined"
       size="small"
@@ -54,14 +54,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
       multiline={multilineArea}
       rows={multilineArea ? rows : 0}
       {...register}
-      InputProps={{
-        ...InputProps,
-        onChange: (e) => {
-          if (InputProps.onChange) {
-            InputProps.onChange(e);
-          }
-        },
-      }}
+      onBlur={onBlur}
       defaultValue={defaultValue}
       placeholder={placeholder}
     />

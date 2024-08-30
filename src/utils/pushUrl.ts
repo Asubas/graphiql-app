@@ -1,0 +1,3 @@
+function pushUrl() {}
+
+export { pushUrl };
