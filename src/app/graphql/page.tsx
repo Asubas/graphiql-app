@@ -1,24 +1,27 @@
 'use client';
 import pages from './graphql.module.scss';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GraphQLResponse, FormData } from '@/src/components/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { sendResponse } from '../../services/responses/sendResponse';
 import { RequestTextField } from '../../components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
-import { useRouter } from 'next/navigation';
-import { encodedUrl } from '@/src/services/responses/encodedUrl';
 import { handlerBlurInput } from '@/src/utils/handlers';
+import { encodedUrl } from '@/src/services/responses/encodedUrl';
 
+// import { decodingUrl } from '@/src/utils/decodingUrl';
+// import { usePathname, useRouter } from 'next/navigation';
 const GraphQLClient = () => {
   const { register, handleSubmit, getValues, watch } = useForm<FormData>();
   const [showHeaders, setShowHeaders] = useState(false);
   const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
-  const router = useRouter();
   const headersObj: Record<string, string> = {};
+  // const pathname = usePathname();
+  // const router = useRouter();
+
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headersValue, query, variables } = data;
 
@@ -50,8 +53,21 @@ const GraphQLClient = () => {
 
   const handlePushUrl = () => {
     const { endpointUrl, headersValue, query, variables } = getValues();
-    handlerBlurInput(endpointUrl, headersValue, query, variables);
+    if (status) handlerBlurInput(endpointUrl, headersValue, query, variables);
   };
+
+  // Если не придумаю, как делать ридерект , удалю ето
+  // const hasRunRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasRunRef.current) {
+  //     hasRunRef.current = true;
+  //     const parts = pathname.split('/');
+  //     if (parts[2]) {
+  //       decodingUrl(pathname);
+  //       router.push('http://localhost:3000/graphql');
+  //     }
+  //   }
+  // }, [pathname, router]);
 
   return (
     <section className={pages.graphql}>
@@ -62,6 +78,7 @@ const GraphQLClient = () => {
             label="Endpoint Url:"
             register={register('endpointUrl')}
             onBlur={handlePushUrl}
+            prettier={'endpoint'}
           />
           <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
         </div>
@@ -73,6 +90,7 @@ const GraphQLClient = () => {
             multilineArea
             rows={20}
             onBlur={handlePushUrl}
+            prettier={'query'}
           />
           <div className={pages.response}>
             <p>Status: {status ? status : ''}</p>

@@ -81,6 +81,7 @@
 
 form {
   .area {
+    position: relative;
     width: 100%;
     display: flex;
     gap: 10px;
@@ -120,4 +121,10 @@ form {
     pointer-events: none;
     user-select: none;
   }
+}
+
+.formattingButton {
+  position: absolute;
+  top: 20px;
+  left: 40%;
 }
