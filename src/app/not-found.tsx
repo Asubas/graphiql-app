@@ -6,7 +6,7 @@ import Link from 'next/link';
 const PageNotFound: React.FC = () => {
   return (
     <main className={styles.notFound}>
-      <div className={styles.notFoundWrap}>
+      <section className={styles.notFoundWrap}>
         <p className={styles.head}>
           4
           <span>
@@ -19,7 +19,7 @@ const PageNotFound: React.FC = () => {
         <Link className={styles.linkToHome} href="/">
           Go Home
         </Link>
-      </div>
+      </section>
     </main>
   );
 };

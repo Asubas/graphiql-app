@@ -22,7 +22,7 @@ export default function ErrorUI({
   };
 
   return (
-    <div className="error">
+    <section className="error">
       <div className="error_img"></div>
       <h2 className="error_h2">Something went wrong!</h2>
       <p className="error_msg">
@@ -35,6 +35,6 @@ export default function ErrorUI({
       <a href="/" className="error_btn">
         Try again from Start
       </a>
-    </div>
+    </section>
   );
 }
