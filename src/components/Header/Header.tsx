@@ -6,13 +6,10 @@ import styles from './Header.module.scss';
 import { useEffect, useState } from 'react';
 import HeaderAuthBtn from '@/src/components/Buttons/HeaderAuthBtn/HeaderAuthBtn';
 import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
+import { useUser } from '@/src/context/UserContext';
 
-interface HeaderProps {
-  isLogined: boolean;
-  userName: string | null;
-}
-
-export default function Header({ isLogined, userName }: HeaderProps) {
+export default function Header() {
+  const { isLogined, userName } = useUser();
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 

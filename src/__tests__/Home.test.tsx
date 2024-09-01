@@ -2,6 +2,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from '@/src/app/page';
+import { useUser } from '@/src/context/UserContext';
+
+jest.mock('../context/UserContext', () => ({
+  useUser: jest.fn(),
+}));
 
 jest.mock('../components/About/About', () => {
   const MockAbout = () => <div>About Section</div>;
@@ -24,6 +29,13 @@ jest.mock('../components/Welcome/Welcome', () => {
 describe('Home Component', () => {
   beforeEach(() => {
     localStorage.clear();
+    jest.clearAllMocks();
+
+    (useUser as jest.Mock).mockReturnValue({
+      isLogined: false,
+      userName: null,
+      toggleLoginState: jest.fn(),
+    });
   });
 
   it('renders the main container with correct styles', () => {
@@ -43,6 +55,14 @@ describe('Home Component', () => {
   });
 
   it('toggles login state and updates Welcome component', () => {
+    const toggleLoginStateMock = jest.fn();
+
+    (useUser as jest.Mock).mockReturnValue({
+      isLogined: false,
+      userName: 'Test User',
+      toggleLoginState: toggleLoginStateMock,
+    });
+
     render(<Home />);
 
     const toggleButton = screen.getByText('Toggle Login');
@@ -50,16 +70,15 @@ describe('Home Component', () => {
 
     fireEvent.click(toggleButton);
 
-    expect(screen.getByText('Welcome, Test User')).toBeInTheDocument();
-
-    fireEvent.click(toggleButton);
-
-    expect(screen.getByText('Welcome Section')).toBeInTheDocument();
+    expect(toggleLoginStateMock).toHaveBeenCalled();
   });
 
   it('renders the Welcome component with stored login state', () => {
-    localStorage.setItem('isLogined', 'true');
-    localStorage.setItem('userName', 'Stored User');
+    (useUser as jest.Mock).mockReturnValue({
+      isLogined: true,
+      userName: 'Stored User',
+      toggleLoginState: jest.fn(),
+    });
 
     render(<Home />);
 

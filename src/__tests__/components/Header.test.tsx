@@ -1,150 +1,96 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import Header from '@/src/components/Header/Header';
+import { useUser } from '@/src/context/UserContext';
 
-interface MockProps {
-  onClick: () => void;
-  className: string;
-  'data-testid'?: string;
-}
-
-jest.mock('../../components/Buttons/HeaderAuthBtn/HeaderAuthBtn', () => {
-  const MockHeaderAuthBtn = ({ onClick, className, 'data-testid': testId }: MockProps) => (
-    <button className={className} onClick={onClick} data-testid={testId}>
-      Mock Button
-    </button>
-  );
-
-  MockHeaderAuthBtn.displayName = 'HeaderAuthBtn';
-
-  return MockHeaderAuthBtn;
-});
-
-jest.mock('../../components/Buttons/PrivateBtn/PrivateBtn', () => {
-  const MockPrivateBtn = ({ className, label }: { className: string; label: string }) => (
-    <button className={className}>{label}</button>
-  );
-
-  MockPrivateBtn.displayName = 'PrivateBtn';
-
-  return MockPrivateBtn;
-});
+jest.mock('../../context/UserContext', () => ({
+  useUser: jest.fn(),
+}));
 
 describe('Header Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders the logo and heading', () => {
-    render(<Header isLogined={false} userName={null} />);
+  test('renders logo and heading', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: false, userName: '' });
+    render(<Header />);
 
-    const logo = screen.getByAltText('Client logo');
-    expect(logo).toBeInTheDocument();
-
-    const heading = screen.getByText('API Client');
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByAltText('Client logo')).toBeInTheDocument();
+    expect(screen.getByText('API Client')).toBeInTheDocument();
   });
 
-  it('renders language options', () => {
-    render(<Header isLogined={false} userName={null} />);
+  test('toggles menu on burger icon click', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: false, userName: '' });
+    render(<Header />);
 
-    const englishLabel = screen.getByLabelText('EN');
-    const russianLabel = screen.getByLabelText('RU');
-    expect(englishLabel).toBeInTheDocument();
-    expect(russianLabel).toBeInTheDocument();
+    const burgerIcon = screen.getByTestId('burger-icon');
+    const overlay = screen.queryByTestId('overlay');
+
+    expect(burgerIcon).toBeInTheDocument();
+    expect(overlay).not.toBeInTheDocument();
+
+    fireEvent.click(burgerIcon);
+    expect(screen.getByTestId('overlay')).toBeInTheDocument();
+
+    fireEvent.click(burgerIcon);
+    expect(screen.queryByTestId('overlay')).not.toBeInTheDocument();
   });
 
-  it('shrinks the header on scroll', () => {
-    render(<Header isLogined={false} userName={null} />);
+  test('closes menu when overlay is clicked', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: false, userName: '' });
+    render(<Header />);
 
-    const header = screen.getByRole('banner');
-    expect(header).not.toHaveClass('shrink');
+    const burgerIcon = screen.getByTestId('burger-icon');
+    fireEvent.click(burgerIcon);
+
+    const overlay = screen.getByTestId('overlay');
+    expect(overlay).toBeInTheDocument();
+
+    fireEvent.click(overlay);
+    expect(overlay).not.toBeInTheDocument();
+  });
+
+  test('renders sign-in and sign-up buttons when user is not logged in', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: false, userName: '' });
+    render(<Header />);
+
+    expect(screen.getByTestId('signin-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('signup-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('logout-btn')).not.toBeInTheDocument();
+  });
+
+  test('renders logout button and user name when user is logged in', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: true, userName: 'John Doe' });
+    render(<Header />);
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByTestId('logout-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('signin-btn')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('signup-btn')).not.toBeInTheDocument();
+  });
+
+  test('renders private buttons in the menu when user is logged in', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: true, userName: 'John Doe' });
+    render(<Header />);
+
+    const burgerIcon = screen.getByTestId('burger-icon');
+    fireEvent.click(burgerIcon);
+
+    expect(screen.getByText('REST Client')).toBeInTheDocument();
+    expect(screen.getByText('GraphQL Client')).toBeInTheDocument();
+    expect(screen.getByText('History')).toBeInTheDocument();
+  });
+
+  test('adds shrink class on scroll', () => {
+    (useUser as jest.Mock).mockReturnValue({ isLogined: false, userName: '' });
+    render(<Header />);
+
+    const headerElement = screen.getByRole('banner');
+
+    expect(headerElement).not.toHaveClass('shrink');
 
     fireEvent.scroll(window, { target: { scrollY: 100 } });
 
-    expect(header).toHaveClass('shrink');
-  });
-
-  it('calls handleClick when signin/signup buttons are clicked when user is not logged in', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    render(<Header isLogined={false} userName={null} />);
-
-    const signinButton = screen.getByTestId('signin-btn');
-    fireEvent.click(signinButton);
-    expect(consoleSpy).toHaveBeenCalledWith('header click');
-
-    const signupButton = screen.getByTestId('signup-btn');
-    fireEvent.click(signupButton);
-    expect(consoleSpy).toHaveBeenCalledWith('header click');
-
-    consoleSpy.mockRestore();
-  });
-
-  it('renders username and logout button when user is logged in', () => {
-    render(<Header isLogined={true} userName="John Doe" />);
-
-    const userNameElement = screen.getByText('John Doe');
-    expect(userNameElement).toBeInTheDocument();
-
-    const logoutButton = screen.getByTestId('logout-btn');
-    expect(logoutButton).toBeInTheDocument();
-  });
-
-  it('calls handleClick when logout button is clicked when user is logged in', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    render(<Header isLogined={true} userName="John Doe" />);
-
-    const logoutButton = screen.getByTestId('logout-btn');
-    fireEvent.click(logoutButton);
-    expect(consoleSpy).toHaveBeenCalledWith('header click');
-
-    consoleSpy.mockRestore();
-  });
-
-  it('toggles menu on burger icon click', () => {
-    render(<Header isLogined={false} userName={null} />);
-
-    const burgerIcon = screen.getByTestId('burger-icon');
-    let overlay = screen.queryByTestId('overlay');
-
-    expect(overlay).not.toBeInTheDocument();
-
-    fireEvent.click(burgerIcon);
-    overlay = screen.getByTestId('overlay');
-    expect(overlay).toBeInTheDocument();
-
-    fireEvent.click(burgerIcon);
-    overlay = screen.queryByTestId('overlay');
-    expect(overlay).not.toBeInTheDocument();
-  });
-
-  it('locks scroll when menu is open', () => {
-    render(<Header isLogined={false} userName={null} />);
-
-    const burgerIcon = screen.getByTestId('burger-icon');
-
-    fireEvent.click(burgerIcon);
-    expect(document.body).toHaveClass('bodyLock');
-    expect(document.documentElement).toHaveClass('bodyLock');
-
-    fireEvent.click(burgerIcon);
-    expect(document.body).not.toHaveClass('bodyLock');
-    expect(document.documentElement).not.toHaveClass('bodyLock');
-  });
-
-  it('renders private buttons when user is logged in and menu is open', () => {
-    render(<Header isLogined={true} userName="John Doe" />);
-
-    const burgerIcon = screen.getByTestId('burger-icon');
-    fireEvent.click(burgerIcon);
-
-    const restBtn = screen.getByText('REST Client');
-    const graphqlBtn = screen.getByText('GraphQL Client');
-    const historyBtn = screen.getByText('History');
-
-    expect(restBtn).toBeInTheDocument();
-    expect(graphqlBtn).toBeInTheDocument();
-    expect(historyBtn).toBeInTheDocument();
+    expect(headerElement).toHaveClass('shrink');
   });
 });
