@@ -129,7 +129,7 @@ export default function Header() {
               </>
             )}
           </div>
-          {!loading && user && (
+          {user && (
             <div className={styles.btnsPrivateBurger}>
               <PrivateBtn
                 className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}
