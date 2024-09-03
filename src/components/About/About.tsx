@@ -1,7 +1,16 @@
 import Image from 'next/image';
 import styles from '@/src/components/About/About.module.scss';
+import { useState } from 'react';
+
+function ErrorThrower() {
+  throw new Error('Это тестовая ошибка!'); // Ошибка выбрасывается при рендере компонента
+  return null; // Этот код никогда не будет достигнут
+}
 
 export default function About() {
+  // тест для error boundary
+  const [showError, setShowError] = useState(false);
+
   return (
     <div className={styles.about}>
       <div className={styles.course}>
@@ -93,6 +102,12 @@ export default function About() {
           </a>
         </div>
       </div>
+
+      {/* тест выброса ошибки для улова */}
+      <button className="btnErrorTest" onClick={() => setShowError(true)}>
+        Throw Error
+      </button>
+      {showError && <ErrorThrower />}
     </div>
   );
 }

@@ -11,12 +11,18 @@ import { toast } from 'react-toastify';
 
 export default function Welcome() {
   const router = useRouter();
-
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
+      if (user) {
+        setIsAuthenticated(true);
+        setUserName(user.displayName || 'User');
+      } else {
+        setIsAuthenticated(false);
+        setUserName(null);
+      }
     });
 
     return () => unsubscribe();
@@ -38,36 +44,39 @@ export default function Welcome() {
     }
   };
 
-  //Кнопка logout, только чтобы протестировать
   const handleLogoutClick = async () => {
     try {
       await signOut(auth);
       toast.success('You have successfully logged out.');
       setIsAuthenticated(false);
+      setUserName(null);
     } catch (error) {
       toast.error('Failed to log out. Please try again.');
     }
   };
 
   return (
-    <>
-      <div className={styles.welcome}>
-        <p className={styles.head}>Welcome!!</p>
-        <p className={styles.disc}>If you want to try playground, please sign in or sign up</p>
-        <div className={styles.buttonWrap}>
-          <AuthBtn className="btnSignin" label="Sign In" onClick={handleSignInClick} />
-          <AuthBtn className="btnSignup" label="Sign Up" onClick={handleSignUpClick} />
-          <AuthBtn className="btnLogout" label="Logout" onClick={handleLogoutClick} />
-        </div>
-      </div>
-      <div className={styles.welcome}>
-        <p className={styles.head}>Welcome back, {'< USERNAME >'}!</p>
-        <div className={styles.btnPrivate}>
-          <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
-          <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
-          <PrivateBtn className="btnPrivate history-btn" label="History" />
-        </div>
-      </div>
-    </>
+    <div className={styles.welcome}>
+      {!isAuthenticated ? (
+        <>
+          <p className={styles.head}>Welcome!!</p>
+          <p className={styles.disc}>If you want to try playground, please sign in or sign up</p>
+          <div className={styles.buttonWrap}>
+            <AuthBtn className="btnSignin" label="Sign In" onClick={handleSignInClick} />
+            <AuthBtn className="btnSignup" label="Sign Up" onClick={handleSignUpClick} />
+          </div>
+        </>
+      ) : (
+        <>
+          <p className={styles.head}>Welcome back, {userName}!</p>
+          <div className={styles.btnPrivate}>
+            <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
+            <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
+            <PrivateBtn className="btnPrivate history-btn" label="History" />
+            <AuthBtn className="btnLogout" label="Logout" onClick={handleLogoutClick} />
+          </div>
+        </>
+      )}
+    </div>
   );
 }
