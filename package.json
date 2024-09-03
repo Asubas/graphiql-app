@@ -17,9 +17,12 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@graphiql/react": "^0.26.2",
     "@mui/material": "^5.16.7",
     "@reduxjs/toolkit": "^2.2.7",
     "firebase": "^10.13.0",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.0",
     "js-beautify": "^1.14.3",
     "next": "14.2.5",
     "react": "^18",

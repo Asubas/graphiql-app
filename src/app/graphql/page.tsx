@@ -10,6 +10,7 @@ import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textField
 import { handlerBlurInput } from '@/src/utils/handlers';
 import { encodedUrl } from '@/src/services/responses/encodedUrl';
 import { DEFAULTQUERYJSON, DEFAULTURLENDPOINT } from '@/src/services/constant';
+import { ShowSchema } from '@/src/utils/schema';
 
 const GraphQLClient = () => {
   const methods = useForm<FormData>();
@@ -36,6 +37,8 @@ const GraphQLClient = () => {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
     }
+
+    ShowSchema(query);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +54,6 @@ const GraphQLClient = () => {
     const { endpointUrl, headersValue, query, variables } = methods.getValues();
     if (status) handlerBlurInput(endpointUrl, headersValue, query, variables);
   };
-
   // Если не придумаю, как делать ридерект , удалю ето
   // const hasRunRef = useRef(false);
   // useEffect(() => {
