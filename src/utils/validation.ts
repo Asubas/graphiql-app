@@ -21,8 +21,6 @@ export const signUpValidationSchema = Yup.object().shape({
     .required('Username is required')
     .min(3, 'Username must be at least 3 characters long')
     .max(15, 'Username must be at most 15 characters long'),
-  firstName: Yup.string().required('First name is required'),
-  lastName: Yup.string().required('Last name is required'),
   email: Yup.string()
     .required('Email is required')
     .matches(

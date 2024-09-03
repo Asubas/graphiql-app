@@ -21,8 +21,6 @@ interface SignInInputs {
 
 interface SignUpInputs {
   username: string;
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -65,10 +63,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   return (
-    <Container maxWidth="sm" className={style.authWrapper}>
+    <Container maxWidth="sm" className={isSignIn ? style.authSignInWrapper : style.authSignUpWrapper}>
       <h1 className={style.header}>{title}</h1>
       <form onSubmit={handleSubmit(onSubmitForm)} noValidate>
-        <Grid container spacing={2} direction="column">
+        <Grid container spacing={0} direction="column">
           {!isSignIn && (
             <>
               <Grid item xs={12}>
@@ -78,24 +76,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
                   error={errors && 'username' in errors ? errors.username?.message || '' : ''}
                   startIcon={<PersonIcon />}
                   register={register('username')}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextInputField
-                  label="First name"
-                  type="text"
-                  error={errors && 'firstName' in errors ? errors.firstName?.message || '' : ''}
-                  startIcon={<PersonIcon />}
-                  register={register('firstName')}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextInputField
-                  label="Last name"
-                  type="text"
-                  error={errors && 'lastName' in errors ? errors.lastName?.message || '' : ''}
-                  startIcon={<PersonIcon />}
-                  register={register('lastName')}
                 />
               </Grid>
             </>
