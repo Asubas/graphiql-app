@@ -27,15 +27,6 @@ export default function Welcome() {
     }
   };
 
-  // const handleLogoutClick = async () => {
-  //   try {
-  //     await signOut();
-  //     toast.success('You have successfully logged out.');
-  //   } catch (error) {
-  //     toast.error('Failed to log out. Please try again.');
-  //   }
-  // };
-
   return (
     <div className={styles.welcome}>
       {!user ? (
@@ -53,7 +44,6 @@ export default function Welcome() {
             <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
             <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
             <PrivateBtn className="btnPrivate history-btn" label="History" />
-            {/* <AuthBtn className="btnLogout" label="Logout" onClick={handleLogoutClick} /> */}
           </div>
         </>
       )}

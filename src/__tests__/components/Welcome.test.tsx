@@ -1,83 +1,77 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import Welcome from '@/src/components/Welcome/Welcome';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/src/hooks/useAuthRedirect';
+import { toast } from 'react-toastify';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('../../components/Buttons/AuthBtn/AuthBtn', () => {
-  const MockAuthBtn = (props: any) => (
-    <button onClick={props.onClick} className={props.className}>
-      {props.label}
-    </button>
-  );
-  MockAuthBtn.displayName = 'AuthBtn';
-  return MockAuthBtn;
-});
+jest.mock('../../hooks/useAuthRedirect', () => ({
+  useAuth: jest.fn(),
+}));
 
-jest.mock('../../components/Buttons/PrivateBtn/PrivateBtn', () => {
-  const MockPrivateBtn = (props: any) => <button className={props.className}>{props.label}</button>;
-  MockPrivateBtn.displayName = 'PrivateBtn';
-  return MockPrivateBtn;
-});
+jest.mock('react-toastify', () => ({
+  toast: {
+    info: jest.fn(),
+  },
+}));
 
 describe('Welcome Component', () => {
-  const consoleSpy = jest.spyOn(console, 'log');
+  const mockPush = jest.fn();
+  const mockSignOut = jest.fn();
 
-  afterEach(() => {
-    consoleSpy.mockClear();
-  });
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+    });
 
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders welcome message for new users', () => {
+  test('renders sign-in and sign-up buttons when user is not logged in', () => {
+    (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
+
     render(<Welcome />);
 
     expect(screen.getByText('Welcome!!')).toBeInTheDocument();
     expect(
       screen.getByText('If you want to try playground, please sign in or sign up'),
     ).toBeInTheDocument();
+    expect(screen.getByText('Sign In')).toBeInTheDocument();
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
-  it('renders Sign In and Sign Up buttons', () => {
+  test('renders private buttons when user is logged in', () => {
+    (useAuth as jest.Mock).mockReturnValue({ user: { name: 'John Doe' }, signOut: mockSignOut });
+
     render(<Welcome />);
 
-    expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Sign Up/i })).toBeInTheDocument();
+    expect(screen.getByText('REST Client')).toBeInTheDocument();
+    expect(screen.getByText('GraphQL Client')).toBeInTheDocument();
+    expect(screen.getByText('History')).toBeInTheDocument();
   });
 
-  it('renders welcome back message for returning users', () => {
+  test('redirects to sign-in page when sign-in button is clicked and user is not logged in', () => {
+    (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
+
     render(<Welcome />);
 
-    expect(screen.getByText('Welcome back, John Doe!')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Sign In'));
+
+    expect(mockPush).toHaveBeenCalledWith('/signIn');
+    expect(toast.info).not.toHaveBeenCalled();
   });
 
-  it('renders REST, GraphQL, and History buttons', () => {
+  test('redirects to sign-up page when sign-up button is clicked and user is not logged in', () => {
+    (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
+
     render(<Welcome />);
 
-    expect(screen.getByRole('button', { name: /REST Client/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /GraphQL Client/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /History/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Sign Up'));
+
+    expect(mockPush).toHaveBeenCalledWith('/signUp');
+    expect(toast.info).not.toHaveBeenCalled();
   });
-
-  // it('handles Sign In button click', () => {
-  //   render(<Welcome />);
-
-  //   const signInButton = screen.getByRole('button', { name: /Sign In/i });
-  //   fireEvent.click(signInButton);
-  //   expect(mockPush).toHaveBeenCalledWith('/signIn');
-  // });
-
-  // it('handles Sign Up button click', () => {
-  //   render(<Welcome />);
-
-  //   const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
-  //   fireEvent.click(signUpButton);
-  //   expect(mockPush).toHaveBeenCalledWith('/signUp');
-  // });
 });

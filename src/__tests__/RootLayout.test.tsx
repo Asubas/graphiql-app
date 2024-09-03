@@ -1,57 +1,43 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import RootLayout from '../app/layout';
 import '@testing-library/jest-dom';
+import Footer from '../components/Footer/Footer';
+import Header from '../components/Header/Header';
 import { ToastContainer } from 'react-toastify';
-import RootLayout, { metadata } from '../app/layout';
+import { ReactNode, AwaitedReactNode, JSX } from 'react';
 
-jest.mock('react-toastify', () => ({
-  ToastContainer: jest.fn(() => <div data-testid="toast-container" />),
-}));
+jest.mock('../components/Header/Header', () => jest.fn(() => <header data-testid="header" />));
+jest.mock('../components/Footer/Footer', () => jest.fn(() => <footer data-testid="footer" />));
 
-describe('RootLayout Component', () => {
-  it('renders children correctly', () => {
-    render(
-      <RootLayout>
-        <div data-testid="child-element">Test Child</div>
-      </RootLayout>,
-    );
-
-    expect(screen.getByTestId('child-element')).toBeInTheDocument();
-    expect(screen.getByTestId('child-element')).toHaveTextContent('Test Child');
-  });
-
-  it('renders ToastContainer with correct props', () => {
-    render(
-      <RootLayout>
-        <div>Test Child</div>
-      </RootLayout>,
-    );
-
-    expect(screen.getByTestId('toast-container')).toBeInTheDocument();
-    expect(ToastContainer).toHaveBeenCalledWith(
-      expect.objectContaining({
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        newestOnTop: false,
-        closeOnClick: true,
-        rtl: false,
-        pauseOnFocusLoss: true,
-        draggable: true,
-        pauseOnHover: true,
-        theme: 'colored',
-      }),
-      {},
-    );
-  });
-
-  it('sets correct metadata', () => {
-    expect(metadata).toEqual({
-      title: 'REST/GraphiQL Client',
-      description: 'REST/GraphiQL Client',
-      icons: {
-        icon: '/favicon.svg',
-      },
+describe('RootLayout', () => {
+  const renderWithRootLayout = (
+    children:
+      | string
+      | number
+      | bigint
+      | boolean
+      | Iterable<ReactNode>
+      | Promise<AwaitedReactNode>
+      | JSX.Element
+      | null
+      | undefined,
+  ) =>
+    render(<RootLayout>{children}</RootLayout>, {
+      container: document.body,
     });
+
+  it('renders Header component', () => {
+    renderWithRootLayout(<div>Test</div>);
+    expect(screen.getByTestId('header')).toBeInTheDocument();
+  });
+
+  it('renders children', () => {
+    renderWithRootLayout(<div data-testid="children">Test Children</div>);
+    expect(screen.getByTestId('children')).toBeInTheDocument();
+  });
+
+  it('renders Footer component', () => {
+    renderWithRootLayout(<div>Test</div>);
+    expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
 });
