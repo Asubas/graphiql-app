@@ -63,7 +63,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   return (
-    <Container maxWidth="sm" className={isSignIn ? style.authSignInWrapper : style.authSignUpWrapper}>
+    <Container
+      maxWidth="sm"
+      className={isSignIn ? style.authSignInWrapper : style.authSignUpWrapper}
+    >
       <h1 className={style.header}>{title}</h1>
       <form onSubmit={handleSubmit(onSubmitForm)} noValidate>
         <Grid container spacing={0} direction="column">
