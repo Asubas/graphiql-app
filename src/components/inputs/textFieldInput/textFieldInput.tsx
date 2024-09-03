@@ -2,10 +2,9 @@ import input from './input.module.scss';
 import pages from '../../../app/graphql/graphql.module.scss';
 import { styled, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { DEFAULTQUERYJSON, DEFAULTURLENDPOINT } from '@/src/services/constant';
 import beautify from 'js-beautify';
 const options = {
   indent_size: 4,
@@ -43,6 +42,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   placeholder = '',
   onBlur,
   prettier = '',
+  defaultValue = '',
 }: {
   label?: string;
   register?: ReturnType<UseFormRegister<TFieldValues>>;
@@ -52,27 +52,27 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   placeholder?: string;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   prettier?: string;
+  defaultValue?: string;
 }) {
   const theme = useTheme();
+  const { getValues, setValue } = useFormContext();
   const [inputText, setInputText] = useState<string | null>('');
   const handleFormat = async () => {
     if (inputText) {
       const parsedJson = JSON.stringify(inputText, null, 2);
       const test = JSON.parse(parsedJson);
       const formattedText = beautify.js(inputText, options);
-      setInputText(formattedText);
+      setValue('query', formattedText);
     } else {
       console.log('тут надо добавить тоастифай мб');
     }
   };
 
   useEffect(() => {
-    if (prettier === 'query') {
-      setInputText(DEFAULTQUERYJSON);
-    } else if (prettier === 'endpoint') {
-      setInputText(DEFAULTURLENDPOINT);
-    }
-  }, [prettier]);
+    const query = getValues('query');
+    setInputText(query);
+  }, [getValues]);
+
   return (
     <>
       <StyledTextField
@@ -87,8 +87,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
         {...register}
         onBlur={onBlur}
         placeholder={placeholder}
-        value={inputText || ''}
-        onChange={(e) => setInputText(e.target.value)}
+        defaultValue={defaultValue}
       />
       {prettier && prettier === 'query' && (
         <Button

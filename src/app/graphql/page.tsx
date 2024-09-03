@@ -1,7 +1,7 @@
 'use client';
 import pages from './graphql.module.scss';
-import { useForm } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { GraphQLResponse, FormData } from '@/src/components/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { sendResponse } from '../../services/responses/sendResponse';
@@ -9,22 +9,18 @@ import { RequestTextField } from '../../components/inputs/requestFieldInput/requ
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
 import { handlerBlurInput } from '@/src/utils/handlers';
 import { encodedUrl } from '@/src/services/responses/encodedUrl';
+import { DEFAULTQUERYJSON, DEFAULTURLENDPOINT } from '@/src/services/constant';
 
-// import { decodingUrl } from '@/src/utils/decodingUrl';
-// import { usePathname, useRouter } from 'next/navigation';
 const GraphQLClient = () => {
-  const { register, handleSubmit, getValues, watch } = useForm<FormData>();
+  const methods = useForm<FormData>();
   const [showHeaders, setShowHeaders] = useState(false);
   const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const headersObj: Record<string, string> = {};
-  // const pathname = usePathname();
-  // const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headersValue, query, variables } = data;
-
     if (headersValue) {
       const headers = JSON.parse(headersValue);
       Object.keys(headers).forEach((key) => {
@@ -52,7 +48,7 @@ const GraphQLClient = () => {
   };
 
   const handlePushUrl = () => {
-    const { endpointUrl, headersValue, query, variables } = getValues();
+    const { endpointUrl, headersValue, query, variables } = methods.getValues();
     if (status) handlerBlurInput(endpointUrl, headersValue, query, variables);
   };
 
@@ -72,80 +68,84 @@ const GraphQLClient = () => {
   return (
     <section className={pages.graphql}>
       <p>GraphQL Client</p>
-      <form onSubmit={handleSubmit(onSubmit)} className={pages.form}>
-        <div className={pages.endpoints}>
-          <TextFieldInput
-            label="Endpoint Url:"
-            register={register('endpointUrl')}
-            onBlur={handlePushUrl}
-            prettier={'endpoint'}
-          />
-          <TextFieldInput label="SDL Url:" register={register('sdlUrl')} />
-        </div>
-        <div className={pages.area}>
-          <TextFieldInput
-            customClass={pages.query}
-            label="Query:"
-            register={register('query')}
-            multilineArea
-            rows={20}
-            onBlur={handlePushUrl}
-            prettier={'query'}
-          />
-          <div className={pages.response}>
-            <p>Status: {status ? status : ''}</p>
-            <RequestTextField response={response ? response : ''} />
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className={pages.form}>
+          <div className={pages.endpoints}>
+            <TextFieldInput
+              label="Endpoint Url:"
+              register={methods.register('endpointUrl')}
+              onBlur={handlePushUrl}
+              prettier={'endpoint'}
+              defaultValue={DEFAULTURLENDPOINT}
+            />
+            <TextFieldInput label="SDL Url:" register={methods.register('sdlUrl')} />
           </div>
-        </div>
-        <div className={pages.documentation}>
-          <Button
-            className={pages.queryButton}
-            variant="contained"
-            type="button"
-            onClick={handleClick}
-          >
-            Add variables
-          </Button>
-          <Button
-            className={pages.queryButton}
-            variant="contained"
-            type="button"
-            data-type="headers"
-            onClick={handleClick}
-          >
-            Add headers
-          </Button>
-          <p>
-            Documentation:{' '}
-            {response && response.data
-              ? 'Link to documentation here'
-              : 'If response success show link to documentation'}
-          </p>
-          <Button className={pages.queryButton} variant="contained" type="submit">
-            Submit
-          </Button>
-        </div>
-        <div className={pages.variables}>
-          <TextFieldInput
-            label="Variables (JSON format):"
-            register={register('variables')}
-            multilineArea
-            rows={5}
-            customClass={showVariables ? pages.show : pages.hidden}
-            placeholder="{ variables }"
-            onBlur={handlePushUrl}
-          />
-          <TextFieldInput
-            label="Headers: "
-            register={register('headersValue')}
-            multilineArea
-            rows={5}
-            customClass={showHeaders ? pages.show : pages.hidden}
-            placeholder="{ headers }"
-            onBlur={handlePushUrl}
-          />
-        </div>
-      </form>
+          <div className={pages.area}>
+            <TextFieldInput
+              customClass={pages.query}
+              label="Query:"
+              register={methods.register('query')}
+              multilineArea
+              rows={20}
+              onBlur={handlePushUrl}
+              prettier={'query'}
+              defaultValue={DEFAULTQUERYJSON}
+            />
+            <div className={pages.response}>
+              <p>Status: {status ? status : ''}</p>
+              <RequestTextField response={response ? response : ''} />
+            </div>
+          </div>
+          <div className={pages.documentation}>
+            <Button
+              className={pages.queryButton}
+              variant="contained"
+              type="button"
+              onClick={handleClick}
+            >
+              Add variables
+            </Button>
+            <Button
+              className={pages.queryButton}
+              variant="contained"
+              type="button"
+              data-type="headers"
+              onClick={handleClick}
+            >
+              Add headers
+            </Button>
+            <p>
+              Documentation:{' '}
+              {response && response.data
+                ? 'Link to documentation here'
+                : 'If response success show link to documentation'}
+            </p>
+            <Button className={pages.queryButton} variant="contained" type="submit">
+              Submit
+            </Button>
+          </div>
+          <div className={pages.variables}>
+            <TextFieldInput
+              label="Variables (JSON format):"
+              register={methods.register('variables')}
+              multilineArea
+              rows={5}
+              customClass={showVariables ? pages.show : pages.hidden}
+              placeholder="{ variables }"
+              onBlur={handlePushUrl}
+            />
+            <TextFieldInput
+              label="Headers: "
+              register={methods.register('headersValue')}
+              multilineArea
+              rows={5}
+              customClass={showHeaders ? pages.show : pages.hidden}
+              placeholder="{ headers }"
+              onBlur={handlePushUrl}
+            />
+          </div>
+        </form>
+      </FormProvider>
     </section>
   );
 };
