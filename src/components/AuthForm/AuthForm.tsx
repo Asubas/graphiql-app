@@ -37,7 +37,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
     resolver: yupResolver(isSignIn ? signInValidationSchema : signUpValidationSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
 
@@ -60,7 +59,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   };
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   return (
     <Container
@@ -107,13 +105,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
             <Grid item xs={12}>
               <TextInputField
                 label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showPassword ? 'text' : 'password'}
                 error={
                   errors && 'confirmPassword' in errors ? errors.confirmPassword?.message || '' : ''
                 }
                 startIcon={<Lock />}
                 showPasswordToggle
-                onTogglePasswordVisibility={handleClickShowConfirmPassword}
+                onTogglePasswordVisibility={handleClickShowPassword}
                 register={register('confirmPassword')}
               />
             </Grid>

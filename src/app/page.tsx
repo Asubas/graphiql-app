@@ -8,15 +8,9 @@ import { useAuth } from '../hooks/useAuthRedirect';
 export default function Home() {
   const { user } = useAuth();
 
-  return !user ? (
+  return (
     <main className={styles.main}>
-      <About />
-      <Welcome />
-    </main>
-  ) : (
-    <main className={styles.main}>
-      <p>Welcome back, {user.displayName || 'User'}!</p>
-      <Welcome />
+      {!user ? <About /> : <p>Welcome back, {user.displayName || 'User'}!</p>} <Welcome />
     </main>
   );
 }
