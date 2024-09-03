@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const router = useRouter();
-  const { loading, user, signOut } = useAuth(); 
+  const { loading, user, signOut } = useAuth();
 
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
+
   const handleSignInClick = () => {
     router.push('/signIn');
   };
@@ -87,7 +87,10 @@ export default function Header() {
           />
           <rect
             className={`${styles.line} ${styles.bottom}`}
-            x="10" y="65" width="80" height="10"
+            x="10"
+            y="65"
+            width="80"
+            height="10"
           />
         </svg>
         <nav
@@ -105,7 +108,7 @@ export default function Header() {
               <>
                 <HeaderAuthBtn
                   className="btnHeadSignin"
-                  onClick={handleSignInClick} 
+                  onClick={handleSignInClick}
                   data-testid="signin-btn"
                 />
                 <HeaderAuthBtn

@@ -28,7 +28,7 @@ export function useAuth() {
         const expirationTime = new Date(idTokenResult.expirationTime).getTime();
 
         setTokenExpirationTime(expirationTime);
-        setUser(user); 
+        setUser(user);
 
         const timeUntilExpiration = expirationTime - new Date().getTime();
         setTimeout(() => {
@@ -109,7 +109,9 @@ export function useAuth() {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
         if (firebaseError.code === 'auth/invalid-credential') {
-          toast.error('User with these credentials does not exist. Please check the email and password.');
+          toast.error(
+            'User with these credentials does not exist. Please check the email and password.',
+          );
         } else if (firebaseError.code === 'auth/too-many-requests') {
           toast.error('Too many requests at the same time. Please try later.');
         }
