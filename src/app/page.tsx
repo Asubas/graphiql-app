@@ -3,21 +3,14 @@
 import styles from './page.module.scss';
 import About from '../components/About/About';
 import Welcome from '../components/Welcome/Welcome';
-import { useUser } from '../context/UserContext';
+import { useAuth } from '../hooks/useAuthRedirect';
 
 export default function Home() {
-  const { isLogined, userName, toggleLoginState } = useUser();
+  const { user } = useAuth();
 
   return (
-    <>
-      <main className={styles.main}>
-        <About />
-        <Welcome isLogined={isLogined} userName={userName} />
-        {/* кнопка для тестов состояния логина */}
-        <button className="btnTest" onClick={toggleLoginState}>
-          Toggle Login
-        </button>
-      </main>
-    </>
+    <main className={styles.main}>
+      {!user ? <About /> : <p>Welcome back, {user.displayName || 'User'}!</p>} <Welcome />
+    </main>
   );
 }
