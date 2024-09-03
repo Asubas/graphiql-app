@@ -6,10 +6,13 @@ import styles from './Header.module.scss';
 import { useEffect, useState } from 'react';
 import HeaderAuthBtn from '@/src/components/Buttons/HeaderAuthBtn/HeaderAuthBtn';
 import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
-import { useUser } from '@/src/context/UserContext';
+import { useAuth } from '@/src/hooks/useAuthRedirect';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { isLogined, userName } = useUser();
+  const router = useRouter();
+  const { loading, user, signOut } = useAuth(); 
+
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
@@ -25,9 +28,13 @@ export default function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  
+  const handleSignInClick = () => {
+    router.push('/signIn');
+  };
 
-  const handleClick = () => {
-    console.log('header click');
+  const handleSignUpClick = () => {
+    router.push('/signUp');
   };
 
   const toggleMenu = () => {
@@ -80,10 +87,7 @@ export default function Header() {
           />
           <rect
             className={`${styles.line} ${styles.bottom}`}
-            x="10"
-            y="65"
-            width="80"
-            height="10"
+            x="10" y="65" width="80" height="10"
           />
         </svg>
         <nav
@@ -97,32 +101,32 @@ export default function Header() {
             <label htmlFor="option-two">RU</label>
           </div>
           <div className={`buttonWrap ${styles.headerBtn}`}>
-            {!isLogined && (
+            {!loading && !user && (
               <>
                 <HeaderAuthBtn
                   className="btnHeadSignin"
-                  onClick={handleClick}
+                  onClick={handleSignInClick} 
                   data-testid="signin-btn"
                 />
                 <HeaderAuthBtn
                   className="btnHeadSignup"
-                  onClick={handleClick}
+                  onClick={handleSignUpClick}
                   data-testid="signup-btn"
                 />
               </>
             )}
-            {isLogined && (
+            {user && (
               <>
-                <span className={styles.userName}>{userName}</span>
+                <span className={styles.userName}>{user.displayName || 'User'}</span>
                 <HeaderAuthBtn
                   className="btnHeadLogout"
-                  onClick={handleClick}
+                  onClick={signOut}
                   data-testid="logout-btn"
                 />
               </>
             )}
           </div>
-          {isLogined && (
+          {!loading && user && (
             <div className={styles.btnsPrivateBurger}>
               <PrivateBtn
                 className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}

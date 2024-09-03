@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
-import { UserProvider } from '../context/UserContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} id="body">
-        <UserProvider>
           <Header />
           {children}
           <ToastContainer
@@ -41,7 +39,6 @@ export default function RootLayout({
             theme="colored"
           />
           <Footer />
-        </UserProvider>
       </body>
     </html>
   );

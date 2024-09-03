@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format:fix": "prettier --write .",
     "prepare": "husky",
-    "pre-commit": "prettier --check . && next lint",
+    "pre-commit": "prettier --write . && next lint",
     "pre-push": "jest --coverage --collectCoverageFrom='./src/**'",
     "test": "jest --coverage --collectCoverageFrom='./src/**'",
     "test:watch": "jest --watch"

@@ -1,35 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import AuthBtn from '../Buttons/AuthBtn/AuthBtn';
 import PrivateBtn from '../Buttons/PrivateBtn/PrivateBtn';
 import styles from './Welcome.module.scss';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '@/src/utils/auth';
+import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
 
 export default function Welcome() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-        setUserName(user.displayName || 'User');
-      } else {
-        setIsAuthenticated(false);
-        setUserName(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user, signOut } = useAuth();
 
   const handleSignInClick = () => {
-    if (isAuthenticated) {
+    if (user) {
       toast.info('You are already logged in!');
     } else {
       router.push('/signIn');
@@ -37,7 +20,7 @@ export default function Welcome() {
   };
 
   const handleSignUpClick = () => {
-    if (isAuthenticated) {
+    if (user) {
       toast.info('You are already registered!');
     } else {
       router.push('/signUp');
@@ -46,10 +29,8 @@ export default function Welcome() {
 
   const handleLogoutClick = async () => {
     try {
-      await signOut(auth);
+      await signOut();
       toast.success('You have successfully logged out.');
-      setIsAuthenticated(false);
-      setUserName(null);
     } catch (error) {
       toast.error('Failed to log out. Please try again.');
     }
@@ -57,7 +38,7 @@ export default function Welcome() {
 
   return (
     <div className={styles.welcome}>
-      {!isAuthenticated ? (
+      {!user ? (
         <>
           <p className={styles.head}>Welcome!!</p>
           <p className={styles.disc}>If you want to try playground, please sign in or sign up</p>
@@ -68,7 +49,7 @@ export default function Welcome() {
         </>
       ) : (
         <>
-          <p className={styles.head}>Welcome back, {userName}!</p>
+          <p className={styles.head}>Welcome back, {user.displayName || 'User'}!</p>
           <div className={styles.btnPrivate}>
             <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
             <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
