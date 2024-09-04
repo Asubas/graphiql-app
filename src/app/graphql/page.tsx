@@ -15,6 +15,7 @@ import {
   DEFAULT_URL_ENDPOINT,
 } from '@/src/services/constant';
 import { DocSection } from '@/src/components/documentation/docSection';
+import { HistorySection } from '@/src/components/history/historySection';
 
 const GraphQLClient = () => {
   const methods = useForm<FormData>();
@@ -127,6 +128,7 @@ const GraphQLClient = () => {
             >
               Add headers
             </Button>
+            <HistorySection />
             <div className={pages.documentation}>
               {status === 500 || !status ? (
                 <span className={pages.documentationShowTitle}>
