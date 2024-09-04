@@ -1,5 +1,5 @@
-const DEFAULTURLENDPOINT = 'https://rickandmortyapi.com/graphql';
-const DEFAULTQUERYJSON = `query {
+const DEFAULT_URL_ENDPOINT = 'https://rickandmortyapi.com/graphql';
+const DEFAULT_QUERY_JSON = `query {
     characters(page: 2, filter: { name: "rick" }) {
       info {
         count
@@ -16,4 +16,6 @@ const DEFAULTQUERYJSON = `query {
     }
   }`;
 
-export { DEFAULTQUERYJSON, DEFAULTURLENDPOINT };
+const DEFAULT_SDL_ENDPOINT = 'https://rickandmortyapi.com/graphql?sdl';
+
+export { DEFAULT_QUERY_JSON, DEFAULT_URL_ENDPOINT, DEFAULT_SDL_ENDPOINT };

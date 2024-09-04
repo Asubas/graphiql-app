@@ -9,8 +9,12 @@ import { RequestTextField } from '../../components/inputs/requestFieldInput/requ
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
 import { handlerBlurInput } from '@/src/utils/handlers';
 import { encodedUrl } from '@/src/services/responses/encodedUrl';
-import { DEFAULTQUERYJSON, DEFAULTURLENDPOINT } from '@/src/services/constant';
-import { ShowSchema } from '@/src/utils/schema';
+import {
+  DEFAULT_QUERY_JSON,
+  DEFAULT_SDL_ENDPOINT,
+  DEFAULT_URL_ENDPOINT,
+} from '@/src/services/constant';
+import { DocSection } from '@/src/components/documentation/docSection';
 
 const GraphQLClient = () => {
   const methods = useForm<FormData>();
@@ -37,8 +41,7 @@ const GraphQLClient = () => {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
     }
-
-    ShowSchema(query);
+    methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,6 +70,10 @@ const GraphQLClient = () => {
   //   }
   // }, [pathname, router]);
 
+  // const showDocumentation = () => {
+  // setIsShowDocumentation((prevState) => !prevState);
+  // };
+
   return (
     <section className={pages.graphql}>
       <p>GraphQL Client</p>
@@ -78,9 +85,13 @@ const GraphQLClient = () => {
               register={methods.register('endpointUrl')}
               onBlur={handlePushUrl}
               prettier={'endpoint'}
-              defaultValue={DEFAULTURLENDPOINT}
+              defaultValue={DEFAULT_URL_ENDPOINT}
             />
-            <TextFieldInput label="SDL Url:" register={methods.register('sdlUrl')} />
+            <TextFieldInput
+              label="SDL Url:"
+              register={methods.register('sdlUrl')}
+              defaultValue={DEFAULT_SDL_ENDPOINT}
+            />
           </div>
           <div className={pages.area}>
             <TextFieldInput
@@ -91,14 +102,14 @@ const GraphQLClient = () => {
               rows={20}
               onBlur={handlePushUrl}
               prettier={'query'}
-              defaultValue={DEFAULTQUERYJSON}
+              defaultValue={DEFAULT_QUERY_JSON}
             />
             <div className={pages.response}>
               <p>Status: {status ? status : ''}</p>
               <RequestTextField response={response ? response : ''} />
             </div>
           </div>
-          <div className={pages.documentation}>
+          <div className={pages.additionally}>
             <Button
               className={pages.queryButton}
               variant="contained"
@@ -116,12 +127,15 @@ const GraphQLClient = () => {
             >
               Add headers
             </Button>
-            <p>
-              Documentation:{' '}
-              {response && response.data
-                ? 'Link to documentation here'
-                : 'If response success show link to documentation'}
-            </p>
+            <div className={pages.documentation}>
+              {status === 500 || !status ? (
+                <span className={pages.documentationShowTitle}>
+                  If response ok, this should be link to documentation
+                </span>
+              ) : (
+                <DocSection endpointSdl={methods.getValues('sdlUrl')} />
+              )}
+            </div>
             <Button className={pages.queryButton} variant="contained" type="submit">
               Submit
             </Button>
