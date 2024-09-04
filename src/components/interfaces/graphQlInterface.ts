@@ -23,3 +23,11 @@ export type CustomTextFieldVariants =
   | 'standard'
   | 'outlined-multiline-static'
   | 'fullWidth';
+
+export interface FormDataHistory {
+  endpointUrl: string;
+  headersObj: Record<string, string>;
+  query: string;
+  variables: string | null;
+  timestamp: string;
+}

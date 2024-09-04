@@ -1,3 +1,5 @@
+import { saveGetHistory } from '@/src/utils/saveGetHistory';
+
 export async function sendResponse(
   endpointUrl: string,
   headersObj: Record<string, string>,
@@ -18,6 +20,14 @@ export async function sendResponse(
     },
     body: JSON.stringify({ endpointUrl, headersObj, query, variables: body.variables }),
   });
+  saveGetHistory({
+    endpointUrl,
+    headersObj,
+    query,
+    variables: body.variables,
+    timestamp: new Date().toISOString(),
+  });
+
   const result = await res.json();
   return { result, status: res.status };
 }

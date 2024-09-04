@@ -8,11 +8,17 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 function HistorySection() {
   const [open, setOpen] = useState(false);
-  const [history, setHistory] = useState<string | null>(null);
+  const [history, setHistory] = useState<string[] | null>([]);
   const anchor: Anchor = 'left';
-  //   const isHistory = localStorage.getItem('history');
+
   const router = useRouter();
   const toggleDrawer = (newOpen: boolean) => () => {
+    const storedHistory = localStorage.getItem('history');
+    if (storedHistory) {
+      setHistory(JSON.parse(storedHistory));
+    } else {
+      setHistory([]);
+    }
     setOpen(newOpen);
   };
 
@@ -49,8 +55,9 @@ function HistorySection() {
   );
 
   useEffect(() => {
-    if (localStorage.getItem('history')) {
-      setHistory(localStorage.getItem('history'));
+    const storedHistory = localStorage.getItem('history');
+    if (storedHistory) {
+      setHistory(JSON.parse(storedHistory));
     }
   }, []);
 
