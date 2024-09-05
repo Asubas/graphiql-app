@@ -54,24 +54,15 @@ function TextFieldInput<TFieldValues extends FieldValues>({
   prettier?: string;
   defaultValue?: string;
 }) {
-  const theme = useTheme();
   const { getValues, setValue } = useFormContext();
-  const [inputText, setInputText] = useState<string | null>('');
   const handleFormat = async () => {
-    if (inputText) {
-      const parsedJson = JSON.stringify(inputText, null, 2);
-      const test = JSON.parse(parsedJson);
-      const formattedText = beautify.js(inputText, options);
+    const query = getValues('query');
+    if (query) {
+      const TextToJson = JSON.stringify(query);
+      const formattedText = beautify.js(JSON.parse(TextToJson), options);
       setValue('query', formattedText);
-    } else {
-      console.log('тут надо добавить тоастифай мб');
     }
   };
-
-  useEffect(() => {
-    const query = getValues('query');
-    setInputText(query);
-  }, [getValues]);
 
   return (
     <>
