@@ -27,21 +27,14 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
   const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
-  const headersObj: Record<string, string> = {};
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headersValue, query, variables } = data;
-    if (headersValue) {
-      const headers = JSON.parse(headersValue);
-      Object.keys(headers).forEach((key) => {
-        headersObj[key] = headers[key];
-      });
-    }
-    const { result, status } = await sendRequest(endpointUrl, headersObj, query, variables);
+    const { result, status } = await sendRequest(endpointUrl, headersValue, query, variables);
     if (result) {
       setResponse(result as GraphQLResponse);
       setStatus(status);
-      encodedUrl(endpointUrl, headersObj, query, variables);
+      encodedUrl(endpointUrl, headersValue, query, variables);
     } else {
       setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
       setStatus(500);
@@ -151,6 +144,7 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
               customClass={showHeaders ? pages.show : pages.hidden}
               placeholder="{ headers }"
               onBlur={handlePushUrl}
+              defaultValue={(defaultParams && defaultParams.headers) || ''}
             />
           </div>
         </form>

@@ -3,7 +3,7 @@ import { encodedUrl } from './encodedUrl';
 
 export async function sendRequest(
   endpointUrl: string,
-  headersObj: Record<string, string>,
+  headers: string,
   query: string,
   variables: string | null,
 ) {
@@ -12,20 +12,18 @@ export async function sendRequest(
     variables: variables ? JSON.parse(variables) : null,
   };
   const baseUrl = 'http://localhost:3000/api/graphql';
-
   const res = await fetch(baseUrl, {
     method: 'POST',
     headers: {
-      ...headersObj,
-      'Content-Type': 'application/json',
+      headers,
     },
-    body: JSON.stringify({ endpointUrl, headersObj, query, variables: body.variables }),
+    body: JSON.stringify({ endpointUrl, headers, query, variables: body.variables }),
   });
 
-  const encodedHistoryUrl = encodedUrl(endpointUrl, headersObj, query, body.variables);
+  const encodedHistoryUrl = encodedUrl(endpointUrl, headers, query, body.variables);
   saveGetHistory({
     endpointUrl,
-    headersObj,
+    headers,
     query,
     variables: body.variables,
     timestamp: new Date().toISOString(),

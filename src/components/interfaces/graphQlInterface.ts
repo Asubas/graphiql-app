@@ -1,5 +1,3 @@
-import { InputProps, TextFieldVariants } from '@mui/material';
-
 export interface ErrorResponse {
   message: string;
 }
@@ -7,8 +5,7 @@ export interface ErrorResponse {
 export interface FormData {
   endpointUrl: string;
   sdlUrl: string;
-  headersKey?: string;
-  headersValue?: string;
+  headersValue: string;
   query: string;
   variables: string;
 }
@@ -26,7 +23,7 @@ export type CustomTextFieldVariants =
 
 export interface FormDataHistory {
   endpointUrl: string;
-  headersObj: Record<string, string>;
+  headers: string;
   query: string;
   variables: string | null;
   timestamp: string;
@@ -35,7 +32,7 @@ export interface FormDataHistory {
 
 export interface DefaultParams {
   endpointUrl: string;
-  headers: { [k: string]: string };
+  headers: string;
   query: string;
   variables: string;
 }

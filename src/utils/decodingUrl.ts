@@ -8,8 +8,8 @@ function decodingUrl(pathname: string) {
     const body = JSON.parse(decodedBody);
     const query = body.query;
     const variables = body.variables;
-    const headersString = parts[parts.length - 1].split('?')[1];
-    const headers = Object.fromEntries(new URLSearchParams(headersString));
+    const encodedHeaders = parts[parts.length - 1].split('?')[1];
+    const headers = encodedHeaders ? JSON.parse(atob(encodedHeaders)) : {};
     return {
       endpointUrl,
       headers,
