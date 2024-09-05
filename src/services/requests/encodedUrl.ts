@@ -18,9 +18,11 @@ function encodedUrl(
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  const encodedUrl = `http://localhost:3000/api/graphql/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${headersString}`;
+  const encodedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${headersString}`;
 
   window.history.pushState({}, '', encodedUrl);
+
+  return encodedUrl;
 }
 
 export { encodedUrl };

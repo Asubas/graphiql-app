@@ -30,4 +30,12 @@ export interface FormDataHistory {
   query: string;
   variables: string | null;
   timestamp: string;
+  encodedHistoryUrl: string;
+}
+
+export interface DefaultParams {
+  endpointUrl: string;
+  headers: { [k: string]: string };
+  query: string;
+  variables: string;
 }

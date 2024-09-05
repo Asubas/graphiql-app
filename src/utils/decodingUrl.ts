@@ -10,7 +10,6 @@ function decodingUrl(pathname: string) {
     const variables = body.variables;
     const headersString = parts[parts.length - 1].split('?')[1];
     const headers = Object.fromEntries(new URLSearchParams(headersString));
-    console.log(endpointUrl, headers, query, variables);
     return {
       endpointUrl,
       headers,

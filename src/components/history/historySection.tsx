@@ -1,14 +1,16 @@
+import Link from 'next/link';
 import pages from '../../app/graphql/graphql.module.scss';
 import styles from './history.module.scss';
 import { useEffect, useState } from 'react';
 import { Button, Drawer } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { FormDataHistory } from '../interfaces/graphQlInterface';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 function HistorySection() {
   const [open, setOpen] = useState(false);
-  const [history, setHistory] = useState<string[] | null>([]);
+  const [history, setHistory] = useState<FormDataHistory[] | null>([]);
   const anchor: Anchor = 'left';
 
   const router = useRouter();
@@ -19,6 +21,7 @@ function HistorySection() {
     } else {
       setHistory([]);
     }
+    console.log(history);
     setOpen(newOpen);
   };
 
@@ -34,7 +37,15 @@ function HistorySection() {
   const DrawerList = (
     <div className={styles.container}>
       {history ? (
-        <p> History </p>
+        history.map((element, index) => {
+          const target = element.endpointUrl.split('/');
+
+          return (
+            <div className={styles.historyElement} key={index}>
+              <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
+            </div>
+          );
+        })
       ) : (
         <div className={styles.emptyHistory}>
           <p>

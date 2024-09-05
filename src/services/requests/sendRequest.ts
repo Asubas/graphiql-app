@@ -1,6 +1,7 @@
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
+import { encodedUrl } from './encodedUrl';
 
-export async function sendResponse(
+export async function sendRequest(
   endpointUrl: string,
   headersObj: Record<string, string>,
   query: string,
@@ -20,12 +21,15 @@ export async function sendResponse(
     },
     body: JSON.stringify({ endpointUrl, headersObj, query, variables: body.variables }),
   });
+
+  const encodedHistoryUrl = encodedUrl(endpointUrl, headersObj, query, body.variables);
   saveGetHistory({
     endpointUrl,
     headersObj,
     query,
     variables: body.variables,
     timestamp: new Date().toISOString(),
+    encodedHistoryUrl,
   });
 
   const result = await res.json();

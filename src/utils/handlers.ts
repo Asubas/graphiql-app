@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { encodedUrl } from '../services/responses/encodedUrl';
+import { encodedUrl } from '../services/requests/encodedUrl';
 
 export const handleHeaderKeyChange = (
   index: number,
