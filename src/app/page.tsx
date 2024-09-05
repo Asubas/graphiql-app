@@ -10,7 +10,15 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      {!user ? <About /> : <p>Welcome back, {user.displayName || 'User'}!</p>} <Welcome />
+      {!user ? (
+        <About />
+      ) : (
+        <>
+          <About />
+          <p>Welcome back, {user.displayName || 'User'}!</p>
+        </>
+      )}{' '}
+      <Welcome />
     </main>
   );
 }

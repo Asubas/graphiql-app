@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -20,11 +20,15 @@ export function useAuth() {
   const [tokenExpirationTime, setTokenExpirationTime] = useState<number | null>(null);
   const router = useRouter();
 
+  const handleTokenExpiration = useCallback(() => {
+    toast.info('Your session has expired. You will be redirected to the main page.');
+    router.push('/');
+  }, [router]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
-        console.log(idTokenResult);
         const expirationTime = new Date(idTokenResult.expirationTime).getTime();
 
         setTokenExpirationTime(expirationTime);
@@ -43,12 +47,7 @@ export function useAuth() {
     });
 
     return () => unsubscribe();
-  }, [router]);
-
-  const handleTokenExpiration = () => {
-    toast.info('Your session has expired. You will be redirected to the main page.');
-    router.push('/');
-  };
+  }, [router, handleTokenExpiration]);
 
   const signUp = async (email: string, password: string, username?: string) => {
     setLoading(true);

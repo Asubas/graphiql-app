@@ -41,9 +41,13 @@ export default function Welcome() {
       ) : (
         <>
           <div className={styles.btnPrivate}>
-            <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
-            <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" />
-            <PrivateBtn className="btnPrivate history-btn" label="History" />
+            <PrivateBtn className="btnPrivate rest-btn" label="REST Client" route="/rest" />
+            <PrivateBtn
+              className="btnPrivate graphql-btn"
+              label="GraphQL Client"
+              route="/graphql"
+            />
+            <PrivateBtn className="btnPrivate history-btn" label="History" route="/history" />
           </div>
         </>
       )}
