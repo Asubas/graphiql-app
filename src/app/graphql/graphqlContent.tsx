@@ -73,7 +73,9 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
               label="SDL Url:"
               register={methods.register('sdlUrl')}
               defaultValue={
-                `${defaultParams && defaultParams.endpointUrl}?sdl` || DEFAULT_SDL_ENDPOINT
+                defaultParams && defaultParams.endpointUrl
+                  ? `${defaultParams.endpointUrl}?sdl`
+                  : DEFAULT_SDL_ENDPOINT
               }
             />
           </div>

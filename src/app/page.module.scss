@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  gap: 48px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+  max-width: 1024px;
+  min-height: 100vh;
+  margin: 120px auto 0;
+
+  @media (max-width: 1020px) {
+    padding: 4rem;
+  }
+
+  @media (max-width: 956px) {
+    padding: 2rem;
+  }
+
+  @media (max-width: 670px) {
+    padding: 1rem;
+  }
+}
