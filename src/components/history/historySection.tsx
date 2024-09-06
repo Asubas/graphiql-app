@@ -21,7 +21,6 @@ function HistorySection() {
     } else {
       setHistory([]);
     }
-    console.log(history);
     setOpen(newOpen);
   };
 
@@ -34,18 +33,30 @@ function HistorySection() {
     }
   };
 
+  const clearHistory = () => {
+    localStorage.removeItem('history');
+    setHistory([]);
+  };
+
   const DrawerList = (
     <div className={styles.container}>
-      {history ? (
-        history.map((element, index) => {
-          const target = element.endpointUrl.split('/');
+      {history && history.length > 0 ? (
+        <>
+          {history.map((element, index) => {
+            const target = element.endpointUrl.split('/');
 
-          return (
-            <div className={styles.historyElement} key={index}>
-              <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
-            </div>
-          );
-        })
+            return (
+              <div className={styles.historyElement} key={index}>
+                <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
+              </div>
+            );
+          })}
+          <div className={styles.buttonsContainer}>
+            <Button variant="contained" type="button" onClick={clearHistory}>
+              Clear History
+            </Button>
+          </div>
+        </>
       ) : (
         <div className={styles.emptyHistory}>
           <p>
