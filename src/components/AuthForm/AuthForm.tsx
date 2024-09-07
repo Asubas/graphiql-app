@@ -7,7 +7,7 @@ import style from './AuthForm.module.scss';
 import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signInValidationSchema, signUpValidationSchema } from '@/src/utils/validation';
+import { useSignInValidationSchema, useSignUpValidationSchema } from '@/src/utils/validation';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/src/utils/getLocale';
 
@@ -29,7 +29,11 @@ interface SignUpInputs {
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
-  const isSignIn = title === 'Sign In';
+  const t = useTranslations('AuthForm');
+  const isSignIn = title === t('signInTitle');
+
+  const signInValidationSchema = useSignInValidationSchema();
+  const signUpValidationSchema = useSignUpValidationSchema();
 
   const {
     register,
@@ -39,7 +43,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
     resolver: yupResolver(isSignIn ? signInValidationSchema : signUpValidationSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
-  const t = useTranslations('AuthForm');
 
   const router = useRouter();
   const locale = getLocale();

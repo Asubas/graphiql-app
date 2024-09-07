@@ -42,6 +42,7 @@
     "throwError": "Throw Error"
   },
   "AuthForm": {
+    "signInTitle": "Sign In",
     "userName": "Username",
     "email": "Email",
     "password": "Password",
@@ -60,5 +61,32 @@
     "history": "History",
     "alreadySignIn": "You are already logged in!",
     "alreadySignUp": "You are already registered!"
+  },
+  "Validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Email must be in the format user@example.com",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordDigit": "Password must contain at least 1 digit",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordSpecial": "Password must contain at least one special character",
+    "usernameRequired": "Username is required",
+    "usernameMinLength": "Username must be at least 3 characters long",
+    "usernameMaxLength": "Username must be at most 15 characters long",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordsMustMatch": "Passwords must match"
+  },
+  "Toasts": {
+    "sessionExpired": "Your session has expired. You will be redirected to the main page",
+    "userCreated": "User is successfully created!",
+    "userExists": "User with this email is already registered",
+    "invalidEmail": "Invalid email address",
+    "unexpectedError": "An unexpected error occurred. Please try again",
+    "userLoggedIn": "You are successfully logged in",
+    "userDoesNotExist": "User with these credentials does not exist. Please check the email and password",
+    "manyRequests": "Too many requests at the same time. Please try later",
+    "userLoggedOut": "You have successfully logged out",
+    "logOutFail": "Failed to log out. Please try again"
   }
 }
