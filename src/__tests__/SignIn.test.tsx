@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import Loader from '@/src/components/Loader/Loader';
-import SignIn from '../app/signIn/page';
+import SignIn from '../app/[locale]/signIn/page';
 import { useAuth } from '../hooks/useAuthRedirect';
 
 jest.mock('../hooks/useAuthRedirect');

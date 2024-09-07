@@ -1,0 +1,45 @@
+{
+  "HomePage": {
+    "title": "Welcome back",
+    "about": "Go to the about page"
+  },
+  "SignIn": {
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password"
+  },
+  "SignUp": {
+    "title": "Sign Up",
+    "email": "Email",
+    "password": "Password"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong!",
+    "errorMessage": "Error:",
+    "showDetails": "Show Details",
+    "hideDetails": "Hide Details",
+    "tryAgain": "Try again from Start"
+  },
+  "NotFoundPage": {
+    "title": "Error: 404 page not found",
+    "message": "Sorry, the page you&apos;re looking for cannot be accessed",
+    "link": "Go Home"
+  },
+  "AboutPage": {
+    "text": "This application was created as part of the React course by RSSchool. If you also want todive into the world of IT and specifically into the world of frontend development,",
+    "rsLinkText": "enroll in the frontend development course",
+    "descriptionBeggining": "Welcome to the home of",
+    "descriptionEnd": "! We are a team of budding developers, unafraid of challenges and always moving forward. Our application is built to assist others by enabling requests to any open APIs. Whether you&apos;re making RESTful requests or diving into GraphQL, our platform is designed to empower your projects.",
+    "team": "Our team",
+    "asubasName": "Alex (Asubas)",
+    "asubasRole": "Team lead, developer",
+    "asubasLocation": "Russia, Yaroslavl",
+    "lipanName": "Anton (lipan4836)",
+    "lipanRole": "developer",
+    "lipanLocation": "Russia, Voronezh",
+    "pdasyaName": "Daria (pdasya)",
+    "pdasyaRole": "developer",
+    "pdasyaLocation": "Japan, Tsukuba",
+    "throwError": "Throw Error"
+  }
+}

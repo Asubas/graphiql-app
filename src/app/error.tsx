@@ -1,5 +1,6 @@
 'use client'; // Error boundaries must be Client Components
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ export default function ErrorUI({
   reset: () => void;
 }) {
   const [showDetails, setShowDetails] = useState(false);
+  const t = useTranslations('ErrorPage');
 
   useEffect(() => {
     console.error(error);
@@ -24,16 +26,16 @@ export default function ErrorUI({
   return (
     <section className="error">
       <div className="error_img"></div>
-      <h2 className="error_h2">Something went wrong!</h2>
+      <h2 className="error_h2">{t('title')}</h2>
       <p className="error_msg">
-        <span className="error_msg__title">Error:</span> {error.message}
+        <span className="error_msg__title">{t('errorMessage')}</span> {error.message}
       </p>
       <button className="error_btn" onClick={toggleDetails}>
-        {showDetails ? 'Hide Details' : 'Show Details'}
+        {showDetails ? t('hideDetails') : t('showDetails')}
       </button>
       {showDetails && <pre className="error_details">{error.stack}</pre>}
       <a href="/" className="error_btn">
-        Try again from Start
+        {t('tryAgain')}
       </a>
     </section>
   );

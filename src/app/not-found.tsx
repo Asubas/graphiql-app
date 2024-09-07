@@ -2,8 +2,10 @@ import React from 'react';
 import styles from './not-found.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const PageNotFound: React.FC = () => {
+  const t = useTranslations('NotFoundPage');
   return (
     <main className={styles.notFound}>
       <section className={styles.notFoundWrap}>
@@ -14,10 +16,10 @@ const PageNotFound: React.FC = () => {
           </span>
           4
         </p>
-        <h2 className={styles.h2head}>Error: 404 page not found</h2>
-        <p className={styles.message}>Sorry, the page you&apos;re looking for cannot be accessed</p>
+        <h2 className={styles.h2head}>{t('title')}</h2>
+        <p className={styles.message}>{t('message')}</p>
         <Link className={styles.linkToHome} href="/">
-          Go Home
+          {t('link')}
         </Link>
       </section>
     </main>

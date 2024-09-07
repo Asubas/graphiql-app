@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import Loader from '@/src/components/Loader/Loader';
-import SignUp from '../app/signUp/page';
+import SignUp from '../app/[locale]/signUp/page';
 
 jest.mock('../hooks/useAuthRedirect');
 jest.mock('../components/AuthForm/AuthForm');
