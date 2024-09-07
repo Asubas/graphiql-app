@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import HeaderAuthBtn from '@/src/components/Buttons/HeaderAuthBtn/HeaderAuthBtn';
 import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
-import { useRouter } from 'next/navigation';
-import { getLocale } from '@/src/utils/getLocale';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { getLocale, setLocale } from '@/src/utils/cookies';
 
 export default function Header() {
   const router = useRouter();
@@ -17,6 +17,8 @@ export default function Header() {
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const locale = getLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,6 +57,14 @@ export default function Header() {
     setMenuOpen(false);
     document.body.classList.remove(styles.bodyLock);
     document.documentElement.classList.remove(styles.bodyLock);
+  };
+
+  const handleLocaleChange = (newLocale: string) => {
+    setLocale(newLocale);
+    const newPathname = pathname.replace(`/${locale}`, '') || '/';
+    router.push(
+      `/${newLocale}${newPathname}${searchParams.toString() ? '?' + searchParams.toString() : ''}`,
+    );
   };
 
   return (
@@ -100,9 +110,24 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.buttonsLang}>
-            <input type="radio" id="option-one" name="selector" />
+            <input
+              type="radio"
+              id="option-one"
+              name="selector"
+              checked={locale === 'en'}
+              readOnly
+              onClick={() => handleLocaleChange('en')}
+            />
             <label htmlFor="option-one">EN</label>
-            <input type="radio" id="option-two" name="selector" />
+
+            <input
+              type="radio"
+              id="option-two"
+              name="selector"
+              checked={locale === 'ru'}
+              readOnly
+              onClick={() => handleLocaleChange('ru')}
+            />
             <label htmlFor="option-two">RU</label>
           </div>
           <div className={`buttonWrap ${styles.headerBtn}`}>

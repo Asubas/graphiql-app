@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSignInValidationSchema, useSignUpValidationSchema } from '@/src/utils/validation';
 import { useTranslations } from 'next-intl';
-import { getLocale } from '@/src/utils/getLocale';
+import { getLocale } from '@/src/utils/cookies';
 
 interface AuthFormProps {
   title: string;

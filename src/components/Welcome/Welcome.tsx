@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
-import { getLocale } from '@/src/utils/getLocale';
+import { getLocale } from '@/src/utils/cookies';
 
 export default function Welcome() {
   const router = useRouter();
