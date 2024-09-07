@@ -24,6 +24,7 @@
     "@mui/system": "^5.16.7",
     "@reduxjs/toolkit": "^2.2.7",
     "firebase": "^10.13.0",
+    "i18n": "^0.15.1",
     "next": "14.2.5",
     "next-intl": "^3.19.1",
     "react": "^18",

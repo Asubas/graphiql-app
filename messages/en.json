@@ -50,5 +50,16 @@
     "submit": "Submit",
     "isSignInText": "Don't have an account? Sign Up",
     "isNotSignInText": "Already have an account? Sign In"
+  },
+  "Welcome": {
+    "welcome": "Welcome!!",
+    "description": "If you want to try playground, please sign in or sign up",
+    "signInLabel": "Sign In",
+    "signUpLabel": "Sign Up",
+    "restLabel": "REST Client",
+    "graphQLLabel": "GraphQL Client",
+    "history": "History",
+    "alreadySignIn": "You are already logged in!",
+    "alreadySignUp": "You are already registered!"
   }
 }
