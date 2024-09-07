@@ -8,6 +8,7 @@ import HeaderAuthBtn from '@/src/components/Buttons/HeaderAuthBtn/HeaderAuthBtn'
 import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { useRouter } from 'next/navigation';
+import { getLocale } from '@/src/utils/getLocale';
 
 export default function Header() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function Header() {
 
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const locale = getLocale();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,11 +32,11 @@ export default function Header() {
   }, []);
 
   const handleSignInClick = () => {
-    router.push('/signIn');
+    router.push(`/${locale}/signIn`);
   };
 
   const handleSignUpClick = () => {
-    router.push('/signUp');
+    router.push(`/${locale}/signUp`);
   };
 
   const toggleMenu = () => {

@@ -1,5 +1,3 @@
-'use client';
-
 import AuthBtn from '../Buttons/AuthBtn/AuthBtn';
 import PrivateBtn from '../Buttons/PrivateBtn/PrivateBtn';
 import styles from './Welcome.module.scss';
@@ -7,17 +5,19 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
+import { getLocale } from '@/src/utils/getLocale';
 
 export default function Welcome() {
   const router = useRouter();
   const { user, signOut } = useAuth();
   const t = useTranslations('Welcome');
+  const locale = getLocale();
 
   const handleSignInClick = () => {
     if (user) {
       toast.info(t('alreadySignIn'));
     } else {
-      router.push('/signIn');
+      router.push(`/${locale}/signIn`);
     }
   };
 
@@ -25,7 +25,7 @@ export default function Welcome() {
     if (user) {
       toast.info(t('alreadySignUp'));
     } else {
-      router.push('/signUp');
+      router.push(`/${locale}/signUp`);
     }
   };
 

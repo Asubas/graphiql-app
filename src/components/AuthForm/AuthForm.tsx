@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signInValidationSchema, signUpValidationSchema } from '@/src/utils/validation';
 import { useTranslations } from 'next-intl';
+import { getLocale } from '@/src/utils/getLocale';
 
 interface AuthFormProps {
   title: string;
@@ -41,12 +42,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const t = useTranslations('AuthForm');
 
   const router = useRouter();
+  const locale = getLocale();
 
   const handleLinkClick = () => {
     if (isSignIn) {
-      router.push('/signUp');
+      router.push(`/${locale}/signUp`);
     } else {
-      router.push('/signIn');
+      router.push(`/${locale}/signIn`);
     }
   };
 
