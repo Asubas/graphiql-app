@@ -8,6 +8,7 @@ import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signInValidationSchema, signUpValidationSchema } from '@/src/utils/validation';
+import { useTranslations } from 'next-intl';
 
 interface AuthFormProps {
   title: string;
@@ -37,6 +38,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
     resolver: yupResolver(isSignIn ? signInValidationSchema : signUpValidationSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
+  const t = useTranslations('AuthForm');
 
   const router = useRouter();
 
@@ -72,7 +74,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
             <>
               <Grid item xs={12}>
                 <TextInputField
-                  label="Username"
+                  label={t('userName')}
                   type="text"
                   error={errors && 'username' in errors ? errors.username?.message || '' : ''}
                   startIcon={<PersonIcon />}
@@ -83,7 +85,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           )}
           <Grid item xs={12}>
             <TextInputField
-              label="Email"
+              label={t('email')}
               type="email"
               error={errors && 'email' in errors ? errors.email?.message || '' : ''}
               startIcon={<EmailRounded />}
@@ -92,7 +94,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           </Grid>
           <Grid item xs={12}>
             <TextInputField
-              label="Password"
+              label={t('password')}
               type={showPassword ? 'text' : 'password'}
               error={errors && 'password' in errors ? errors.password?.message || '' : ''}
               startIcon={<Lock />}
@@ -104,7 +106,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           {!isSignIn && (
             <Grid item xs={12}>
               <TextInputField
-                label="Confirm Password"
+                label={t('confirmPassword')}
                 type={showPassword ? 'text' : 'password'}
                 error={
                   errors && 'confirmPassword' in errors ? errors.confirmPassword?.message || '' : ''
@@ -118,13 +120,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           )}
           <Grid item xs={12}>
             <Button fullWidth variant="contained" color="primary" type="submit">
-              Submit
+              {t('submit')}
             </Button>
           </Grid>
         </Grid>
       </form>
       <Link variant="body2" onClick={handleLinkClick} className={style.navigationLink}>
-        {isSignIn ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+        {isSignIn ? t('isSignInText') : t('isNotSignInText')}
       </Link>
     </Container>
   );

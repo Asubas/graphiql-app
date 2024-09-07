@@ -41,5 +41,14 @@
     "pdasyaRole": "developer",
     "pdasyaLocation": "Japan, Tsukuba",
     "throwError": "Throw Error"
+  },
+  "AuthForm": {
+    "userName": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "isSignInText": "Don't have an account? Sign Up",
+    "isNotSignInText": "Already have an account? Sign In"
   }
 }
