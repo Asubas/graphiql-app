@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PageNotFound from '@/src/app/not-found';
+import PageNotFound from '@/src/app/[locale]/not-found';
 
 jest.mock('next/image', () => {
   const MockImage = ({
