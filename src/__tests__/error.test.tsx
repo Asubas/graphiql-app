@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ErrorUI from '@/src/app/error';
+import ErrorUI from '@/src/app/[locale]/error';
 
 describe('ErrorUI Component', () => {
   const errorMock = new Error('Test error message');

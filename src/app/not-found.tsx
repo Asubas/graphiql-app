@@ -3,6 +3,7 @@ import styles from './not-found.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import '../styles/globals.scss';
 
 const PageNotFound: React.FC = () => {
   const t = useTranslations('NotFoundPage');
