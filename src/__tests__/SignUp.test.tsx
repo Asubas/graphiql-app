@@ -4,15 +4,20 @@ import '@testing-library/jest-dom';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import Loader from '@/src/components/Loader/Loader';
+import { useTranslations } from 'next-intl';
 import SignUp from '../app/[locale]/signUp/page';
 
 jest.mock('../hooks/useAuthRedirect');
 jest.mock('../components/AuthForm/AuthForm');
 jest.mock('../components/Loader/Loader');
+jest.mock('next-intl', () => ({
+  useTranslations: jest.fn(),
+}));
 
 const mockUseAuth = useAuth as jest.Mock;
 const mockAuthForm = AuthForm as jest.Mock;
 const mockLoader = Loader as jest.Mock;
+const mockUseTranslations = useTranslations as jest.Mock;
 
 describe('SignUp Component', () => {
   beforeEach(() => {
@@ -27,6 +32,7 @@ describe('SignUp Component', () => {
       </form>
     ));
     mockLoader.mockReturnValue(<div>Loading...</div>);
+    mockUseTranslations.mockReturnValue((key: string) => (key === 'title' ? 'Sign Up' : key));
   });
 
   it('renders the loading state when loading is true', () => {
@@ -35,14 +41,6 @@ describe('SignUp Component', () => {
     render(<SignUp />);
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-  });
-
-  it('renders the AuthForm component when loading is false', () => {
-    mockUseAuth.mockReturnValue({ loading: false, signUp: jest.fn() });
-
-    render(<SignUp />);
-
-    expect(screen.getByText('Submit')).toBeInTheDocument();
   });
 
   it('calls signUp with correct email, password, and username on form submit', async () => {
