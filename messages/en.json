@@ -21,14 +21,14 @@
   },
   "NotFoundPage": {
     "title": "Error: 404 page not found",
-    "message": "Sorry, the page you&apos;re looking for cannot be accessed",
+    "message": "Sorry, the page you are looking for cannot be accessed",
     "link": "Go Home"
   },
   "AboutPage": {
-    "text": "This application was created as part of the React course by RSSchool. If you also want todive into the world of IT and specifically into the world of frontend development,",
+    "text": "This application was created as part of the React course by RSSchool. If you also want to dive into the world of IT and specifically into the world of frontend development,",
     "rsLinkText": "enroll in the frontend development course",
     "descriptionBeggining": "Welcome to the home of",
-    "descriptionEnd": "! We are a team of budding developers, unafraid of challenges and always moving forward. Our application is built to assist others by enabling requests to any open APIs. Whether you&apos;re making RESTful requests or diving into GraphQL, our platform is designed to empower your projects.",
+    "descriptionEnd": "! We are a team of budding developers, unafraid of challenges and always moving forward. Our application is built to assist others by enabling requests to any open APIs. Whether you are making RESTful requests or diving into GraphQL, our platform is designed to empower your projects.",
     "team": "Our team",
     "asubasName": "Alex (Asubas)",
     "asubasRole": "Team lead, developer",
