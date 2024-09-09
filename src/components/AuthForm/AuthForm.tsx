@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Button, Container, Link } from '@mui/material';
 import { EmailRounded, Lock } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
-import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import style from './AuthForm.module.scss';
 import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
@@ -99,6 +99,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
               showPasswordToggle
               onTogglePasswordVisibility={handleClickShowPassword}
               register={register('password')}
+              autocomplete={'new-password'}
             />
           </Grid>
           {!isSignIn && (
@@ -113,6 +114,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
                 showPasswordToggle
                 onTogglePasswordVisibility={handleClickShowPassword}
                 register={register('confirmPassword')}
+                autocomplete={'new-password'}
               />
             </Grid>
           )}

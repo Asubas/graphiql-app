@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 export default function Welcome() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const handleSignInClick = () => {
     if (user) {

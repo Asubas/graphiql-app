@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -20,11 +20,15 @@ export function useAuth() {
   const [tokenExpirationTime, setTokenExpirationTime] = useState<number | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
+  const handleTokenExpiration = useCallback(() => {
+    toast.info('Your session has expired. You will be redirected to the main page.');
+    router.push('/');
+  }, [router]);
+
+  useLayoutEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
-        console.log(idTokenResult);
         const expirationTime = new Date(idTokenResult.expirationTime).getTime();
 
         setTokenExpirationTime(expirationTime);
@@ -43,12 +47,7 @@ export function useAuth() {
     });
 
     return () => unsubscribe();
-  }, [router]);
-
-  const handleTokenExpiration = () => {
-    toast.info('Your session has expired. You will be redirected to the main page.');
-    router.push('/');
-  };
+  }, [handleTokenExpiration, router]);
 
   const signUp = async (email: string, password: string, username?: string) => {
     setLoading(true);
@@ -66,6 +65,9 @@ export function useAuth() {
       });
 
       toast.success('User is successfully created!');
+      const idTokenResult = await user.getIdTokenResult();
+      const token = idTokenResult.token;
+      document.cookie = `token=${token}; path=/; max-age=${Date.parse(idTokenResult.expirationTime) / 1000 - new Date().getTime() / 1000}`;
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
@@ -92,6 +94,8 @@ export function useAuth() {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
         const expirationTime = new Date(idTokenResult.expirationTime).getTime();
+        const token = idTokenResult.token;
+        document.cookie = `token=${token}; path=/; max-age=${Date.parse(idTokenResult.expirationTime) / 1000 - new Date().getTime() / 1000}`;
 
         setTokenExpirationTime(expirationTime);
 

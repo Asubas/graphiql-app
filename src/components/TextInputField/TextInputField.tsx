@@ -13,6 +13,7 @@ interface TextInputFieldProps {
   showPasswordToggle?: boolean;
   onTogglePasswordVisibility?: () => void;
   register: UseFormRegisterReturn;
+  autocomplete?: string;
 }
 
 const TextInputField: React.FC<TextInputFieldProps> = ({
@@ -23,6 +24,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
   showPasswordToggle,
   onTogglePasswordVisibility,
   register,
+  autocomplete = 'off',
 }) => {
   return (
     <TextField
@@ -47,6 +49,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
           </InputAdornment>
         ),
       }}
+      autoComplete={autocomplete}
       {...register}
     />
   );
