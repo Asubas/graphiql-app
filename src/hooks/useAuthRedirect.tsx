@@ -37,9 +37,8 @@ export function useAuth() {
         const timeUntilExpiration = expirationTime - new Date().getTime();
         setTimeout(() => {
           handleTokenExpiration();
+          router.push('/');
         }, timeUntilExpiration);
-
-        router.push('/');
       } else {
         setUser(null);
         setLoading(false);
