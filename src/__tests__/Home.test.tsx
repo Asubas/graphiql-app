@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import Home from '../app/[locale]/page';
 
 jest.mock('next/navigation', () => ({

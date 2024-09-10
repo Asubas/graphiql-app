@@ -2,8 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import { useRouter } from 'next/navigation';
 import { getLocale } from '@/src/utils/cookies';
-import { useSignInValidationSchema, useSignUpValidationSchema } from '@/src/utils/validation';
-import { useTranslations } from 'next-intl';
 import '@testing-library/jest-dom';
 
 jest.mock('next/navigation', () => ({

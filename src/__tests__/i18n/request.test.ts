@@ -46,7 +46,6 @@ describe('getRequestConfig', () => {
         return ruMessages;
       default:
         notFound();
-        throw new Error('File not found');
     }
   };
 

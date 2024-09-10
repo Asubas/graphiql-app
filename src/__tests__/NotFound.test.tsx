@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { useTranslations } from 'next-intl';
 import PageNotFound from '../app/[...not-found]/not-found';
 
 jest.mock('next-intl', () => ({

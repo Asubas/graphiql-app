@@ -1,13 +1,10 @@
 'use client'; // Error boundaries must be Client Components
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function ErrorUI({
   error,
-  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;

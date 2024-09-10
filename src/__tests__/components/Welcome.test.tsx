@@ -3,7 +3,6 @@ import '@testing-library/jest-dom';
 import Welcome from '@/src/components/Welcome/Welcome';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
-import { toast } from 'react-toastify';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),

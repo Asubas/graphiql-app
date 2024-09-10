@@ -1,9 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import About from '@/src/components/About/About';
-import { useTranslations } from 'next-intl';
 
-// Mocking necessary modules
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: { [key: string]: string } = {
