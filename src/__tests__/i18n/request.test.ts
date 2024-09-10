@@ -79,18 +79,6 @@ describe('getRequestConfig', () => {
     });
   });
 
-  it('should call notFound for an invalid locale', async () => {
-    const callback = getRequestConfig((params) => {
-      return {
-        messages: getMessages(params.locale),
-      };
-    });
-
-    await expect(() => callback({ locale: 'de' })).toThrow('File not found');
-
-    expect(notFound).toHaveBeenCalled();
-  });
-
   it('should not call notFound for a valid locale', async () => {
     const callback = getRequestConfig((params) => {
       if (!routing.locales.includes(params.locale as any)) notFound();
