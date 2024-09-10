@@ -1,3 +1,0 @@
-function pushUrl() {}
-
-export { pushUrl };

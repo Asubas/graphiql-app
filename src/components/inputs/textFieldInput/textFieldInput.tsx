@@ -1,10 +1,9 @@
 import input from './input.module.scss';
 import pages from '../../../app/graphql/graphql.module.scss';
-import { styled, useTheme } from '@mui/material';
+import { styled } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
 import beautify from 'js-beautify';
 const options = {
   indent_size: 4,
