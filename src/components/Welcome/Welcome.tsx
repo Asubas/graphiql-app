@@ -6,7 +6,6 @@ import styles from './Welcome.module.scss';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
-import { HistorySection } from '../history/historySection';
 
 export default function Welcome() {
   const router = useRouter();
@@ -44,8 +43,7 @@ export default function Welcome() {
           <div className={styles.btnPrivate}>
             <PrivateBtn className="btnPrivate rest-btn" label="REST Client" />
             <PrivateBtn className="btnPrivate graphql-btn" label="GraphQL Client" path="graphql" />
-            {/* <PrivateBtn className="btnPrivate history-btn" label="History" /> */}
-            <HistorySection classNamed="btnPrivate history-btn" />
+            <PrivateBtn className="btnPrivate history-btn" label="History" path="history" />
           </div>
         </>
       )}

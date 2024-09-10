@@ -17,7 +17,7 @@ import {
   DEFAULT_URL_ENDPOINT,
 } from '@/src/services/constant';
 import { DocSection } from '@/src/components/documentation/docSection';
-import { HistorySection } from '@/src/components/history/historySection';
+import { HistoryButton } from '@/src/components/history/historySection';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { sendRequest } from '@/src/services/requests/sendRequest';
 
@@ -113,7 +113,7 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
             >
               Add headers
             </Button>
-            <HistorySection />
+            <HistoryButton />
             <div className={pages.documentation}>
               {status === 500 || !status ? (
                 <span className={pages.documentationShowTitle}>
