@@ -16,6 +16,7 @@ import {
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import styles from './rest.module.scss';
 import { color } from '@mui/system';
+import { statusMessages } from '@/src/services/constant';
 
 type QueryParam = { key: string; value: string };
 type Header = { key: string; value: string };
@@ -90,7 +91,9 @@ export default function RestContent() {
         body: method !== 'GET' && body ? body : undefined,
       });
 
-      setResponseStatus({ code: res.status, text: res.statusText });
+      const statusText = res.statusText || statusMessages[res.status] || 'Unknown Status';
+
+      setResponseStatus({ code: res.status, text: statusText });
       console.log(res.status, res.statusText);
 
       const result = await res.json();
