@@ -106,6 +106,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
               showPasswordToggle
               onTogglePasswordVisibility={handleClickShowPassword}
               register={register('password')}
+              data-testid="password-input"
             />
           </Grid>
           {!isSignIn && (
@@ -120,6 +121,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
                 showPasswordToggle
                 onTogglePasswordVisibility={handleClickShowPassword}
                 register={register('confirmPassword')}
+                data-testid="confirm-password-input"
               />
             </Grid>
           )}
