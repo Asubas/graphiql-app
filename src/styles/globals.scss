@@ -270,6 +270,15 @@ body {
     }
   }
 }
+.history-btn:last-child {
+  @extend .btnPrivate;
+  text-transform: none;
+  font-style: normal;
+  font-family: '__Inter_36bd41', '__Inter_Fallback_36bd41';
+  &:hover {
+    background-color: #1b1925;
+  }
+}
 
 .rest-btn {
   &::after {

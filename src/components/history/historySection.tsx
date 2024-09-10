@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import pages from '../../app/graphql/graphql.module.scss';
 import styles from './history.module.scss';
+import '../Welcome/Welcome.module.scss';
 import { useEffect, useState } from 'react';
 import { Button, Drawer } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -8,7 +9,7 @@ import { FormDataHistory } from '../interfaces/graphQlInterface';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
-function HistorySection() {
+function HistorySection({ classNamed = '' }: { classNamed?: string }) {
   const [open, setOpen] = useState(false);
   const [history, setHistory] = useState<FormDataHistory[] | null>([]);
   const anchor: Anchor = 'left';
@@ -84,8 +85,12 @@ function HistorySection() {
   }, []);
 
   return (
-    <div>
-      <Button className={`${pages.queryButton} `} onClick={toggleDrawer(true)} variant="contained">
+    <>
+      <Button
+        className={`${classNamed ? classNamed : pages.queryButton}`}
+        onClick={toggleDrawer(true)}
+        variant="contained"
+      >
         History
       </Button>
       <Drawer
@@ -96,7 +101,7 @@ function HistorySection() {
       >
         {DrawerList}
       </Drawer>
-    </div>
+    </>
   );
 }
 
