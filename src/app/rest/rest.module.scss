@@ -1,3 +1,60 @@
-.restclient {
-  margin-top: 120px;
+.restCont {
+  margin: 120px auto 40px;
+  padding: 1rem;
+  width: 100%;
+  // max-width: 1024px;
+  min-height: calc(100svh - 269px);
+  color: azure;
+  display: flex;
+  justify-content: space-between;
+
+  .form {
+    width: 48%;
+
+    .head {
+      margin-bottom: 32px;
+    }
+  }
+
+  .responseCont {
+    width: 48%;
+
+    .responseBody {
+      width: 100%;
+      padding: 1rem;
+      background: #1d1b1f;
+      font-size: 12px;
+    }
+  }
+}
+
+.methodUrl {
+  display: flex;
+  gap: 1rem;
+}
+
+.headersParams {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.customInput {
+  input,
+  label {
+    color: white;
+  }
+  fieldset {
+    border-color: white !important;
+  }
+}
+
+.customSelect {
+  .MuiOutlinedInput-root {
+    color: white;
+    fieldset {
+      border-color: white !important;
+    }
+  }
 }
