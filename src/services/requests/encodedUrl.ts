@@ -1,6 +1,6 @@
 function encodedUrl(
   endpointUrl: string,
-  headersValue: string = '',
+  headersValue: string | null,
   query: string,
   variables: string | null,
 ) {
@@ -10,7 +10,7 @@ function encodedUrl(
     variables: variables ? JSON.parse(variables) : null,
   };
   const encodedBody = btoa(JSON.stringify(body));
-  const encodedHeaders = btoa(headersValue);
+  const encodedHeaders = headersValue ? btoa(headersValue) : '';
 
   const encodedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${encodedHeaders}`;
 

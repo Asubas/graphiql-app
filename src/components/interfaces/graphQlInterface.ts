@@ -5,7 +5,7 @@ export interface ErrorResponse {
 export interface FormData {
   endpointUrl: string;
   sdlUrl: string;
-  headersValue: string;
+  headers: string;
   query: string;
   variables: string;
 }

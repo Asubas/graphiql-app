@@ -37,8 +37,6 @@ function HistorySection() {
         <>
           <div className={styles.historyList}>
             {history.map((element, index) => {
-              const target = element.endpointUrl.split('/');
-
               return (
                 <div className={styles.historyElement} key={index}>
                   <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>

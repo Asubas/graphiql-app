@@ -20,7 +20,13 @@ import { HistoryButton } from '@/src/components/history/historySection';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { sendRequest } from '@/src/services/requests/sendRequest';
 
-const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => {
+const GraphQLClient = ({
+  defaultParams,
+  decodingHeaders,
+}: {
+  defaultParams?: DefaultParams;
+  decodingHeaders?: string;
+}) => {
   const methods = useForm<FormData>();
   const [showHeaders, setShowHeaders] = useState(false);
   const [showVariables, setShowVariables] = useState(false);
@@ -28,8 +34,8 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
   const [status, setStatus] = useState<number | null>(null);
 
   const onSubmit = async (data: FormData) => {
-    const { endpointUrl, headersValue, query, variables } = data;
-    const response = (await sendRequest(endpointUrl, headersValue, query, variables)) || {
+    const { endpointUrl, headers, query, variables } = data;
+    const response = (await sendRequest(endpointUrl, headers, query, variables)) || {
       result: null,
       status: 500,
     };
@@ -54,12 +60,10 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
   };
 
   const handlePushUrl = () => {
-    const { endpointUrl, headersValue, query, variables } = methods.getValues();
-    if (status) handlerBlurInput(endpointUrl, headersValue, query, variables);
+    const { endpointUrl, headers, query, variables } = methods.getValues();
+    if (status) handlerBlurInput(endpointUrl, headers, query, variables);
   };
 
-  console.log(defaultParams?.headers);
-  console.log(defaultParams?.variables);
   return (
     <section className={pages.graphql}>
       <p>GraphQL Client</p>
@@ -148,17 +152,13 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
             />
             <TextFieldInput
               label="Headers: "
-              register={methods.register('headersValue')}
+              register={methods.register('headers')}
               multilineArea
               rows={5}
               customClass={showHeaders ? pages.show : pages.hidden}
               placeholder="{ headers }"
               onBlur={handlePushUrl}
-              defaultValue={
-                defaultParams?.headers && Object.keys(defaultParams.headers).length > 0
-                  ? JSON.stringify(defaultParams.headers)
-                  : ''
-              }
+              defaultValue={decodingHeaders ? decodingHeaders : ''}
             />
           </div>
         </form>
