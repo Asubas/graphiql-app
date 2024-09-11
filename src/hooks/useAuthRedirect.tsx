@@ -28,21 +28,25 @@ export function useAuth() {
   useLayoutEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const idTokenResult = await user.getIdTokenResult();
-        const expirationTime = new Date(idTokenResult.expirationTime).getTime();
+        try {
+          const idTokenResult = await user.getIdTokenResult();
+          const expirationTime = new Date(idTokenResult.expirationTime).getTime();
 
-        setTokenExpirationTime(expirationTime);
-        setUser(user);
+          setTokenExpirationTime(expirationTime);
+          setUser(user);
 
-        const timeUntilExpiration = expirationTime - new Date().getTime();
-        setTimeout(() => {
-          handleTokenExpiration();
-          router.push('/');
-        }, timeUntilExpiration);
+          const timeUntilExpiration = expirationTime - new Date().getTime();
+          setTimeout(() => {
+            handleTokenExpiration();
+          }, timeUntilExpiration);
+        } catch (error) {
+          toast.error('Error retrieving token information');
+        }
       } else {
         setUser(null);
-        setLoading(false);
       }
+
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -85,8 +89,8 @@ export function useAuth() {
   };
 
   const signIn = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
 
@@ -104,10 +108,10 @@ export function useAuth() {
         }, timeUntilExpiration);
 
         setUser(user);
+        toast.success('You are successfully logged in');
       }
 
       router.push('/');
-      toast.success('You are successfully logged in');
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
@@ -134,6 +138,8 @@ export function useAuth() {
       router.push('/');
     } catch (error) {
       toast.error('Failed to log out. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
