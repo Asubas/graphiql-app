@@ -4,15 +4,14 @@ import AuthBtn from '../Buttons/AuthBtn/AuthBtn';
 import PrivateBtn from '../Buttons/PrivateBtn/PrivateBtn';
 import styles from './Welcome.module.scss';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
 
 export default function Welcome() {
   const router = useRouter();
-  const { user } = useAuth();
+  const token = document.cookie.includes('token=');
 
   const handleSignInClick = () => {
-    if (user) {
+    if (token) {
       toast.info('You are already logged in!');
     } else {
       router.push('/signIn');
@@ -20,7 +19,7 @@ export default function Welcome() {
   };
 
   const handleSignUpClick = () => {
-    if (user) {
+    if (token) {
       toast.info('You are already registered!');
     } else {
       router.push('/signUp');
@@ -29,7 +28,7 @@ export default function Welcome() {
 
   return (
     <div className={styles.welcome}>
-      {!user ? (
+      {!token ? (
         <>
           <p className={styles.head}>Welcome!!</p>
           <p className={styles.disc}>If you want to try playground, please sign in or sign up</p>

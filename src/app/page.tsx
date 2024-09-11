@@ -8,7 +8,6 @@ import Loader from '../components/Loader/Loader';
 
 export default function Home() {
   const { user, loading } = useAuth();
-
   if (loading) {
     return (
       <main className={styles.main}>

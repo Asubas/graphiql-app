@@ -22,6 +22,8 @@ export function useAuth() {
 
   const handleTokenExpiration = useCallback(() => {
     toast.info('Your session has expired. You will be redirected to the main page.');
+    setUser(null);
+    document.cookie = 'token=; path=/; max-age=0;';
     router.push('/');
   }, [router]);
 
@@ -70,7 +72,7 @@ export function useAuth() {
       toast.success('User is successfully created!');
       const idTokenResult = await user.getIdTokenResult();
       const token = idTokenResult.token;
-      document.cookie = `token=${token}; path=/; max-age=${Date.parse(idTokenResult.expirationTime) / 1000 - new Date().getTime() / 1000}`;
+      document.cookie = `token=${token}; path=/; max-age=3600;`;
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
@@ -98,8 +100,7 @@ export function useAuth() {
         const idTokenResult = await user.getIdTokenResult();
         const expirationTime = new Date(idTokenResult.expirationTime).getTime();
         const token = idTokenResult.token;
-        document.cookie = `token=${token}; path=/; max-age=${Date.parse(idTokenResult.expirationTime) / 1000 - new Date().getTime() / 1000}`;
-
+        document.cookie = `token=${token}; path=/; max-age=3600;`;
         setTokenExpirationTime(expirationTime);
 
         const timeUntilExpiration = expirationTime - new Date().getTime();
@@ -134,6 +135,7 @@ export function useAuth() {
     try {
       await firebaseSignOut(auth);
       setUser(null);
+      document.cookie = 'token=; path=/; max-age=0;';
       toast.success('You have successfully logged out.');
       router.push('/');
     } catch (error) {
