@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import {
   TextField,
@@ -15,8 +15,9 @@ import {
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import styles from './rest.module.scss';
-import { color } from '@mui/system';
 import { statusMessages } from '@/src/services/constant';
+import { useRouter } from 'next/navigation';
+import { encodeUrl } from '@/src/utils/urlUtils';
 
 type QueryParam = { key: string; value: string };
 type Header = { key: string; value: string };
@@ -29,8 +30,22 @@ type FormData = {
   body: string;
 };
 
-export default function RestContent() {
-  const { control, register, handleSubmit, reset } = useForm<FormData>({
+type RestContentProps = {
+  method?: string;
+  endpointUrl?: string;
+  body?: string;
+  headers?: Header[];
+  queries?: QueryParam[];
+};
+
+export default function RestContent({
+  method,
+  endpointUrl,
+  body,
+  headers,
+  queries,
+}: RestContentProps) {
+  const { control, register, handleSubmit, reset, setValue } = useForm<FormData>({
     defaultValues: {
       method: 'GET',
       endpointUrl: 'https://api.restful-api.dev/objects',
@@ -44,6 +59,7 @@ export default function RestContent() {
     fields: headerFields,
     append: appendHeader,
     remove: removeHeader,
+    replace: replaceHeaders,
   } = useFieldArray({
     control,
     name: 'headers',
@@ -53,6 +69,7 @@ export default function RestContent() {
     fields: queryFields,
     append: appendQuery,
     remove: removeQuery,
+    replace: replaceQueries,
   } = useFieldArray({
     control,
     name: 'queries',
@@ -62,9 +79,33 @@ export default function RestContent() {
   const [responseStatus, setResponseStatus] = useState<{ code: number; text: string } | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (method) setValue('method', method);
+    if (endpointUrl) setValue('endpointUrl', endpointUrl);
+    if (body) setValue('body', body);
+    if (headers) {
+      replaceHeaders(headers.length ? headers : [{ key: '', value: '' }]);
+    }
+    if (queries) {
+      replaceQueries(queries.length ? queries : [{ key: '', value: '' }]);
+    }
+  }, [method, endpointUrl, body, headers, queries, setValue, replaceHeaders, replaceQueries]);
+
   const onSubmit = async (data: FormData) => {
     try {
       const { method, endpointUrl, headers, queries, body } = data;
+
+      const newUrl = encodeUrl({
+        method,
+        endpointUrl,
+        body,
+        headers,
+        queries,
+      });
+
+      router.push(newUrl);
 
       const requestHeaders = headers.reduce((acc: Record<string, string>, header) => {
         if (header.key && header.value) {
@@ -97,6 +138,7 @@ export default function RestContent() {
       console.log(res.status, res.statusText);
 
       const result = await res.json();
+      console.log('response', result);
       setResponseBody(JSON.stringify(result, null, 2));
       setJsonError(null);
     } catch (error) {
