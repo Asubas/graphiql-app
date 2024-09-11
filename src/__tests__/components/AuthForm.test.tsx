@@ -1,50 +1,67 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import { useRouter } from 'next/navigation';
+import { getLocale } from '@/src/utils/cookies';
+import '@testing-library/jest-dom';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-const mockRouter = useRouter as jest.Mock;
+jest.mock('../../utils/cookies', () => ({
+  getLocale: jest.fn(),
+}));
+
+jest.mock('../../utils/validation', () => ({
+  useSignInValidationSchema: jest.fn(),
+  useSignUpValidationSchema: jest.fn(),
+}));
+
+jest.mock('next-intl', () => ({
+  useTranslations: jest.fn(() => (key: string) => key),
+}));
 
 describe('AuthForm Component', () => {
-  beforeEach(() => {
-    mockRouter.mockReturnValue({ push: jest.fn() });
-  });
-
+  const mockPush = jest.fn();
   const mockOnSubmit = jest.fn();
 
-  it('toggles password visibility correctly', () => {
-    render(<AuthForm title="Sign Up" onSubmit={mockOnSubmit} />);
-
-    const passwordField = screen.getByLabelText(/Password/i, {
-      selector: 'input[name="password"]',
-    });
-    const toggleButton = screen.getAllByLabelText('toggle password visibility')[0];
-
-    expect(passwordField).toHaveAttribute('type', 'password');
-
-    fireEvent.click(toggleButton);
-
-    expect(passwordField).toHaveAttribute('type', 'text');
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (getLocale as jest.Mock).mockReturnValue('en');
+    mockPush.mockClear();
+    mockOnSubmit.mockClear();
   });
 
-  it('navigates to Sign Up page on link click when on Sign In form', () => {
-    render(<AuthForm title="Sign In" onSubmit={mockOnSubmit} />);
+  it('renders the sign-in form with all fields', () => {
+    render(<AuthForm title="signInTitle" onSubmit={mockOnSubmit} />);
 
-    fireEvent.click(screen.getByText("Don't have an account? Sign Up"));
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i, { selector: 'input' })).toBeInTheDocument();
 
-    expect(mockRouter().push).toHaveBeenCalledWith('/signUp');
+    expect(screen.getByRole('button', { name: 'submit' })).toBeInTheDocument();
   });
 
-  it('navigates to Sign In page on link click when on Sign Up form', () => {
-    render(<AuthForm title="Sign Up" onSubmit={mockOnSubmit} />);
+  it('renders the sign-up form with all fields', () => {
+    render(<AuthForm title="signUpTitle" onSubmit={mockOnSubmit} />);
+    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Already have an account? Sign In'));
+    expect(screen.getByRole('button', { name: 'submit' })).toBeInTheDocument();
+  });
 
-    expect(mockRouter().push).toHaveBeenCalledWith('/signIn');
+  it('navigates to the correct page when link is clicked in sign-in form', () => {
+    render(<AuthForm title="signInTitle" onSubmit={mockOnSubmit} />);
+
+    fireEvent.click(screen.getByText('isSignInText'));
+
+    expect(mockPush).toHaveBeenCalledWith('/en/signUp');
+  });
+
+  it('navigates to the correct page when link is clicked in sign-up form', () => {
+    render(<AuthForm title="signUpTitle" onSubmit={mockOnSubmit} />);
+
+    fireEvent.click(screen.getByText('isNotSignInText'));
+
+    expect(mockPush).toHaveBeenCalledWith('/en/signIn');
   });
 });

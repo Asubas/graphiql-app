@@ -2,21 +2,18 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Loader from '@/src/components/Loader/Loader';
-import styles from '@/src/components/Loader/Loader.module.scss'; // Импортируйте стили
+import styles from '@/src/components/Loader/Loader.module.scss';
 
 describe('Loader Component', () => {
   test('renders Loader component correctly', () => {
     const { container } = render(<Loader />);
 
-    // Проверяем, что элемент с классом overlay присутствует
     const overlayElement = container.querySelector(`.${styles.overlay}`);
     expect(overlayElement).toBeInTheDocument();
 
-    // Проверяем, что элемент с классом loader присутствует
     const loaderElement = container.querySelector(`.${styles.loader}`);
     expect(loaderElement).toBeInTheDocument();
 
-    // Проверяем, что элемент с классом loaderInner присутствует внутри loader
     const loaderInnerElement = container.querySelector(`.${styles.loaderInner}`);
     expect(loaderInnerElement).toBeInTheDocument();
   });

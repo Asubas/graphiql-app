@@ -1,40 +1,49 @@
 import * as Yup from 'yup';
+import { useTranslations } from 'next-intl';
 
-export const signInValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .required('Email is required')
-    .matches(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$/,
-      'Email must be at example user@example.com',
-    ),
-  password: Yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters long')
-    .matches(/[0-9]/, 'Password must contain at least 1 digit')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[\W_]/, 'Password must contain at least one special character'),
-});
+export const useSignInValidationSchema = () => {
+  const t = useTranslations('Validation');
 
-export const signUpValidationSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters long')
-    .max(15, 'Username must be at most 15 characters long'),
-  email: Yup.string()
-    .required('Email is required')
-    .matches(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$/,
-      'Email must be at example user@example.com',
-    ),
-  password: Yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters long')
-    .matches(/[0-9]/, 'Password must contain at least 1 digit')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[\W_]/, 'Password must contain at least one special character'),
-  confirmPassword: Yup.string()
-    .required('Please confirm your password')
-    .oneOf([Yup.ref('password')], 'Passwords must match'),
-});
+  return Yup.object().shape({
+    email: Yup.string()
+      .required(t('emailRequired'))
+      .matches(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$/,
+        t('emailInvalid'),
+      ),
+    password: Yup.string()
+      .required(t('passwordRequired'))
+      .min(8, t('passwordMinLength'))
+      .matches(/[0-9]/, t('passwordDigit'))
+      .matches(/[a-z]/, t('passwordLowercase'))
+      .matches(/[A-Z]/, t('passwordUppercase'))
+      .matches(/[\W_]/, t('passwordSpecial')),
+  });
+};
+
+export const useSignUpValidationSchema = () => {
+  const t = useTranslations('Validation');
+
+  return Yup.object().shape({
+    username: Yup.string()
+      .required(t('usernameRequired'))
+      .min(3, t('usernameMinLength'))
+      .max(15, t('usernameMaxLength')),
+    email: Yup.string()
+      .required(t('emailRequired'))
+      .matches(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$/,
+        t('emailInvalid'),
+      ),
+    password: Yup.string()
+      .required(t('passwordRequired'))
+      .min(8, t('passwordMinLength'))
+      .matches(/[0-9]/, t('passwordDigit'))
+      .matches(/[a-z]/, t('passwordLowercase'))
+      .matches(/[A-Z]/, t('passwordUppercase'))
+      .matches(/[\W_]/, t('passwordSpecial')),
+    confirmPassword: Yup.string()
+      .required(t('confirmPasswordRequired'))
+      .oneOf([Yup.ref('password')], t('passwordsMustMatch')),
+  });
+};

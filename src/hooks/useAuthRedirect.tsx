@@ -13,12 +13,14 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/src/utils/firestore';
 import { toast } from 'react-toastify';
 import { FirebaseError } from 'firebase/app';
+import { useTranslations } from 'next-intl';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [tokenExpirationTime, setTokenExpirationTime] = useState<number | null>(null);
   const router = useRouter();
+  const t = useTranslations('Toasts');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -48,7 +50,7 @@ export function useAuth() {
   }, [router]);
 
   const handleTokenExpiration = () => {
-    toast.info('Your session has expired. You will be redirected to the main page.');
+    toast.info(t('sessionExpired'));
     router.push('/');
     signOut();
   };
@@ -68,17 +70,17 @@ export function useAuth() {
         createdAt: new Date(),
       });
 
-      toast.success('User is successfully created!');
+      toast.success(t('userCreated'));
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
         if (firebaseError.code === 'auth/email-already-in-use') {
-          toast.error('User with this email is already registered.');
+          toast.error(t('userExists'));
         } else if (firebaseError.code === 'auth/invalid-email') {
-          toast.error('Invalid email address.');
+          toast.error(t('invalidEmail'));
         } else {
-          toast.error('An unexpected error occurred. Please try again.');
+          toast.error(t('unexpectedError'));
         }
       }
     } finally {
@@ -108,18 +110,17 @@ export function useAuth() {
       }
 
       router.push('/');
+      toast.success(t('userLoggedIn'));
     } catch (error) {
       const firebaseError = error as FirebaseError;
       if (firebaseError) {
         if (firebaseError.code === 'auth/invalid-credential') {
-          toast.error(
-            'User with these credentials does not exist. Please check the email and password.',
-          );
+          toast.error(t('userDoesNotExist'));
         } else if (firebaseError.code === 'auth/too-many-requests') {
-          toast.error('Too many requests at the same time. Please try later.');
+          toast.error(t('manyRequests'));
         }
       } else {
-        toast.error('An unexpected error occurred. Please try again.');
+        toast.error(t('unexpectedError'));
       }
     } finally {
       setLoading(false);
@@ -130,12 +131,10 @@ export function useAuth() {
     try {
       await firebaseSignOut(auth);
       setUser(null);
-      toast.success('You have successfully logged out.');
+      toast.success(t('userLoggedOut'));
       router.push('/');
     } catch (error) {
-      toast.error('Failed to log out. Please try again.');
-    } finally {
-      setLoading(false);
+      toast.error(t('logOutFail'));
     }
   };
 

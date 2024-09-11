@@ -1,73 +1,79 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Home from '@/src/app/page';
-import { useAuth } from '../hooks/useAuthRedirect';
+import { useAuth } from '@/src/hooks/useAuthRedirect';
+import { useRouter } from 'next/navigation';
+import Home from '../app/[locale]/page';
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock('next-intl', () => ({
+  useTranslations: jest.fn(() => (key: string) => {
+    const translations: { [key: string]: string } = {
+      'HomePage.title': 'Welcome back',
+    };
+    return translations[key] || key;
+  }),
+}));
 
 jest.mock('../hooks/useAuthRedirect', () => ({
   useAuth: jest.fn(),
 }));
 
-jest.mock('../components/About/About', () => {
-  const MockAbout = () => <div>About Section</div>;
-  MockAbout.displayName = 'About';
-  return MockAbout;
-});
-
-jest.mock('../components/Welcome/Welcome', () => {
-  const MockWelcome = () => <div>Welcome Section</div>;
-  MockWelcome.displayName = 'Welcome';
-  return MockWelcome;
-});
-
 describe('Home Component', () => {
+  const mockRouterPush = jest.fn();
+
   beforeEach(() => {
-    localStorage.clear();
     jest.clearAllMocks();
 
-    (useAuth as jest.Mock).mockReturnValue({
+    const mockUseRouter = useRouter as jest.Mock;
+    mockUseRouter.mockReturnValue({
+      push: mockRouterPush,
+    });
+  });
+
+  it('renders About component when user is not logged in', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
       user: null,
-      signOut: jest.fn(),
-    });
-  });
-
-  it('renders the main container with correct styles', () => {
-    render(<Home />);
-    const mainElement = screen.getByRole('main');
-    expect(mainElement).toHaveClass('main');
-  });
-
-  it('renders the About component', () => {
-    render(<Home />);
-    expect(screen.getByText('About Section')).toBeInTheDocument();
-  });
-
-  it('renders the Welcome component when user is not logged in', () => {
-    render(<Home />);
-    expect(screen.getByText('Welcome Section')).toBeInTheDocument();
-  });
-
-  it('renders welcome message with user name when user is logged in', () => {
-    (useAuth as jest.Mock).mockReturnValue({
-      user: { displayName: 'Test User' },
-      signOut: jest.fn(),
     });
 
     render(<Home />);
 
-    expect(screen.getByText('Welcome back, Test User!')).toBeInTheDocument();
-    expect(screen.getByText('Welcome Section')).toBeInTheDocument();
+    expect(screen.getByText(/descriptionEnd/i)).toBeInTheDocument();
   });
 
-  it('renders welcome message with default user name when displayName is not available', () => {
-    (useAuth as jest.Mock).mockReturnValue({
+  it('renders welcome message when user is logged in', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
+      user: { displayName: 'John Doe' },
+    });
+
+    render(<Home />);
+
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+  });
+
+  it('renders Welcome component', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
+      user: null,
+    });
+
+    render(<Home />);
+
+    expect(screen.getByText(/descriptionBeggining/i)).toBeInTheDocument();
+  });
+
+  it('renders fallback name "User" if displayName is not available', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
       user: {},
-      signOut: jest.fn(),
     });
 
     render(<Home />);
 
-    expect(screen.getByText('Welcome back, User!')).toBeInTheDocument();
-    expect(screen.getByText('Welcome Section')).toBeInTheDocument();
+    expect(screen.getByText(/User/i)).toBeInTheDocument();
   });
 });

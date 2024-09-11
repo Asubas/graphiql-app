@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from '@/src/components/About/About.module.scss';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 function ErrorThrower() {
   throw new Error('Это тестовая ошибка!'); // Ошибка выбрасывается при рендере компонента
@@ -10,29 +11,26 @@ function ErrorThrower() {
 export default function About() {
   // тест для error boundary
   const [showError, setShowError] = useState(false);
+  const t = useTranslations('AboutPage');
 
   return (
     <div className={styles.about}>
       <div className={styles.course}>
         <div className={styles.img}></div>
         <p className={styles.text}>
-          This application was created as part of the React course by RSSchool. If you also want to
-          dive into the world of IT and specifically into the world of frontend development,{' '}
+          {t('text')}{' '}
           <a className={styles.rsLink} href="https://rs.school/courses">
-            enroll in the frontend development course
+            {t('rsLinkText')}
           </a>
           .
         </p>
       </div>
       <div className={styles.aboutWrap}>
         <article className={styles.description}>
-          Welcome to the home of <span className={styles.strong}>DreamTeam</span>! We are a team of
-          budding developers, unafraid of challenges and always moving forward. Our application is
-          built to assist others by enabling requests to any open APIs. Whether you&apos;re making
-          RESTful requests or diving into GraphQL, our platform is designed to empower your
-          projects.
+          {t('descriptionBeggining')} <span className={styles.strong}>DreamTeam</span>
+          {t('descriptionEnd')}
         </article>
-        <h2 className={styles.h2}>Our Team</h2>
+        <h2 className={styles.h2}>{t('team')}</h2>
         <div className={styles.team}>
           <a
             className={styles.member}
@@ -41,11 +39,11 @@ export default function About() {
             data-testid="team-member-link"
           >
             <div className={styles.text}>
-              <h3 className={styles.h3}>Alex (Asubas)</h3>
+              <h3 className={styles.h3}>{t('asubasName')}</h3>
               <p className={styles.disc}>
-                Team lead, developer
+                {t('asubasRole')}
                 <br />
-                Russia, Yaroslavl
+                {t('asubasLocation')}
               </p>
             </div>
             <Image
@@ -63,11 +61,11 @@ export default function About() {
             data-testid="team-member-link"
           >
             <div className={styles.text}>
-              <h3 className={styles.h3}>Anton (lipan4836)</h3>
+              <h3 className={styles.h3}>{t('lipanName')}</h3>
               <p className={styles.disc}>
-                developer
+                {t('lipanRole')}
                 <br />
-                Russia, Voronezh
+                {t('lipanLocation')}
               </p>
             </div>
             <Image
@@ -85,11 +83,11 @@ export default function About() {
             data-testid="team-member-link"
           >
             <div className={styles.text}>
-              <h3 className={styles.h3}>Daria (pdasya)</h3>
+              <h3 className={styles.h3}>{t('pdasyaName')}</h3>
               <p className={styles.disc}>
-                developer
+                {t('pdasyaRole')}
                 <br />
-                Japan, Tsukuba
+                {t('pdasyaLocation')}
               </p>
             </div>
             <Image
@@ -105,7 +103,7 @@ export default function About() {
 
       {/* тест выброса ошибки для улова */}
       <button className="btnErrorTest" onClick={() => setShowError(true)}>
-        Throw Error
+        {t('throwError')}
       </button>
       {showError && <ErrorThrower />}
     </div>
