@@ -16,6 +16,7 @@ interface DecodeUrlParams {
 
 // кодирую безопасно строку в base64
 export function encodeBase64(data: string): string {
+  console.log('encode', btoa(unescape(encodeURIComponent(data))));
   return btoa(unescape(encodeURIComponent(data)));
 }
 
