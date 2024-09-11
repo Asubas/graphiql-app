@@ -10,7 +10,6 @@ import {
 import { Button } from '@mui/material';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
 import { handlerBlurInput } from '@/src/utils/handlers';
-import { encodedUrl } from '@/src/services/requests/encodedUrl';
 import {
   DEFAULT_QUERY_JSON,
   DEFAULT_SDL_ENDPOINT,
@@ -30,15 +29,18 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headersValue, query, variables } = data;
-    const { result, status } = await sendRequest(endpointUrl, headersValue, query, variables);
+    const response = (await sendRequest(endpointUrl, headersValue, query, variables)) || {
+      result: null,
+      status: 500,
+    };
+    const { result, status } = response;
+
     if (result) {
       setResponse(result as GraphQLResponse);
-      setStatus(status);
-      encodedUrl(endpointUrl, headersValue, query, variables);
     } else {
-      setResponse({ errors: [{ message: 'Что-то пошло не так.' }] });
-      setStatus(500);
+      setResponse({ errors: [{ message: 'Error fetch' }] });
     }
+    setStatus(status);
     methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
   };
 
@@ -56,6 +58,8 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
     if (status) handlerBlurInput(endpointUrl, headersValue, query, variables);
   };
 
+  console.log(defaultParams?.headers);
+  console.log(defaultParams?.variables);
   return (
     <section className={pages.graphql}>
       <p>GraphQL Client</p>
@@ -136,7 +140,11 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
               customClass={showVariables ? pages.show : pages.hidden}
               placeholder="{ variables }"
               onBlur={handlePushUrl}
-              defaultValue={(defaultParams && defaultParams.variables) || ''}
+              defaultValue={
+                defaultParams?.variables && Object.keys(defaultParams.variables).length > 0
+                  ? JSON.stringify(defaultParams.variables)
+                  : ''
+              }
             />
             <TextFieldInput
               label="Headers: "
@@ -146,7 +154,11 @@ const GraphQLClient = ({ defaultParams }: { defaultParams?: DefaultParams }) => 
               customClass={showHeaders ? pages.show : pages.hidden}
               placeholder="{ headers }"
               onBlur={handlePushUrl}
-              defaultValue={(defaultParams && defaultParams.headers) || ''}
+              defaultValue={
+                defaultParams?.headers && Object.keys(defaultParams.headers).length > 0
+                  ? JSON.stringify(defaultParams.headers)
+                  : ''
+              }
             />
           </div>
         </form>
