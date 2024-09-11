@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import {
   TextField,
@@ -45,7 +45,7 @@ export default function RestContent({
   headers,
   queries,
 }: RestContentProps) {
-  const { control, register, handleSubmit, reset, setValue } = useForm<FormData>({
+  const { control, register, handleSubmit, reset, watch, getValues } = useForm<FormData>({
     defaultValues: {
       method: 'GET',
       endpointUrl: 'https://api.restful-api.dev/objects',
@@ -59,55 +59,46 @@ export default function RestContent({
     fields: headerFields,
     append: appendHeader,
     remove: removeHeader,
-    replace: replaceHeaders,
-  } = useFieldArray({
-    control,
-    name: 'headers',
-  });
+  } = useFieldArray({ control, name: 'headers' });
 
   const {
     fields: queryFields,
     append: appendQuery,
     remove: removeQuery,
-    replace: replaceQueries,
-  } = useFieldArray({
-    control,
-    name: 'queries',
-  });
+  } = useFieldArray({ control, name: 'queries' });
 
   const [responseBody, setResponseBody] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<{ code: number; text: string } | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
-
   const router = useRouter();
 
+  const updateUrl = useCallback(() => {
+    const currentData = getValues();
+    const newUrl = encodeUrl({
+      method: currentData.method,
+      endpointUrl: currentData.endpointUrl,
+      body: currentData.body,
+      headers: currentData.headers,
+      queries: currentData.queries,
+    });
+    router.replace(newUrl);
+    window.history.pushState(null, '', newUrl);
+  }, [getValues, router]);
+
+  // смотрим обновление url
   useEffect(() => {
-    if (method) setValue('method', method);
-    if (endpointUrl) setValue('endpointUrl', endpointUrl);
-    if (body) setValue('body', body);
-    if (headers) {
-      replaceHeaders(headers.length ? headers : [{ key: '', value: '' }]);
-    }
-    if (queries) {
-      replaceQueries(queries.length ? queries : [{ key: '', value: '' }]);
-    }
-  }, [method, endpointUrl, body, headers, queries, setValue, replaceHeaders, replaceQueries]);
+    const subscription = watch((_, { type }) => {
+      if (type === 'blur') {
+        updateUrl();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, updateUrl]);
 
   const onSubmit = async (data: FormData) => {
     try {
       const { method, endpointUrl, headers, queries, body } = data;
-
-      const newUrl = encodeUrl({
-        method,
-        endpointUrl,
-        body,
-        headers,
-        queries,
-      });
-
-      router.push(newUrl);
-
-      const requestHeaders = headers.reduce((acc: Record<string, string>, header) => {
+      const requestHeaders = headers.reduce<Record<string, string>>((acc, header) => {
         if (header.key && header.value) {
           acc[header.key] = header.value;
         }
@@ -115,7 +106,7 @@ export default function RestContent({
       }, {});
 
       const queryParams = queries
-        .reduce((acc: string[], query) => {
+        .reduce<string[]>((acc, query) => {
           if (query.key && query.value) {
             acc.push(`${encodeURIComponent(query.key)}=${encodeURIComponent(query.value)}`);
           }
@@ -124,7 +115,6 @@ export default function RestContent({
         .join('&');
 
       const fullUrl = queryParams ? `${endpointUrl}?${queryParams}` : endpointUrl;
-      console.log('Full URL:', fullUrl);
 
       const res = await fetch(fullUrl, {
         method,
@@ -133,21 +123,23 @@ export default function RestContent({
       });
 
       const statusText = res.statusText || statusMessages[res.status] || 'Unknown Status';
-
       setResponseStatus({ code: res.status, text: statusText });
-      console.log(res.status, res.statusText);
 
       const result = await res.json();
-      console.log('response', result);
       setResponseBody(JSON.stringify(result, null, 2));
       setJsonError(null);
+
+      // пушим запрос в историю
+      const timestamp = new Date().toISOString();
+      const history = JSON.parse(localStorage.getItem('history') || '[]');
+      history.push({ method, endpointUrl, headers, queries, body, timestamp });
+      localStorage.setItem('history', JSON.stringify(history));
     } catch (error) {
-      console.error('Error sending request:', error);
       setJsonError('Invalid JSON in request body');
+      console.error('Error sending request:', error);
     }
   };
 
-  // сброс формы
   const onReset = () => {
     reset();
     setResponseBody(null);
@@ -186,7 +178,7 @@ export default function RestContent({
           {/* эндпоинт */}
           <TextField
             className={styles.customInput}
-            {...register('endpointUrl')}
+            {...register('endpointUrl', { onBlur: updateUrl })}
             label="Endpoint URL"
             size="small"
             fullWidth
@@ -205,14 +197,14 @@ export default function RestContent({
             {headerFields.map((field, index) => (
               <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
                 <TextField
-                  {...register(`headers.${index}.key`)}
+                  {...register(`headers.${index}.key`, { onBlur: updateUrl })}
                   label="Header Key"
                   fullWidth
                   size="small"
                   className={styles.customInput}
                 />
                 <TextField
-                  {...register(`headers.${index}.value`)}
+                  {...register(`headers.${index}.value`, { onBlur: updateUrl })}
                   label="Header Value"
                   fullWidth
                   size="small"
@@ -253,14 +245,14 @@ export default function RestContent({
             {queryFields.map((field, index) => (
               <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
                 <TextField
-                  {...register(`queries.${index}.key`)}
+                  {...register(`queries.${index}.key`, { onBlur: updateUrl })}
                   label="Query Key"
                   fullWidth
                   size="small"
                   className={styles.customInput}
                 />
                 <TextField
-                  {...register(`queries.${index}.value`)}
+                  {...register(`queries.${index}.value`, { onBlur: updateUrl })}
                   label="Query Value"
                   fullWidth
                   size="small"
@@ -295,7 +287,7 @@ export default function RestContent({
 
         {/* ввод боди */}
         <TextField
-          {...register('body')}
+          {...register('body', { onBlur: updateUrl })}
           label="Body"
           fullWidth
           multiline

@@ -16,13 +16,13 @@ interface DecodeUrlParams {
 
 // кодирую безопасно строку в base64
 export function encodeBase64(data: string): string {
-  return btoa(encodeURIComponent(data));
+  return btoa(unescape(encodeURIComponent(data)));
 }
 
 // декодирую безопасно из base64
 export function decodeBase64(data: string): string {
   try {
-    return decodeURIComponent(atob(data));
+    return decodeURIComponent(escape(atob(data)));
   } catch (error) {
     console.error('Error decoding Base64 string:', error);
     return '';
