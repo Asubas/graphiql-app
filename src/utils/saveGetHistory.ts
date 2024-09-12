@@ -1,4 +1,4 @@
-import { FormDataHistory } from '../components/interfaces/graphQlInterface';
+import { FormDataHistory } from '../interfaces/graphQlInterface';
 
 function saveGetHistory(data: FormDataHistory) {
   const existingRequests = localStorage.getItem('history');

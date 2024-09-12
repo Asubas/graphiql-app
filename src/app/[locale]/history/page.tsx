@@ -1,6 +1,6 @@
 'use client';
 import styles from './history.module.scss';
-import { FormDataHistory } from '@/src/components/interfaces/graphQlInterface';
+import { FormDataHistory } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

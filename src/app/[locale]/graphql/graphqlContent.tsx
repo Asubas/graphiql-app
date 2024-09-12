@@ -2,11 +2,7 @@
 import pages from './graphql.module.scss';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useState } from 'react';
-import {
-  GraphQLResponse,
-  FormData,
-  DefaultParams,
-} from '@/src/components/interfaces/graphQlInterface';
+import { GraphQLResponse, FormData, DefaultParams } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
 import { handlerBlurInput } from '@/src/utils/handlers';

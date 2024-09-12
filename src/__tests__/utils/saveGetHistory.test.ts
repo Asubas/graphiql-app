@@ -1,4 +1,4 @@
-import { FormDataHistory } from '@/src/components/interfaces/graphQlInterface';
+import { FormDataHistory } from '@/src/interfaces/graphQlInterface';
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
 
 beforeEach(() => {
