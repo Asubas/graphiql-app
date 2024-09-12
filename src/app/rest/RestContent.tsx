@@ -12,12 +12,16 @@ import {
   Box,
   Typography,
   IconButton,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import styles from './rest.module.scss';
 import { statusMessages } from '@/src/services/constant';
 import { useRouter } from 'next/navigation';
 import { encodeUrl } from '@/src/utils/urlUtils';
+import { formatJson } from '@/src/utils/formatJson';
 
 type QueryParam = { key: string; value: string };
 type Header = { key: string; value: string };
@@ -45,7 +49,7 @@ export default function RestContent({
   headers,
   queries,
 }: RestContentProps) {
-  const { control, register, handleSubmit, reset, watch, getValues } = useForm<FormData>({
+  const { control, register, handleSubmit, reset, watch, getValues, setValue } = useForm<FormData>({
     defaultValues: {
       method: 'GET',
       endpointUrl: 'https://api.restful-api.dev/objects',
@@ -70,6 +74,7 @@ export default function RestContent({
   const [responseBody, setResponseBody] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<{ code: number; text: string } | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
+  const [inputMode, setInputMode] = useState<'json' | 'text'>('json');
   const router = useRouter();
 
   const updateUrl = useCallback(() => {
@@ -94,6 +99,24 @@ export default function RestContent({
     });
     return () => subscription.unsubscribe();
   }, [watch, updateUrl]);
+
+  const handleFormatJson = () => {
+    const currentBody = getValues('body');
+    const formattedJson = formatJson(currentBody);
+
+    if (formattedJson) {
+      setValue('body', formattedJson);
+      setJsonError(null);
+    } else {
+      setJsonError('Invalid JSON format');
+    }
+  };
+
+  const handleInputModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMode(event.target.value as 'json' | 'text');
+    setValue('body', '');
+    setJsonError(null);
+  };
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -286,6 +309,14 @@ export default function RestContent({
         </Box>
 
         {/* ввод боди */}
+        {/* Переключатель режимов ввода */}
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="subtitle1">Input Mode:</Typography>
+          <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
+            <FormControlLabel value="json" control={<Radio />} label="JSON" />
+            <FormControlLabel value="text" control={<Radio />} label="Text" />
+          </RadioGroup>
+        </Box>
         <TextField
           {...register('body', { onBlur: updateUrl })}
           label="Body"
@@ -297,6 +328,24 @@ export default function RestContent({
           sx={{ mb: 2 }}
           className={styles.customInput}
         />
+        {inputMode === 'json' && (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleFormatJson}
+            sx={{
+              backgroundColor: '#3C3B3F',
+              color: 'white',
+              borderColor: '#3C3B3F',
+              '&:hover': {
+                backgroundColor: '#4F4E52',
+              },
+              mb: 2,
+            }}
+          >
+            Format Body
+          </Button>
+        )}
 
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button
