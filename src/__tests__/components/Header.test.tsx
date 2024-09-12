@@ -81,7 +81,7 @@ describe('Header Component', () => {
       user: { displayName: 'John Doe' },
       signOut: jest.fn(),
     });
-
+    document.cookie = 'token=someToken';
     render(<Header />);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe('Header Component', () => {
       user: { displayName: 'John Doe' },
       signOut: jest.fn(),
     });
-
+    document.cookie = 'token=someToken';
     render(<Header />);
 
     const burgerIcon = screen.getByTestId('burger-icon');

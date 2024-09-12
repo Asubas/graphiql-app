@@ -8,6 +8,7 @@ import '@testing-library/jest-dom';
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
   useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }));
 jest.mock('../../utils/decodingUrl', () => ({
   decodingUrl: jest.fn(),
@@ -22,6 +23,7 @@ describe('GraphQlParams', () => {
 
   beforeEach(() => {
     (nextRouter.usePathname as jest.Mock).mockReturnValue('/some/path');
+    (nextRouter.useSearchParams as jest.Mock).mockReturnValue('someHeaders');
     (nextRouter.useRouter as jest.Mock).mockReturnValue({
       push: jest.fn(),
     });

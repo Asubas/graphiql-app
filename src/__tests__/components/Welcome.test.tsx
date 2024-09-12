@@ -45,7 +45,7 @@ describe('Welcome Component', () => {
 
   test('renders private buttons when user is logged in', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: { name: 'John Doe' }, signOut: mockSignOut });
-
+    document.cookie = 'token=someToken';
     render(<Welcome />);
 
     expect(screen.getByText('REST Client')).toBeInTheDocument();
@@ -55,22 +55,18 @@ describe('Welcome Component', () => {
 
   test('redirects to sign-in page when sign-in button is clicked and user is not logged in', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
-
+    document.cookie = 'token=someToken; max-age=0';
     render(<Welcome />);
-
     fireEvent.click(screen.getByText('Sign In'));
-
     expect(mockPush).toHaveBeenCalledWith('/signIn');
     expect(toast.info).not.toHaveBeenCalled();
   });
 
   test('redirects to sign-up page when sign-up button is clicked and user is not logged in', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
-
+    document.cookie = 'token=someToken; max-age=0';
     render(<Welcome />);
-
     fireEvent.click(screen.getByText('Sign Up'));
-
     expect(mockPush).toHaveBeenCalledWith('/signUp');
     expect(toast.info).not.toHaveBeenCalled();
   });
