@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import * as nextRouter from 'next/navigation';
 import { decodingUrl } from '@/src/utils/decodingUrl';
-import GraphQlParams from '@/src/app/graphql/[...params]/page';
+import GraphQlParams from '@/src/app/[locale]/graphql/[...params]/page';
 import '@testing-library/jest-dom';
 
 jest.mock('next/navigation', () => ({
