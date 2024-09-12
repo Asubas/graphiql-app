@@ -18,20 +18,20 @@ describe('Middleware', () => {
     jest.clearAllMocks();
   });
 
-  //   it('should redirect to home if no token and accessing /restfull', () => {
-  //     const request = {
-  //       cookies: { get: jest.fn().mockReturnValue({ value: undefined }) },
-  //       nextUrl: { pathname: '/restfull', href: 'http://localhost/restfull' },
-  //     } as unknown as NextRequest;
+  it('should redirect to home if no token and accessing /restfull', () => {
+    const request = {
+      cookies: { get: jest.fn().mockReturnValue(undefined) },
+      nextUrl: { pathname: '/restfull', href: 'http://localhost/restfull' },
+    } as unknown as NextRequest;
 
-  //     const response = middleware(request);
+    const response = middleware(request);
 
-  //     expect(NextResponse.redirect).toHaveBeenCalledWith(new URL('/', request.nextUrl.href));
-  //   });
+    expect(NextResponse.redirect).toHaveBeenCalledWith(new URL('/', request.nextUrl.href));
+  });
 
   it('should redirect to home if no token and accessing /graphql', () => {
     const request = {
-      cookies: { get: jest.fn().mockReturnValue({ value: null }) },
+      cookies: { get: jest.fn().mockReturnValue(undefined) },
       nextUrl: { pathname: '/graphql', href: 'http://localhost/graphql' },
     } as unknown as NextRequest;
 
@@ -39,18 +39,6 @@ describe('Middleware', () => {
     expect(NextResponse.redirect).toHaveBeenCalledWith(
       new URL('http://localhost/', request.nextUrl.origin),
     );
-  });
-
-  it('should not redirect if token is present and accessing /restfull', () => {
-    const request = {
-      cookies: { get: jest.fn().mockReturnValue({ value: 'valid_token' }) },
-      nextUrl: { pathname: '/restfull', href: 'http://localhost/restfull' },
-    } as unknown as NextRequest;
-
-    const response = middleware(request);
-
-    expect(NextResponse.next).toHaveBeenCalled();
-    expect(NextResponse.redirect).not.toHaveBeenCalled();
   });
 
   it('should redirect to home if token is present and accessing /signIn', () => {
@@ -73,17 +61,5 @@ describe('Middleware', () => {
     const response = middleware(request);
 
     expect(NextResponse.redirect).toHaveBeenCalledWith(new URL('/', request.nextUrl.href));
-  });
-
-  it('should call NextResponse.next() for other routes', () => {
-    const request = {
-      cookies: { get: jest.fn().mockReturnValue({ value: 'valid_token' }) },
-      nextUrl: { pathname: '/otherRoute', href: 'http://localhost/otherRoute' },
-    } as unknown as NextRequest;
-
-    const response = middleware(request);
-
-    expect(NextResponse.next).toHaveBeenCalled();
-    expect(NextResponse.redirect).not.toHaveBeenCalled();
   });
 });

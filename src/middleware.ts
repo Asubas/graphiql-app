@@ -7,7 +7,6 @@ const intlMiddleware = createMiddleware(routing);
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
 
-  // Проверка на доступность токена для определённых маршрутов
   if (
     (!token && request.nextUrl.pathname === '/restfull') ||
     (!token && request.nextUrl.pathname.startsWith('/graphql')) ||

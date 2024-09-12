@@ -63,8 +63,9 @@ describe('Welcome Component', () => {
     expect(screen.getByText('signUpLabel')).toBeInTheDocument();
   });
 
-  test('renders private buttons when user is logged in', () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: { name: 'John Doe' }, signOut: mockSignOut });
+  it('renders private buttons when user is logged in', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({ user: { displayName: 'John Doe' } });
     document.cookie = 'token=someToken';
     render(<Welcome />);
 
@@ -73,21 +74,30 @@ describe('Welcome Component', () => {
     expect(screen.getByText('history')).toBeInTheDocument();
   });
 
-  test('redirects to sign-in page when sign-in button is clicked and user is not logged in', () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
+  it('navigates to sign-in page when Sign In button is clicked (user not logged in)', () => {
+    const mockUseAuth = useAuth as jest.Mock;
     document.cookie = 'token=someToken; max-age=0';
+
+    mockUseAuth.mockReturnValue({ user: null });
+
     render(<Welcome />);
-    fireEvent.click(screen.getByText('Sign In'));
-    expect(mockPush).toHaveBeenCalledWith('/signIn');
-    expect(toast.info).not.toHaveBeenCalled();
+
+    const signInButton = screen.getByText('signInLabel');
+    fireEvent.click(signInButton);
+
+    expect(mockRouterPush).toHaveBeenCalledWith('/en/signIn');
   });
 
-  test('redirects to sign-up page when sign-up button is clicked and user is not logged in', () => {
-    (useAuth as jest.Mock).mockReturnValue({ user: null, signOut: mockSignOut });
+  it('navigates to sign-up page when Sign Up button is clicked (user not logged in)', () => {
+    const mockUseAuth = useAuth as jest.Mock;
     document.cookie = 'token=someToken; max-age=0';
+    mockUseAuth.mockReturnValue({ user: null });
+
     render(<Welcome />);
-    fireEvent.click(screen.getByText('Sign Up'));
-    expect(mockPush).toHaveBeenCalledWith('/signUp');
-    expect(toast.info).not.toHaveBeenCalled();
+
+    const signUpButton = screen.getByText('signUpLabel');
+    fireEvent.click(signUpButton);
+
+    expect(mockRouterPush).toHaveBeenCalledWith('/en/signUp');
   });
 });
