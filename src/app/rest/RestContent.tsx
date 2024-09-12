@@ -2,9 +2,8 @@
 
 import pages from '../graphql/graphql.module.scss';
 import { useCallback, useEffect, useState } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useForm, useFieldArray, Controller, FormProvider } from 'react-hook-form';
 import {
-  TextField,
   Button,
   Select,
   MenuItem,
@@ -25,26 +24,13 @@ import { encodeUrl } from '@/src/utils/urlUtils';
 import { formatJson } from '@/src/utils/formatJson';
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
-
-type QueryParam = { key: string; value: string };
-type Header = { key: string; value: string };
-
-type FormData = {
-  method: string;
-  endpointUrl: string;
-  headers: { key: string; value: string }[];
-  queries: { key: string; value: string }[];
-  variables: { key: string; value: string }[];
-  body: string;
-};
-
-type RestContentProps = {
-  method?: string;
-  endpointUrl?: string;
-  body?: string;
-  headers?: Header[];
-  queries?: QueryParam[];
-};
+import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
+import {
+  RestContentProps,
+  FormData,
+  QueryParam,
+  Header,
+} from '@/src/components/types/restFullTypes';
 
 export default function RestContent({
   method,
@@ -53,7 +39,7 @@ export default function RestContent({
   headers,
   queries,
 }: RestContentProps) {
-  const { control, register, handleSubmit, reset, watch, getValues, setValue } = useForm<FormData>({
+  const methods = useForm<FormData>({
     defaultValues: {
       method: 'GET',
       endpointUrl: 'https://api.restful-api.dev/objects',
@@ -68,19 +54,19 @@ export default function RestContent({
     fields: headerFields,
     append: appendHeader,
     remove: removeHeader,
-  } = useFieldArray({ control, name: 'headers' });
+  } = useFieldArray({ control: methods.control, name: 'headers' });
 
   const {
     fields: queryFields,
     append: appendQuery,
     remove: removeQuery,
-  } = useFieldArray({ control, name: 'queries' });
+  } = useFieldArray({ control: methods.control, name: 'queries' });
 
   const {
     fields: variablesFields,
     append: appendVariables,
     remove: removeVariables,
-  } = useFieldArray({ control, name: 'variables' });
+  } = useFieldArray({ control: methods.control, name: 'variables' });
 
   const [responseBody, setResponseBody] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<{ code: number; text: string } | null>(null);
@@ -90,7 +76,7 @@ export default function RestContent({
   const router = useRouter();
 
   const updateUrl = useCallback(() => {
-    const currentData = getValues();
+    const currentData = methods.getValues();
     const newUrl = encodeUrl({
       method: currentData.method,
       endpointUrl: currentData.endpointUrl,
@@ -102,24 +88,24 @@ export default function RestContent({
     setEncodedHistoryUrl(newUrl);
     router.replace(newUrl);
     window.history.pushState(null, '', newUrl);
-  }, [getValues, router]);
+  }, [methods, router]);
 
   // смотрим обновление url
   useEffect(() => {
-    const subscription = watch((_, { type }) => {
+    const subscription = methods.watch((_, { type }) => {
       if (type === 'blur') {
         updateUrl();
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, updateUrl]);
+  }, [updateUrl, methods]);
 
   const handleFormatJson = () => {
-    const currentBody = getValues('body');
+    const currentBody = methods.getValues('body');
     const formattedJson = formatJson(currentBody);
 
     if (formattedJson) {
-      setValue('body', formattedJson);
+      methods.setValue('body', formattedJson);
       setJsonError(null);
     } else {
       setJsonError('Invalid JSON format');
@@ -128,7 +114,7 @@ export default function RestContent({
 
   const handleInputModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputMode(event.target.value as 'json' | 'text');
-    setValue('body', '');
+    methods.setValue('body', '');
     setJsonError(null);
   };
 
@@ -185,293 +171,229 @@ export default function RestContent({
   };
 
   const onReset = () => {
-    reset();
+    methods.reset();
     setResponseBody(null);
     setJsonError(null);
   };
 
   return (
     <section className={styles.restCont}>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <h2 className={styles.head}>RESTfull Client</h2>
-
-        <Box className={styles.methodUrl}>
-          {/* выбор метода */}
-          <FormControl
-            fullWidth
-            size="small"
-            className={styles.customSelect}
-            sx={{ mb: 2, width: 130 }}
-          >
-            <InputLabel>Method</InputLabel>
-            <Controller
-              name="method"
-              control={control}
-              render={({ field }) => (
-                <Select {...field} label="Method" sx={{ color: 'white', borderColor: 'white' }}>
-                  <MenuItem value="GET">GET</MenuItem>
-                  <MenuItem value="POST">POST</MenuItem>
-                  <MenuItem value="PUT">PUT</MenuItem>
-                  <MenuItem value="DELETE">DELETE</MenuItem>
-                  <MenuItem value="PATCH">PATCH</MenuItem>
-                </Select>
-              )}
+      <FormProvider {...methods}>
+        <form className={styles.form} onSubmit={methods.handleSubmit(onSubmit)}>
+          <h2 className={styles.head}>RESTfull Client</h2>
+          <Box className={styles.methodUrl}>
+            {/* выбор метода */}
+            <FormControl
+              fullWidth
+              size="small"
+              className={styles.customSelect}
+              sx={{ mb: 2, width: 130 }}
+            >
+              <InputLabel>Method</InputLabel>
+              <Controller
+                name="method"
+                control={methods.control}
+                render={({ field }) => (
+                  <Select {...field} label="Method" sx={{ color: 'white', borderColor: 'white' }}>
+                    <MenuItem value="GET">GET</MenuItem>
+                    <MenuItem value="POST">POST</MenuItem>
+                    <MenuItem value="PUT">PUT</MenuItem>
+                    <MenuItem value="DELETE">DELETE</MenuItem>
+                    <MenuItem value="PATCH">PATCH</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
+            {/* эндпоинт */}
+            <TextFieldInput
+              customClass={pages.query}
+              label="Endpoint URL"
+              register={methods.register('endpointUrl')}
+              multilineArea
+              rows={1}
+              onBlur={updateUrl}
             />
-          </FormControl>
-
-          {/* эндпоинт */}
-          <TextField
-            className={styles.customInput}
-            {...register('endpointUrl', { onBlur: updateUrl })}
-            label="Endpoint URL"
-            size="small"
-            fullWidth
-            variant="outlined"
-            required
-            sx={{ mb: 2 }}
-          />
-        </Box>
-
-        <Box className={styles.headersParams}>
-          {/* добавление хэдэров */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Headers:
-            </Typography>
-            {headerFields.map((field, index) => (
-              <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
-                <TextField
-                  {...register(`headers.${index}.key`, { onBlur: updateUrl })}
-                  label="Header Key"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <TextField
-                  {...register(`headers.${index}.value`, { onBlur: updateUrl })}
-                  label="Header Value"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <IconButton
-                  onClick={() => removeHeader(index)}
-                  color="error"
-                  aria-label="delete header"
-                  size="small"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => appendHeader({ key: '', value: '' })}
-              sx={{
-                backgroundColor: '#3C3B3F',
-                color: 'white',
-                borderColor: 'white',
-                '&:hover': {
-                  backgroundColor: '#4F4E52',
-                },
-              }}
-            >
-              Add Header
-            </Button>
           </Box>
-
-          {/* добавление кверей */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Query Parameters:
-            </Typography>
-            {queryFields.map((field, index) => (
-              <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
-                <TextField
-                  {...register(`queries.${index}.key`, { onBlur: updateUrl })}
-                  label="Query Key"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <TextField
-                  {...register(`queries.${index}.value`, { onBlur: updateUrl })}
-                  label="Query Value"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <IconButton
-                  onClick={() => removeQuery(index)}
-                  color="error"
-                  aria-label="delete query"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => appendQuery({ key: '', value: '' })}
-              sx={{
-                backgroundColor: '#3C3B3F',
-                color: 'white',
-                borderColor: 'white',
-                '&:hover': {
-                  backgroundColor: '#4F4E52',
-                },
-              }}
-            >
-              Add Query Parameter
-            </Button>
-          </Box>
-          {/*Добавление вариаблес */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Variables:
-            </Typography>
-            {variablesFields.map((field, index) => (
-              <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
-                <TextField
-                  {...register(`variables.${index}.key`, { onBlur: updateUrl })}
-                  label="Variable Key"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <TextField
-                  {...register(`variables.${index}.value`, { onBlur: updateUrl })}
-                  label="Variable Value"
-                  fullWidth
-                  size="small"
-                  className={styles.customInput}
-                />
-                <IconButton
-                  onClick={() => removeVariables(index)}
-                  color="error"
-                  aria-label="delete variables"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => appendVariables({ key: '', value: '' })}
-              sx={{
-                backgroundColor: '#3C3B3F',
-                color: 'white',
-                borderColor: 'white',
-                '&:hover': {
-                  backgroundColor: '#4F4E52',
-                },
-              }}
-            >
-              Add Variables
-            </Button>
-          </Box>
-        </Box>
-
-        {/* ввод боди */}
-        {/* Переключатель режимов ввода */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">Input Mode:</Typography>
-          <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
-            <FormControlLabel value="json" control={<Radio />} label="JSON" />
-            <FormControlLabel value="text" control={<Radio />} label="Text" />
-          </RadioGroup>
-        </Box>
-        <TextField
-          {...register('body', { onBlur: updateUrl })}
-          label="Body"
-          fullWidth
-          multiline
-          minRows={4}
-          variant="outlined"
-          size="small"
-          sx={{ mb: 2 }}
-          className={styles.customInput}
-        />
-
-        {inputMode === 'json' && (
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleFormatJson}
-            sx={{
-              backgroundColor: '#3C3B3F',
-              color: 'white',
-              borderColor: '#3C3B3F',
-              '&:hover': {
-                backgroundColor: '#4F4E52',
-              },
-              mb: 2,
-            }}
-          >
-            Format Body
-          </Button>
-        )}
-
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{
-              backgroundColor: '#3C3B3F',
-              color: 'white',
-              borderColor: 'white',
-              '&:hover': {
-                backgroundColor: '#4F4E52',
-              },
-            }}
-          >
-            Send Request
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            onClick={onReset}
-            sx={{
-              backgroundColor: '#3C3B3F',
-              color: 'white',
-              borderColor: 'white',
-              '&:hover': {
-                backgroundColor: '#4F4E52',
-              },
-            }}
-          >
-            Reset Form
-          </Button>
-        </Box>
-      </form>
-
-      {/* ответ */}
-      {/* <div className={styles.responseCont}>
-        <Typography variant="h6">Response</Typography>
-        {jsonError ? (
-          <Typography color="error">{jsonError}</Typography>
-        ) : (
-          <>
-            {responseStatus && (
-              <Typography variant="subtitle1">
-                Status: {responseStatus.code} {responseStatus.text}
+          <Box className={styles.headersParams}>
+            {/* добавление хэдэров */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Headers:
               </Typography>
-            )}
-            <pre className={styles.responseBody}>{responseBody}</pre>
-          </>
-        )}
-      </div>  тут как вариант т.к в тз требуется такой же поле для ответа как в грапхкл сделайт.. ток его немног над стилизовать под рест*/}
-      <div className={`${pages.response} ${pages.restResponse}`}>
-        {' '}
-        <p>Status: {responseStatus ? responseStatus.code : ''}</p>
-        <RequestTextField response={responseBody ? responseBody : ''} />
-      </div>
+              {headerFields.map((field, index) => (
+                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Header key"
+                    register={methods.register(`headers.${index}.key`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Header Value"
+                    register={methods.register(`headers.${index}.value`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+                  <IconButton
+                    onClick={() => removeHeader(index)}
+                    color="error"
+                    aria-label="delete header"
+                    size="small"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              ))}
+              <Button
+                className={pages.queryButton}
+                variant="contained"
+                type="button"
+                onClick={() => appendHeader({ key: '', value: '' })}
+              >
+                Add Header
+              </Button>
+            </Box>
+            {/* добавление кверей */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Query Parameters:
+              </Typography>
+              {queryFields.map((field, index) => (
+                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Query Key"
+                    register={methods.register(`queries.${index}.key`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Query Value"
+                    register={methods.register(`queries.${index}.value`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+                  <IconButton
+                    onClick={() => removeQuery(index)}
+                    color="error"
+                    aria-label="delete query"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              ))}
+              <Button
+                className={pages.queryButton}
+                variant="contained"
+                type="button"
+                onClick={() => appendQuery({ key: '', value: '' })}
+              >
+                Add Query Parameter
+              </Button>
+            </Box>
+            {/*Добавление вариаблес */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Variables:
+              </Typography>
+              {variablesFields.map((field, index) => (
+                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Variable Key"
+                    register={methods.register(`variables.${index}.key`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+
+                  <TextFieldInput
+                    customClass={pages.query}
+                    label="Variable Value"
+                    register={methods.register(`variables.${index}.value`)}
+                    multilineArea
+                    rows={1}
+                    onBlur={updateUrl}
+                  />
+                  <IconButton
+                    onClick={() => removeVariables(index)}
+                    color="error"
+                    aria-label="delete variables"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              ))}
+              <Button
+                className={pages.queryButton}
+                variant="contained"
+                type="button"
+                onClick={() => appendVariables({ key: '', value: '' })}
+              >
+                Add Variables
+              </Button>
+            </Box>
+          </Box>
+          {/* ввод боди */}
+          {/* Переключатель режимов ввода */}
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle1">Input Mode:</Typography>
+            <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
+              <FormControlLabel value="json" control={<Radio />} label="JSON" />
+              <FormControlLabel value="text" control={<Radio />} label="Text" />
+            </RadioGroup>
+          </Box>
+          <TextFieldInput
+            customClass={`${pages.query} ${pages.bodyRestful}`}
+            label="Body"
+            register={methods.register('body')}
+            multilineArea
+            rows={20}
+            onBlur={updateUrl}
+            prettier={'query'}
+          />
+          {inputMode === 'json' && (
+            <Button
+              className={pages.queryButton}
+              variant="contained"
+              type="button"
+              onClick={handleFormatJson}
+            >
+              Format Body
+            </Button>
+          )}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button type="submit" className={pages.queryButton} variant="contained">
+              Send Request
+            </Button>
+            <Button
+              className={pages.queryButton}
+              variant="contained"
+              type="button"
+              onClick={onReset}
+            >
+              Reset Form
+            </Button>
+          </Box>
+        </form>
+        {/* ответ */}
+        <div className={`${pages.response} ${pages.restResponse}`}>
+          {' '}
+          <p>Status: {responseStatus ? responseStatus.code : ''}</p>
+          <RequestTextField
+            response={responseBody ? JSON.parse(responseBody) : ''}
+            client="restFull"
+          />
+        </div>
+      </FormProvider>
     </section>
   );
 }

@@ -21,7 +21,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function RequestTextField({ response }: { response: unknown }) {
+function RequestTextField({ response, client }: { response: unknown; client?: string }) {
   return (
     <StyledTextField
       id={'outlined-basic'}
@@ -30,7 +30,7 @@ function RequestTextField({ response }: { response: unknown }) {
       size="small"
       color="warning"
       multiline
-      rows={20}
+      rows={client ? 48 : 20}
       fullWidth={true}
       value={response ? JSON.stringify(response, null, 2) : ''}
     />
