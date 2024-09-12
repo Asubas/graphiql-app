@@ -13,7 +13,7 @@ import { getLocale, setLocale } from '@/src/utils/cookies';
 export default function Header() {
   const router = useRouter();
   const { loading, user, signOut } = useAuth();
-  const [token, setToken] = useState(false);
+  const token = document.cookie.includes('token=');
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const locale = getLocale();
@@ -27,10 +27,6 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    const tokenExists = document.cookie.includes('token=');
-    setToken(tokenExists);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -148,7 +144,7 @@ export default function Header() {
                 />
               </>
             )}
-            {user && (
+            {user && token && (
               <>
                 <span className={styles.userName}>{user.displayName || 'User'}</span>
                 <HeaderAuthBtn
