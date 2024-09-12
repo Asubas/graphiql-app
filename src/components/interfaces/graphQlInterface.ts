@@ -23,11 +23,29 @@ export type CustomTextFieldVariants =
 
 export interface FormDataHistory {
   endpointUrl: string;
-  headers: string;
-  query: string;
-  variables: string | null;
+  headers?:
+    | string
+    | {
+        key: string;
+        value: string;
+      }[];
+  query?: string;
+  variables?:
+    | string
+    | null
+    | {
+        key: string;
+        value: string;
+      }[];
   timestamp: string;
   encodedHistoryUrl: string;
+  body?: string;
+  queryParams?:
+    | string
+    | {
+        key: string;
+        value: string;
+      }[];
 }
 
 export interface DefaultParams {

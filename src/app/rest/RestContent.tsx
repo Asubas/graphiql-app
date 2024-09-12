@@ -1,5 +1,6 @@
 'use client';
 
+import pages from '../graphql/graphql.module.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import {
@@ -22,6 +23,8 @@ import { statusMessages } from '@/src/services/constant';
 import { useRouter } from 'next/navigation';
 import { encodeUrl } from '@/src/utils/urlUtils';
 import { formatJson } from '@/src/utils/formatJson';
+import { saveGetHistory } from '@/src/utils/saveGetHistory';
+import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 
 type QueryParam = { key: string; value: string };
 type Header = { key: string; value: string };
@@ -31,6 +34,7 @@ type FormData = {
   endpointUrl: string;
   headers: { key: string; value: string }[];
   queries: { key: string; value: string }[];
+  variables: { key: string; value: string }[];
   body: string;
 };
 
@@ -55,6 +59,7 @@ export default function RestContent({
       endpointUrl: 'https://api.restful-api.dev/objects',
       headers: [{ key: 'Content-Type', value: 'application/json' }],
       queries: [{ key: '', value: '' }],
+      variables: [{ key: '', value: '' }],
       body: '',
     },
   });
@@ -71,10 +76,17 @@ export default function RestContent({
     remove: removeQuery,
   } = useFieldArray({ control, name: 'queries' });
 
+  const {
+    fields: variablesFields,
+    append: appendVariables,
+    remove: removeVariables,
+  } = useFieldArray({ control, name: 'variables' });
+
   const [responseBody, setResponseBody] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<{ code: number; text: string } | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [inputMode, setInputMode] = useState<'json' | 'text'>('json');
+  const [encodedHistoryUrl, setEncodedHistoryUrl] = useState('');
   const router = useRouter();
 
   const updateUrl = useCallback(() => {
@@ -83,9 +95,11 @@ export default function RestContent({
       method: currentData.method,
       endpointUrl: currentData.endpointUrl,
       body: currentData.body,
+      variables: currentData.variables,
       headers: currentData.headers,
       queries: currentData.queries,
     });
+    setEncodedHistoryUrl(newUrl);
     router.replace(newUrl);
     window.history.pushState(null, '', newUrl);
   }, [getValues, router]);
@@ -120,7 +134,7 @@ export default function RestContent({
 
   const onSubmit = async (data: FormData) => {
     try {
-      const { method, endpointUrl, headers, queries, body } = data;
+      const { method, endpointUrl, headers, variables, queries, body } = data;
       const requestHeaders = headers.reduce<Record<string, string>>((acc, header) => {
         if (header.key && header.value) {
           acc[header.key] = header.value;
@@ -142,7 +156,10 @@ export default function RestContent({
       const res = await fetch(fullUrl, {
         method,
         headers: requestHeaders,
-        body: method !== 'GET' && body ? body : undefined,
+        body:
+          method !== 'GET' && (body || variables.length > 0)
+            ? JSON.stringify({ body, variables })
+            : undefined,
       });
 
       const statusText = res.statusText || statusMessages[res.status] || 'Unknown Status';
@@ -151,12 +168,16 @@ export default function RestContent({
       const result = await res.json();
       setResponseBody(JSON.stringify(result, null, 2));
       setJsonError(null);
-
-      // пушим запрос в историю
-      const timestamp = new Date().toISOString();
-      const history = JSON.parse(localStorage.getItem('history') || '[]');
-      history.push({ method, endpointUrl, headers, queries, body, timestamp });
-      localStorage.setItem('history', JSON.stringify(history));
+      saveGetHistory({
+        endpointUrl,
+        headers,
+        variables,
+        body,
+        queryParams,
+        timestamp: new Date().toISOString(),
+        encodedHistoryUrl,
+      });
+      updateUrl();
     } catch (error) {
       setJsonError('Invalid JSON in request body');
       console.error('Error sending request:', error);
@@ -306,6 +327,52 @@ export default function RestContent({
               Add Query Parameter
             </Button>
           </Box>
+          {/*Добавление вариаблес */}
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Variables:
+            </Typography>
+            {variablesFields.map((field, index) => (
+              <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                <TextField
+                  {...register(`variables.${index}.key`, { onBlur: updateUrl })}
+                  label="Variable Key"
+                  fullWidth
+                  size="small"
+                  className={styles.customInput}
+                />
+                <TextField
+                  {...register(`variables.${index}.value`, { onBlur: updateUrl })}
+                  label="Variable Value"
+                  fullWidth
+                  size="small"
+                  className={styles.customInput}
+                />
+                <IconButton
+                  onClick={() => removeVariables(index)}
+                  color="error"
+                  aria-label="delete variables"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            ))}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => appendVariables({ key: '', value: '' })}
+              sx={{
+                backgroundColor: '#3C3B3F',
+                color: 'white',
+                borderColor: 'white',
+                '&:hover': {
+                  backgroundColor: '#4F4E52',
+                },
+              }}
+            >
+              Add Variables
+            </Button>
+          </Box>
         </Box>
 
         {/* ввод боди */}
@@ -328,6 +395,7 @@ export default function RestContent({
           sx={{ mb: 2 }}
           className={styles.customInput}
         />
+
         {inputMode === 'json' && (
           <Button
             variant="outlined"
@@ -384,7 +452,7 @@ export default function RestContent({
       </form>
 
       {/* ответ */}
-      <div className={styles.responseCont}>
+      {/* <div className={styles.responseCont}>
         <Typography variant="h6">Response</Typography>
         {jsonError ? (
           <Typography color="error">{jsonError}</Typography>
@@ -398,6 +466,11 @@ export default function RestContent({
             <pre className={styles.responseBody}>{responseBody}</pre>
           </>
         )}
+      </div>  тут как вариант т.к в тз требуется такой же поле для ответа как в грапхкл сделайт.. ток его немног над стилизовать под рест*/}
+      <div className={`${pages.response} ${pages.restResponse}`}>
+        {' '}
+        <p>Status: {responseStatus ? responseStatus.code : ''}</p>
+        <RequestTextField response={responseBody ? responseBody : ''} />
       </div>
     </section>
   );
