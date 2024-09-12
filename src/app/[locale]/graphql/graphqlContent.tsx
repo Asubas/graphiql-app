@@ -151,7 +151,7 @@ const GraphQLClient = ({
               }
             />
             <TextFieldInput
-              label="Headers: "
+              label="Headers (JSON format):"
               register={methods.register('headers')}
               multilineArea
               rows={5}

@@ -81,7 +81,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
       />
       {prettier && prettier === 'query' && (
         <Button
-          className={`${pages.queryButton} ${pages.formattingButton}`}
+          className={`${pages.queryButton} ${input.formattingButton}`}
           variant="contained"
           type="button"
           onClick={handleFormat}

@@ -30,6 +30,13 @@
     max-width: 70%;
     padding: 10px;
 
+    span {
+      margin-right: 10px;
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
     a {
       color: #ffa500;
       text-decoration: none;

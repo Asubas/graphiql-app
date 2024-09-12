@@ -24,6 +24,19 @@ function HistorySection() {
     setHistory([]);
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    };
+    return date.toLocaleString('ru-RU', options).replace(',', '');
+  };
+
   useEffect(() => {
     const storedHistory = localStorage.getItem('history');
     if (storedHistory) {
@@ -39,6 +52,7 @@ function HistorySection() {
             {history.map((element, index) => {
               return (
                 <div className={styles.historyElement} key={index}>
+                  <span>{formatDate(element.timestamp)}</span>
                   <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
                 </div>
               );

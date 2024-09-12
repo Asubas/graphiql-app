@@ -54,16 +54,14 @@ export function useAuth() {
     });
 
     return () => unsubscribe();
-  }, [router]);
+  }, [handleTokenExpiration, router]);
 
   const signUp = async (email: string, password: string, username?: string) => {
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
       await updateProfile(user, { displayName: username });
-
       await addDoc(collection(db, 'users'), {
         uid: user.uid,
         email: user.email,
@@ -72,6 +70,9 @@ export function useAuth() {
       });
 
       toast.success('User is successfully created!');
+      const idTokenResult = await user.getIdTokenResult();
+      const token = idTokenResult.token;
+      document.cookie = `token=${token}; path=/; max-age=3600;`;
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
