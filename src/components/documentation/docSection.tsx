@@ -1,4 +1,4 @@
-import pages from '../../app/graphql/graphql.module.scss';
+import pages from '../../app/[locale]/graphql/graphql.module.scss';
 import styles from './docSection.module.scss';
 import { useEffect, useState } from 'react';
 import { IntrospectionQuery, buildClientSchema, getIntrospectionQuery, printSchema } from 'graphql';

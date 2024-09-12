@@ -1,5 +1,5 @@
 import input from './input.module.scss';
-import pages from '../../../app/graphql/graphql.module.scss';
+import pages from '../../../app/[locale]/graphql/graphql.module.scss';
 import { styled } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';

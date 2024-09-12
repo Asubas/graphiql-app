@@ -1,4 +1,4 @@
-import pages from '../../app/graphql/graphql.module.scss';
+import pages from '../../app/[locale]/graphql/graphql.module.scss';
 import '../Welcome/Welcome.module.scss';
 import { Button, Drawer } from '@mui/material';
 import { useRouter } from 'next/navigation';

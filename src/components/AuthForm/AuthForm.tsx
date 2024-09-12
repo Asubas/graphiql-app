@@ -7,7 +7,9 @@ import style from './AuthForm.module.scss';
 import TextInputField from '../TextInputField/TextInputField';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signInValidationSchema, signUpValidationSchema } from '@/src/utils/validation';
+import { useSignInValidationSchema, useSignUpValidationSchema } from '@/src/utils/validation';
+import { useTranslations } from 'next-intl';
+import { getLocale } from '@/src/utils/cookies';
 
 interface AuthFormProps {
   title: string;
@@ -27,7 +29,11 @@ interface SignUpInputs {
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
-  const isSignIn = title === 'Sign In';
+  const t = useTranslations('AuthForm');
+  const isSignIn = title === t('signInTitle');
+
+  const signInValidationSchema = useSignInValidationSchema();
+  const signUpValidationSchema = useSignUpValidationSchema();
 
   const {
     register,
@@ -39,12 +45,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+  const locale = getLocale();
 
   const handleLinkClick = () => {
     if (isSignIn) {
-      router.push('/signUp');
+      router.push(`/${locale}/signUp`);
     } else {
-      router.push('/signIn');
+      router.push(`/${locale}/signIn`);
     }
   };
 
@@ -72,7 +79,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
             <>
               <Grid item xs={12}>
                 <TextInputField
-                  label="Username"
+                  label={t('userName')}
                   type="text"
                   error={errors && 'username' in errors ? errors.username?.message || '' : ''}
                   startIcon={<PersonIcon />}
@@ -83,7 +90,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           )}
           <Grid item xs={12}>
             <TextInputField
-              label="Email"
+              label={t('email')}
               type="email"
               error={errors && 'email' in errors ? errors.email?.message || '' : ''}
               startIcon={<EmailRounded />}
@@ -92,7 +99,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
           </Grid>
           <Grid item xs={12}>
             <TextInputField
-              label="Password"
+              label={t('password')}
               type={showPassword ? 'text' : 'password'}
               error={errors && 'password' in errors ? errors.password?.message || '' : ''}
               startIcon={<Lock />}
@@ -100,12 +107,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
               onTogglePasswordVisibility={handleClickShowPassword}
               register={register('password')}
               autocomplete={'new-password'}
+              data-testid="password-input"
             />
           </Grid>
           {!isSignIn && (
             <Grid item xs={12}>
               <TextInputField
-                label="Confirm Password"
+                label={t('confirmPassword')}
                 type={showPassword ? 'text' : 'password'}
                 error={
                   errors && 'confirmPassword' in errors ? errors.confirmPassword?.message || '' : ''
@@ -115,18 +123,19 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
                 onTogglePasswordVisibility={handleClickShowPassword}
                 register={register('confirmPassword')}
                 autocomplete={'new-password'}
+                data-testid="confirm-password-input"
               />
             </Grid>
           )}
           <Grid item xs={12}>
             <Button fullWidth variant="contained" color="primary" type="submit">
-              Submit
+              {t('submit')}
             </Button>
           </Grid>
         </Grid>
       </form>
       <Link variant="body2" onClick={handleLinkClick} className={style.navigationLink}>
-        {isSignIn ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+        {isSignIn ? t('isSignInText') : t('isNotSignInText')}
       </Link>
     </Container>
   );

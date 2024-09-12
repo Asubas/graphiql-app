@@ -1,0 +1,92 @@
+{
+  "HomePage": {
+    "title": "Welcome back,"
+  },
+  "SignIn": {
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password"
+  },
+  "SignUp": {
+    "title": "Sign Up",
+    "email": "Email",
+    "password": "Password"
+  },
+  "ErrorPage": {
+    "title": "Something went wrong!",
+    "errorMessage": "Error:",
+    "showDetails": "Show Details",
+    "hideDetails": "Hide Details",
+    "tryAgain": "Try again from Start"
+  },
+  "NotFoundPage": {
+    "title": "Error: 404 page not found",
+    "message": "Sorry, the page you are looking for cannot be accessed",
+    "link": "Go Home"
+  },
+  "AboutPage": {
+    "text": "This application was created as part of the React course by RSSchool. If you also want to dive into the world of IT and specifically into the world of frontend development,",
+    "rsLinkText": "enroll in the frontend development course",
+    "descriptionBeggining": "Welcome to the home of",
+    "descriptionEnd": "! We are a team of budding developers, unafraid of challenges and always moving forward. Our application is built to assist others by enabling requests to any open APIs. Whether you are making RESTful requests or diving into GraphQL, our platform is designed to empower your projects.",
+    "team": "Our team",
+    "asubasName": "Alex (Asubas)",
+    "asubasRole": "Team lead, developer",
+    "asubasLocation": "Russia, Yaroslavl",
+    "lipanName": "Anton (lipan4836)",
+    "lipanRole": "developer",
+    "lipanLocation": "Russia, Voronezh",
+    "pdasyaName": "Daria (pdasya)",
+    "pdasyaRole": "developer",
+    "pdasyaLocation": "Japan, Tsukuba",
+    "throwError": "Throw Error"
+  },
+  "AuthForm": {
+    "signInTitle": "Sign In",
+    "userName": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "isSignInText": "Don't have an account? Sign Up",
+    "isNotSignInText": "Already have an account? Sign In"
+  },
+  "Welcome": {
+    "welcome": "Welcome!!",
+    "description": "If you want to try playground, please sign in or sign up",
+    "signInLabel": "Sign In",
+    "signUpLabel": "Sign Up",
+    "restLabel": "REST Client",
+    "graphQLLabel": "GraphQL Client",
+    "history": "History",
+    "alreadySignIn": "You are already logged in!",
+    "alreadySignUp": "You are already registered!"
+  },
+  "Validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Email must be in the format user@example.com",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordDigit": "Password must contain at least 1 digit",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordSpecial": "Password must contain at least one special character",
+    "usernameRequired": "Username is required",
+    "usernameMinLength": "Username must be at least 3 characters long",
+    "usernameMaxLength": "Username must be at most 15 characters long",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordsMustMatch": "Passwords must match"
+  },
+  "Toasts": {
+    "sessionExpired": "Your session has expired. You will be redirected to the main page",
+    "userCreated": "User is successfully created!",
+    "userExists": "User with this email is already registered",
+    "invalidEmail": "Invalid email address",
+    "unexpectedError": "An unexpected error occurred. Please try again",
+    "userLoggedIn": "You are successfully logged in",
+    "userDoesNotExist": "User with these credentials does not exist. Please check the email and password",
+    "manyRequests": "Too many requests at the same time. Please try later",
+    "userLoggedOut": "You have successfully logged out",
+    "logOutFail": "Failed to log out. Please try again"
+  }
+}
