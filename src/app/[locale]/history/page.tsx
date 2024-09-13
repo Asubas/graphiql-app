@@ -2,12 +2,14 @@
 import styles from './history.module.scss';
 import { FormDataHistory } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 function HistorySection() {
   const [history, setHistory] = useState<FormDataHistory[] | null>([]);
+  const t = useTranslations('History');
 
   const router = useRouter();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,23 +61,20 @@ function HistorySection() {
             })}
             <div className={styles.buttonsContainer}>
               <Button variant="contained" type="button" onClick={clearHistory}>
-                Clear History
+                {t('clearButton')}
               </Button>
             </div>
           </div>
         </>
       ) : (
         <div className={styles.emptyHistory}>
-          <p>
-            You haven&apos;t executed any requests yet <br />
-            Try those options:
-          </p>
+          <p>{t('historyDescription')}</p>
           <div className={styles.buttonsContainer}>
             <Button variant="contained" type="button" onClick={handleClick}>
-              GraphiQl
+              {t('graphiQLButton')}
             </Button>
             <Button data-type="restFull" variant="contained" type="button" onClick={handleClick}>
-              RestFullApi
+              {t('restFullApi')}
             </Button>
           </div>
         </div>

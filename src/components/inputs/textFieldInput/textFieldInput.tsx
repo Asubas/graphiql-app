@@ -6,6 +6,7 @@ import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import beautify from 'js-beautify';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useTranslations } from 'next-intl';
 const options = {
   indent_size: 4,
   indent_with_tabs: false,
@@ -88,6 +89,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
       setValue('query', formattedText);
     }
   };
+  const t = useTranslations('TextFieldInput');
 
   return (
     <>
@@ -130,7 +132,7 @@ function TextFieldInput<TFieldValues extends FieldValues>({
           type="button"
           onClick={handleFormat}
         >
-          formatting
+          {t('textFieldButton')}
         </Button>
       )}
     </>

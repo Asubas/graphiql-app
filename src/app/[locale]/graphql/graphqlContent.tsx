@@ -15,6 +15,7 @@ import { DocSection } from '@/src/components/documentation/docSection';
 import { HistoryButton } from '@/src/components/history/historySection';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { sendRequest } from '@/src/services/requests/sendRequest';
+import { useTranslations } from 'next-intl';
 
 const GraphQLClient = ({
   defaultParams,
@@ -28,6 +29,7 @@ const GraphQLClient = ({
   const [showVariables, setShowVariables] = useState(false);
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
+  const t = useTranslations('GraphQLContent');
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headers, query, variables } = data;
@@ -40,7 +42,7 @@ const GraphQLClient = ({
     if (result) {
       setResponse(result as GraphQLResponse);
     } else {
-      setResponse({ errors: [{ message: 'Error fetch' }] });
+      setResponse({ errors: [{ message: t('errorMessage') }] });
     }
     setStatus(status);
     methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
@@ -62,19 +64,19 @@ const GraphQLClient = ({
 
   return (
     <section className={pages.graphql}>
-      <p>GraphQL Client</p>
+      <p>{t('pageTitle')}</p>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={pages.form}>
           <div className={pages.endpoints}>
             <TextFieldInput
-              label="Endpoint Url:"
+              label={t('endpointUrlLabel')}
               register={methods.register('endpointUrl')}
               onBlur={handlePushUrl}
               prettier={'endpoint'}
               defaultValue={(defaultParams && defaultParams.endpointUrl) || DEFAULT_URL_ENDPOINT}
             />
             <TextFieldInput
-              label="SDL Url:"
+              label={t('sdlUrlLabel')}
               register={methods.register('sdlUrl')}
               defaultValue={
                 defaultParams && defaultParams.endpointUrl
@@ -86,7 +88,7 @@ const GraphQLClient = ({
           <div className={pages.area}>
             <TextFieldInput
               customClass={pages.query}
-              label="Query:"
+              label={t('queryLabel')}
               register={methods.register('query')}
               multilineArea
               rows={20}
@@ -95,7 +97,9 @@ const GraphQLClient = ({
               defaultValue={(defaultParams && defaultParams.query) || DEFAULT_QUERY_JSON}
             />
             <div className={pages.response}>
-              <p>Status: {status ? status : ''}</p>
+              <p>
+                {t('status')} {status ? status : ''}
+              </p>
               <RequestTextField response={response ? response : ''} />
             </div>
           </div>
@@ -106,7 +110,7 @@ const GraphQLClient = ({
               type="button"
               onClick={handleClick}
             >
-              Add variables
+              {t('addVariablesButton')}
             </Button>
             <Button
               className={pages.queryButton}
@@ -115,30 +119,28 @@ const GraphQLClient = ({
               data-type="headers"
               onClick={handleClick}
             >
-              Add headers
+              {t('addHeaderButton')}
             </Button>
             <HistoryButton />
             <div className={pages.documentation}>
               {status === 500 || !status ? (
-                <span className={pages.documentationShowTitle}>
-                  If response ok, this should be link to documentation
-                </span>
+                <span className={pages.documentationShowTitle}>{t('docsTitleText')}</span>
               ) : (
                 <DocSection endpointSdl={methods.getValues('sdlUrl')} />
               )}
             </div>
             <Button className={pages.queryButton} variant="contained" type="submit">
-              Submit
+              {t('submitButton')}
             </Button>
           </div>
           <div className={pages.variables}>
             <TextFieldInput
-              label="Variables (JSON format):"
+              label={t('variablesLabel')}
               register={methods.register('variables')}
               multilineArea
               rows={5}
               customClass={showVariables ? pages.show : pages.hidden}
-              placeholder="{ variables }"
+              placeholder={t('variablesPlaceholder')}
               onBlur={handlePushUrl}
               defaultValue={
                 defaultParams?.variables && Object.keys(defaultParams.variables).length > 0
@@ -147,12 +149,12 @@ const GraphQLClient = ({
               }
             />
             <TextFieldInput
-              label="Headers (JSON format):"
+              label={t('headersLabel')}
               register={methods.register('headers')}
               multilineArea
               rows={5}
               customClass={showHeaders ? pages.show : pages.hidden}
-              placeholder="{ headers }"
+              placeholder={t('headersPlaceholder')}
               onBlur={handlePushUrl}
               defaultValue={decodingHeaders ? decodingHeaders : ''}
             />

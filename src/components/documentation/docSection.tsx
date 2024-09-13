@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { IntrospectionQuery, buildClientSchema, getIntrospectionQuery, printSchema } from 'graphql';
 import { request } from 'graphql-request';
 import { Button, Drawer } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -11,6 +12,7 @@ function DocSection({ endpointSdl }: { endpointSdl: string }) {
   const [open, setOpen] = useState(false);
   const [sdl, setSDL] = useState<string>('');
   const anchor: Anchor = 'right';
+  const t = useTranslations('DocSection');
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -39,7 +41,7 @@ function DocSection({ endpointSdl }: { endpointSdl: string }) {
   return (
     <div>
       <Button className={`${pages.queryButton} `} onClick={toggleDrawer(true)} variant="contained">
-        Show documentation
+        {t('showButton')}
       </Button>
       <Drawer
         open={open}
@@ -47,7 +49,7 @@ function DocSection({ endpointSdl }: { endpointSdl: string }) {
         onClose={toggleDrawer(false)}
         classes={{ paper: styles.drawer }}
       >
-        {sdl ? DrawerList : 'Loading documentation...'}
+        {sdl ? DrawerList : t('loadingDocumentation')}
       </Drawer>
     </div>
   );
