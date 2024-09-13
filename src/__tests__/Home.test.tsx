@@ -46,6 +46,7 @@ describe('Home Component', () => {
 
   it('renders welcome message when user is logged in', () => {
     const mockUseAuth = useAuth as jest.Mock;
+    document.cookie = 'token=someToken';
     mockUseAuth.mockReturnValue({
       user: { displayName: 'John Doe' },
     });
@@ -57,13 +58,14 @@ describe('Home Component', () => {
 
   it('renders Welcome component', () => {
     const mockUseAuth = useAuth as jest.Mock;
+    document.cookie = 'token=someToken';
     mockUseAuth.mockReturnValue({
       user: null,
     });
 
     render(<Home />);
 
-    expect(screen.getByText(/descriptionBeggining/i)).toBeInTheDocument();
+    expect(screen.getByText(/graphQLLabel/i)).toBeInTheDocument();
   });
 
   it('renders fallback name "User" if displayName is not available', () => {

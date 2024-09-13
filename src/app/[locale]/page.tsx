@@ -17,7 +17,7 @@ export default function Home() {
         <About />
       ) : (
         <p>
-          {t('title')} {user?.displayName || 'User'}!
+          {t('title')} {token && user && user.displayName ? user?.displayName : 'User'}!
         </p>
       )}{' '}
       <Welcome />

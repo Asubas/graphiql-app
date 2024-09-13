@@ -1,32 +1,16 @@
+import style from './AuthForm.module.scss';
+import PersonIcon from '@mui/icons-material/Person';
 import React, { useState } from 'react';
 import { Grid, Button, Container, Link } from '@mui/material';
 import { EmailRounded, Lock } from '@mui/icons-material';
-import PersonIcon from '@mui/icons-material/Person';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import style from './AuthForm.module.scss';
-import TextInputField from '../TextInputField/TextInputField';
+import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSignInValidationSchema, useSignUpValidationSchema } from '@/src/utils/validation';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/src/utils/cookies';
-
-interface AuthFormProps {
-  title: string;
-  onSubmit: (email: string, password: string, username?: string) => void;
-}
-
-interface SignInInputs {
-  email: string;
-  password: string;
-}
-
-interface SignUpInputs {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { TextFieldInput } from '../inputs/textFieldInput/textFieldInput';
+import { AuthFormProps, SignInInputs, SignUpInputs } from '@/src/interfaces/authFormInterfaces';
 
 const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const t = useTranslations('AuthForm');
@@ -35,11 +19,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
   const signInValidationSchema = useSignInValidationSchema();
   const signUpValidationSchema = useSignUpValidationSchema();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignInInputs | SignUpInputs>({
+  const methods = useForm<SignInInputs | SignUpInputs>({
     resolver: yupResolver(isSignIn ? signInValidationSchema : signUpValidationSchema),
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -73,67 +53,76 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
       className={isSignIn ? style.authSignInWrapper : style.authSignUpWrapper}
     >
       <h1 className={style.header}>{title}</h1>
-      <form onSubmit={handleSubmit(onSubmitForm)} noValidate>
-        <Grid container spacing={0} direction="column">
-          {!isSignIn && (
-            <>
-              <Grid item xs={12}>
-                <TextInputField
-                  label={t('userName')}
-                  type="text"
-                  error={errors && 'username' in errors ? errors.username?.message || '' : ''}
-                  startIcon={<PersonIcon />}
-                  register={register('username')}
-                />
-              </Grid>
-            </>
-          )}
-          <Grid item xs={12}>
-            <TextInputField
-              label={t('email')}
-              type="email"
-              error={errors && 'email' in errors ? errors.email?.message || '' : ''}
-              startIcon={<EmailRounded />}
-              register={register('email')}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextInputField
-              label={t('password')}
-              type={showPassword ? 'text' : 'password'}
-              error={errors && 'password' in errors ? errors.password?.message || '' : ''}
-              startIcon={<Lock />}
-              showPasswordToggle
-              onTogglePasswordVisibility={handleClickShowPassword}
-              register={register('password')}
-              autocomplete={'new-password'}
-              data-testid="password-input"
-            />
-          </Grid>
-          {!isSignIn && (
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmitForm)} noValidate>
+          <Grid container spacing={0} direction="column">
+            {!isSignIn && (
+              <>
+                <Grid item xs={12}>
+                  <TextFieldInput
+                    id={'userName-id'}
+                    customClass={style.inputAuthForm}
+                    label={t('userName')}
+                    type="text"
+                    startIcon={<PersonIcon />}
+                    error={methods.formState.errors.username?.message || ''}
+                    register={methods.register('username')}
+                    autocomplete={'userName'}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xs={12}>
-              <TextInputField
-                label={t('confirmPassword')}
+              <TextFieldInput
+                id={'email-id'}
+                customClass={style.inputAuthForm}
+                label={t('email')}
+                type="email"
+                startIcon={<EmailRounded />}
+                error={methods.formState.errors.email?.message || ''}
+                register={methods.register('email')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextFieldInput
+                id={'password-id'}
+                customClass={style.inputAuthForm}
+                label={t('password')}
                 type={showPassword ? 'text' : 'password'}
-                error={
-                  errors && 'confirmPassword' in errors ? errors.confirmPassword?.message || '' : ''
-                }
                 startIcon={<Lock />}
                 showPasswordToggle
                 onTogglePasswordVisibility={handleClickShowPassword}
-                register={register('confirmPassword')}
+                register={methods.register('password')}
                 autocomplete={'new-password'}
-                data-testid="confirm-password-input"
+                data-testid="password-input"
+                error={methods.formState.errors.password?.message || ''}
               />
             </Grid>
-          )}
-          <Grid item xs={12}>
-            <Button fullWidth variant="contained" color="primary" type="submit">
-              {t('submit')}
-            </Button>
+            {!isSignIn && (
+              <Grid item xs={12}>
+                <TextFieldInput
+                  id={'confirmPassword-id'}
+                  customClass={style.inputAuthForm}
+                  label={t('confirmPassword')}
+                  type={showPassword ? 'text' : 'password'}
+                  startIcon={<Lock />}
+                  showPasswordToggle
+                  onTogglePasswordVisibility={handleClickShowPassword}
+                  register={methods.register('confirmPassword')}
+                  autocomplete={'new-password'}
+                  data-testid="confirm-password-input"
+                  error={methods.formState.errors.confirmPassword?.message || ''}
+                />
+              </Grid>
+            )}
+            <Grid item xs={12}>
+              <Button className={style.submitButton} fullWidth type="submit" variant="contained">
+                {t('submit')}
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
+        </form>
+      </FormProvider>
       <Link variant="body2" onClick={handleLinkClick} className={style.navigationLink}>
         {isSignIn ? t('isSignInText') : t('isNotSignInText')}
       </Link>
