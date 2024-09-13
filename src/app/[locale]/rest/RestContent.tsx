@@ -43,13 +43,18 @@ export default function RestContent({
       endpointUrl: defaultParams?.endpointUrl
         ? defaultParams.endpointUrl
         : 'https://api.restful-api.dev/objects',
-      headers: decodingHeaders
-        ? decodingHeaders
-        : [{ key: 'Content-Type', value: 'application/json' }],
-      queries: defaultParams?.queries ? defaultParams?.queries : [{ key: '', value: '' }],
-      variables: Array.isArray(defaultParams?.variables)
-        ? defaultParams.variables
-        : [{ key: '', value: '' }],
+      headers:
+        decodingHeaders && decodingHeaders.length > 0
+          ? decodingHeaders
+          : [{ key: 'Content-Type', value: 'application/json' }],
+      queries:
+        defaultParams?.queries && defaultParams?.queries.length > 0
+          ? defaultParams?.queries
+          : [{ key: '', value: '' }],
+      variables:
+        Array.isArray(defaultParams?.variables) && defaultParams.variables.length > 0
+          ? defaultParams.variables
+          : [{ key: '', value: '' }],
       body: defaultParams?.body && defaultParams.body !== '{}' ? defaultParams?.body : '',
     },
   });

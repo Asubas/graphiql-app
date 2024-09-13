@@ -9,6 +9,9 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   },
   '& .MuiInputLabel-root': {
     color: 'wheat',
+    '&.Mui-focused': {
+      color: theme.palette.warning.main,
+    },
   },
   '& .MuiOutlinedInput-root': {
     color: 'white',
