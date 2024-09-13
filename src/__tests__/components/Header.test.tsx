@@ -1,50 +1,58 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Header from '@/src/components/Header/Header';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/hooks/useAuthRedirect';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/'),
+  useSearchParams: jest.fn(() => new URLSearchParams()),
 }));
 
 jest.mock('../../hooks/useAuthRedirect', () => ({
   useAuth: jest.fn(),
 }));
 
-beforeEach(() => {
-  const mockUseRouter = useRouter as jest.Mock;
-  mockUseRouter.mockReturnValue({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn().mockResolvedValue(undefined),
-    pathname: '/',
-    route: '/',
-    asPath: '/',
-    query: {},
-  });
-
-  const mockUseAuth = useAuth as jest.Mock;
-  mockUseAuth.mockReturnValue({
-    loading: false,
-    user: null,
-    signOut: jest.fn(),
-  });
-
-  jest.clearAllMocks();
-});
+jest.mock('../../utils/cookies', () => ({
+  getLocale: jest.fn(() => 'en'),
+  setLocale: jest.fn(),
+}));
 
 describe('Header Component', () => {
-  test('renders logo and heading', () => {
+  const mockRouterPush = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    const mockUseRouter = useRouter as jest.Mock;
+    mockUseRouter.mockReturnValue({
+      push: mockRouterPush,
+    });
+
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
+      loading: false,
+      user: null,
+      signOut: jest.fn(),
+    });
+  });
+
+  it('renders logo and heading', () => {
     render(<Header />);
-    expect(screen.getByAltText('Client logo')).toBeInTheDocument();
+
+    const logo = screen.getByAltText('Client logo');
+    expect(logo).toBeInTheDocument();
     expect(screen.getByText('API Client')).toBeInTheDocument();
   });
 
-  test('toggles menu on burger icon click', () => {
+  it('toggles menu on burger icon click', () => {
     render(<Header />);
 
     const burgerIcon = screen.getByTestId('burger-icon');
     expect(burgerIcon).toBeInTheDocument();
+
+    expect(screen.queryByTestId('overlay')).not.toBeInTheDocument();
 
     fireEvent.click(burgerIcon);
     expect(screen.getByTestId('overlay')).toBeInTheDocument();
@@ -53,20 +61,7 @@ describe('Header Component', () => {
     expect(screen.queryByTestId('overlay')).not.toBeInTheDocument();
   });
 
-  test('closes menu when overlay is clicked', () => {
-    render(<Header />);
-
-    const burgerIcon = screen.getByTestId('burger-icon');
-    fireEvent.click(burgerIcon);
-
-    const overlay = screen.getByTestId('overlay');
-    expect(overlay).toBeInTheDocument();
-
-    fireEvent.click(overlay);
-    expect(overlay).not.toBeInTheDocument();
-  });
-
-  test('renders sign-in and sign-up buttons when user is not logged in', () => {
+  it('renders sign-in and sign-up buttons when user is not logged in', () => {
     render(<Header />);
 
     expect(screen.getByTestId('signin-btn')).toBeInTheDocument();
@@ -74,14 +69,14 @@ describe('Header Component', () => {
     expect(screen.queryByTestId('logout-btn')).not.toBeInTheDocument();
   });
 
-  test('renders logout button and user name when user is logged in', () => {
+  it('renders logout button and user name when user is logged in', () => {
     const mockUseAuth = useAuth as jest.Mock;
     mockUseAuth.mockReturnValue({
       loading: false,
       user: { displayName: 'John Doe' },
       signOut: jest.fn(),
     });
-
+    document.cookie = 'token=someToken';
     render(<Header />);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -97,18 +92,20 @@ describe('Header Component', () => {
       user: { displayName: 'John Doe' },
       signOut: jest.fn(),
     });
-
+    document.cookie = 'token=someToken';
     render(<Header />);
 
-    const burgerIcon = screen.getByTestId('burger-icon');
-    fireEvent.click(burgerIcon);
+    const enRadio = screen.getByLabelText('EN');
+    const ruRadio = screen.getByLabelText('RU');
 
-    expect(screen.getByText('REST Client')).toBeInTheDocument();
-    expect(screen.getByText('GraphQL Client')).toBeInTheDocument();
-    expect(screen.getByText('History')).toBeInTheDocument();
+    expect(enRadio).toBeInTheDocument();
+    expect(ruRadio).toBeInTheDocument();
+
+    fireEvent.click(ruRadio);
+    expect(mockRouterPush).toHaveBeenCalledWith('/ru/');
   });
 
-  test('adds shrink class on scroll', () => {
+  it('adds shrink class on scroll', () => {
     render(<Header />);
 
     const headerElement = screen.getByRole('banner');

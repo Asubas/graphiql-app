@@ -3,16 +3,21 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AuthForm from '@/src/components/AuthForm/AuthForm';
 import Loader from '@/src/components/Loader/Loader';
-import SignIn from '../app/signIn/page';
+import SignIn from '../app/[locale]/signIn/page';
 import { useAuth } from '../hooks/useAuthRedirect';
+import { useTranslations } from 'next-intl';
 
 jest.mock('../hooks/useAuthRedirect');
 jest.mock('../components/AuthForm/AuthForm');
 jest.mock('../components/Loader/Loader');
+jest.mock('next-intl', () => ({
+  useTranslations: jest.fn(),
+}));
 
 const mockUseAuth = useAuth as jest.Mock;
 const mockAuthForm = AuthForm as jest.Mock;
 const mockLoader = Loader as jest.Mock;
+const mockUseTranslations = useTranslations as jest.Mock;
 
 describe('SignIn Component', () => {
   beforeEach(() => {
@@ -27,6 +32,7 @@ describe('SignIn Component', () => {
       </form>
     ));
     mockLoader.mockReturnValue(<div>Loading...</div>);
+    mockUseTranslations.mockReturnValue((key: string) => (key === 'title' ? 'Sign In' : key));
   });
 
   it('renders the loading state when loading is true', () => {

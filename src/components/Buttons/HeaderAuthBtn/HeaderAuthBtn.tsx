@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-
 interface HeaderAuthBtnProps {
   className: string;
   onClick: () => void;

@@ -1,53 +1,54 @@
-'use client';
-
 import AuthBtn from '../Buttons/AuthBtn/AuthBtn';
 import PrivateBtn from '../Buttons/PrivateBtn/PrivateBtn';
 import styles from './Welcome.module.scss';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
+import { getLocale } from '@/src/utils/cookies';
 
 export default function Welcome() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const token = document.cookie.includes('token=');
+  const locale = getLocale();
+  const t = useTranslations('Welcome');
 
   const handleSignInClick = () => {
-    if (user) {
-      toast.info('You are already logged in!');
+    if (token) {
+      toast.info(t('alreadySignIn'));
     } else {
-      router.push('/signIn');
+      router.push(`/${locale}/signIn`);
     }
   };
 
   const handleSignUpClick = () => {
-    if (user) {
-      toast.info('You are already registered!');
+    if (token) {
+      toast.info(t('alreadySignUp'));
     } else {
-      router.push('/signUp');
+      router.push(`/${locale}/signUp`);
     }
   };
 
   return (
     <div className={styles.welcome}>
-      {!user ? (
+      {!token ? (
         <>
-          <p className={styles.head}>Welcome!!</p>
-          <p className={styles.disc}>If you want to try playground, please sign in or sign up</p>
+          <p className={styles.head}>{t('welcome')}</p>
+          <p className={styles.disc}>{t('description')}</p>
           <div className={styles.buttonWrap}>
-            <AuthBtn className="btnSignin" label="Sign In" onClick={handleSignInClick} />
-            <AuthBtn className="btnSignup" label="Sign Up" onClick={handleSignUpClick} />
+            <AuthBtn className="btnSignin" label={t('signInLabel')} onClick={handleSignInClick} />
+            <AuthBtn className="btnSignup" label={t('signUpLabel')} onClick={handleSignUpClick} />
           </div>
         </>
       ) : (
         <>
           <div className={styles.btnPrivate}>
-            <PrivateBtn className="btnPrivate rest-btn" label="REST Client" route="/rest" />
+            <PrivateBtn className="btnPrivate rest-btn" label={t('restLabel')} />
             <PrivateBtn
               className="btnPrivate graphql-btn"
-              label="GraphQL Client"
-              route="/graphql"
+              label={t('graphQLLabel')}
+              path="graphql"
             />
-            <PrivateBtn className="btnPrivate history-btn" label="History" route="/history" />
+            <PrivateBtn className="btnPrivate history-btn" label={t('history')} path="history" />
           </div>
         </>
       )}

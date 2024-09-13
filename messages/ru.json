@@ -1,0 +1,127 @@
+{
+  "HomePage": {
+    "title": "С возвращением,"
+  },
+  "SignIn": {
+    "title": "Вход",
+    "email": "Почта",
+    "password": "Пароль"
+  },
+  "SignUp": {
+    "title": "Регистрация",
+    "email": "Почта",
+    "password": "Пароль"
+  },
+  "ErrorPage": {
+    "title": "Что-то пошло не так!",
+    "errorMessage": "Ошибка:",
+    "showDetails": "Показать детали",
+    "hideDetails": "Скрыть детали",
+    "tryAgain": "Повторь попытку с начала"
+  },
+  "NotFoundPage": {
+    "title": "Ошибка: 404 страница не найдена",
+    "message": "Извините, страница, которую вы ищете, недоступна",
+    "link": "Домой"
+  },
+  "AboutPage": {
+    "text": "Это приложение было создано в рамках курса React от RSSchool. Если вы тоже хотите погрузиться в мир IT и, в частности, в мир фронтенд-разработки,",
+    "rsLinkText": "записаться на курс по фронтенд-разработке",
+    "descriptionBeggining": "Добро пожаловать на домашнюю страницу",
+    "descriptionEnd": "! Мы - команда начинающих разработчиков, не боящихся трудностей и всегда движущихся вперед. Наше приложение создано для того, чтобы помогать другим, обеспечивая запросы к любым открытым API. Независимо от того, делаете ли вы RESTful-запросы или погружаетесь в GraphQL, наша платформа создана для расширения возможностей ваших проектов.",
+    "team": "Наша команда",
+    "asubasName": "Алекс (Asubas)",
+    "asubasRole": "Тим лид, разработчик",
+    "asubasLocation": "Россия, Ярославль",
+    "lipanName": "Антон (lipan4836)",
+    "lipanRole": "разработчик",
+    "lipanLocation": "Россия, Воронеж",
+    "pdasyaName": "Дарья (pdasya)",
+    "pdasyaRole": "разработчик",
+    "pdasyaLocation": "Япония, Цукуба",
+    "throwError": "Выбросить ошибку"
+  },
+  "AuthForm": {
+    "signInTitle": "Вход",
+    "userName": "Пользователь",
+    "email": "Почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердить пароль",
+    "submit": "Отправить",
+    "isSignInText": "У вас нет учетной записи? Зарегистрируйтесь",
+    "isNotSignInText": "У вас уже есть аккаунт? Войти"
+  },
+  "Welcome": {
+    "welcome": "Добро пожаловать!!",
+    "description": "Если вы хотите попробовать поиграть на игровой площадке, пожалуйста, войдите или зарегистрируйтесь",
+    "signInLabel": "Войти",
+    "signUpLabel": "Зарегистрироваться",
+    "restLabel": "REST Клиент",
+    "graphQLLabel": "GraphQL Клиент",
+    "history": "История",
+    "alreadySignIn": "Вы уже вошли в систему!",
+    "alreadySignUp": "Вы уже зарегистрированы!"
+  },
+  "Validation": {
+    "emailRequired": "Требуется электронная почта",
+    "emailInvalid": "Email должен быть в формате user@example.com",
+    "passwordRequired": "Пароль обязателен",
+    "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+    "passwordDigit": "Пароль должен содержать как минимум 1 цифру",
+    "passwordLowercase": "Пароль должен содержать хотя бы одну строчную букву",
+    "passwordUppercase": "Пароль должен содержать хотя бы одну заглавную букву",
+    "passwordSpecial": "Пароль должен содержать хотя бы один специальный символ",
+    "usernameRequired": "Имя пользователя обязательно",
+    "usernameMinLength": "Имя пользователя должно содержать не менее 3 символов",
+    "usernameMaxLength": "Имя пользователя должно содержать не более 15 символов",
+    "confirmPasswordRequired": "Пожалуйста, подтвердите свой пароль",
+    "passwordsMustMatch": "Пароли должны совпадать"
+  },
+  "Toasts": {
+    "sessionExpired": "Срок действия вашей сессии истек. Вы будете перенаправлены на главную страницу",
+    "userCreated": "Пользователь успешно создан!",
+    "userExists": "Пользователь с таким email уже зарегистрирован",
+    "invalidEmail": "Неверный адрес электронной почты",
+    "unexpectedError": "Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз.",
+    "userLoggedIn": "Вы успешно вошли в систему",
+    "userDoesNotExist": "Пользователь с такими учетными данными не существует. Пожалуйста, проверьте электронную почту и пароль.",
+    "manyRequests": "Слишком много запросов в одно и то же время. Пожалуйста, попробуйте позже.",
+    "userLoggedOut": "Вы успешно вышли из системы",
+    "logOutFail": "Не удалось выйти из системы. Пожалуйста, попробуйте еще раз."
+  },
+  "GraphQLContent": {
+    "errorMessage": "Ошибка загрузки",
+    "pageTitle": "GraphQL Клиент",
+    "endpointUrlLabel": "Эндпойнт Url",
+    "sdlUrlLabel": "SDL Url:",
+    "queryLabel": "Запрос:",
+    "status": "Статус",
+    "addVariablesButton": "Добавить переменные",
+    "addHeaderButton": "Добавить заголовки",
+    "docsTitleText": "Если ответ нормальный, это должна быть ссылка на документацию",
+    "submitButton": "Отправить",
+    "variablesLabel": "Переменные (JSON формат):",
+    "variablesPlaceholder": "{ переменные }",
+    "headersLabel": "Заголовки (JSON формат):",
+    "headersPlaceholder": "{ заголовки }"
+  },
+  "History": {
+    "clearButton": "Очистить историю",
+    "historyDescription": "Вы еще не выполнили ни одного запроса. Попробуйте эти варианты:",
+    "graphiQLButton": "GraphiQl",
+    "restFullApi": "RestFullApi"
+  },
+  "DocSection": {
+    "showButton": "Показать документацию",
+    "loadingDocumentation": "Загрузка документации..."
+  },
+  "HistoryButton": {
+    "historyButton": "История"
+  },
+  "RequestTextField": {
+    "textFieldLabel": "Ответ: "
+  },
+  "TextFieldInput": {
+    "textFieldButton": "Форматирование"
+  }
+}

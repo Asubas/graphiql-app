@@ -1,92 +1,24 @@
-import Link from 'next/link';
-import pages from '../../app/graphql/graphql.module.scss';
-import styles from './history.module.scss';
-import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import pages from '../../app/[locale]/graphql/graphql.module.scss';
+import '../Welcome/Welcome.module.scss';
 import { Button, Drawer } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { FormDataHistory } from '../interfaces/graphQlInterface';
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-
-function HistorySection() {
-  const [open, setOpen] = useState(false);
-  const [history, setHistory] = useState<FormDataHistory[] | null>([]);
-  const anchor: Anchor = 'left';
-
+function HistoryButton() {
   const router = useRouter();
-  const toggleDrawer = (newOpen: boolean) => () => {
-    const storedHistory = localStorage.getItem('history');
-    if (storedHistory) {
-      setHistory(JSON.parse(storedHistory));
-    } else {
-      setHistory([]);
-    }
-    console.log(history);
-    setOpen(newOpen);
+  const t = useTranslations('HistoryButton');
+
+  const handleClick = () => {
+    router.push('/history');
   };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const target = event.currentTarget.getAttribute('data-type');
-    if (target === 'restFull') {
-      router.push('/');
-    } else {
-      router.push('http://localhost:3000/graphql');
-    }
-  };
-
-  const DrawerList = (
-    <div className={styles.container}>
-      {history ? (
-        history.map((element, index) => {
-          const target = element.endpointUrl.split('/');
-
-          return (
-            <div className={styles.historyElement} key={index}>
-              <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
-            </div>
-          );
-        })
-      ) : (
-        <div className={styles.emptyHistory}>
-          <p>
-            You haven&apos;t executed any requests yet <br />
-            Try those options:
-          </p>
-          <div className={styles.buttonsContainer}>
-            <Button variant="contained" type="button" onClick={handleClick}>
-              GraphiQl
-            </Button>
-            <Button data-type="restFull" variant="contained" type="button" onClick={handleClick}>
-              RestFullApi
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  useEffect(() => {
-    const storedHistory = localStorage.getItem('history');
-    if (storedHistory) {
-      setHistory(JSON.parse(storedHistory));
-    }
-  }, []);
 
   return (
-    <div>
-      <Button className={`${pages.queryButton} `} onClick={toggleDrawer(true)} variant="contained">
-        History
+    <>
+      <Button className={pages.queryButton} onClick={handleClick} variant="contained">
+        {t('historyButton')}
       </Button>
-      <Drawer
-        open={open}
-        anchor={anchor}
-        onClose={toggleDrawer(false)}
-        classes={{ paper: styles.historySection }}
-      >
-        {DrawerList}
-      </Drawer>
-    </div>
+    </>
   );
 }
 
-export { HistorySection };
+export { HistoryButton };

@@ -1,4 +1,5 @@
 import { TextField, styled } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& label': {
@@ -21,11 +22,12 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function RequestTextField({ response, client }: { response: unknown; client?: string }) {
+function RequestTextField({ response }: { response: unknown }) {
+  const t = useTranslations('RequestTextField');
   return (
     <StyledTextField
       id={'outlined-basic'}
-      label="Response: "
+      label={t('textFieldLabel')}
       variant="outlined"
       size="small"
       color="warning"

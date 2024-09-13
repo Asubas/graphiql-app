@@ -5,16 +5,14 @@ import { useRouter } from 'next/navigation';
 interface PrivateBtnProps {
   label: string;
   className: string;
-  route: string;
+  path?: string;
 }
 
-export default function PrivateBtn({ label, className, route }: PrivateBtnProps) {
+export default function PrivateBtn({ label, className, path }: PrivateBtnProps) {
   const router = useRouter();
-
   const handleClick = () => {
-    router.push(route);
+    router.push(`${path}`);
   };
-
   return (
     <button className={className} onClick={handleClick}>
       {label}

@@ -1,5 +1,6 @@
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
 import { encodedUrl } from './encodedUrl';
+import { toast } from 'react-toastify';
 
 export async function sendRequest(
   endpointUrl: string,
@@ -7,29 +8,41 @@ export async function sendRequest(
   query: string,
   variables: string | null,
 ) {
+  let parsedHeaders = {};
+  try {
+    parsedHeaders = headers ? JSON.parse(headers) : {};
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : 'Unknown Error');
+    return;
+  }
+  const parsedVariables = variables ?? null;
   const body = {
     query,
-    variables: variables ? JSON.parse(variables) : null,
+    variables: parsedVariables,
   };
-  const baseUrl = 'http://localhost:3000/api/graphql';
-  const res = await fetch(baseUrl, {
-    method: 'POST',
-    headers: {
+
+  try {
+    const res = await fetch(endpointUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...parsedHeaders,
+      },
+      body: JSON.stringify(body),
+    });
+    const responseText = await res.text();
+    const result = responseText ? JSON.parse(responseText) : {};
+    const encodedHistoryUrl = encodedUrl(endpointUrl, headers, query, parsedVariables);
+    saveGetHistory({
+      endpointUrl,
       headers,
-    },
-    body: JSON.stringify({ endpointUrl, headers, query, variables: body.variables }),
-  });
-
-  const encodedHistoryUrl = encodedUrl(endpointUrl, headers, query, body.variables);
-  saveGetHistory({
-    endpointUrl,
-    headers,
-    query,
-    variables: body.variables,
-    timestamp: new Date().toISOString(),
-    encodedHistoryUrl,
-  });
-
-  const result = await res.json();
-  return { result, status: res.status };
+      query,
+      variables: parsedVariables,
+      timestamp: new Date().toISOString(),
+      encodedHistoryUrl,
+    });
+    return { result, status: res.status };
+  } catch (error) {
+    if (error instanceof Error) toast.error(`${error.message}`);
+  }
 }
