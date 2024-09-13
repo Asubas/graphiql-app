@@ -32,6 +32,7 @@ import {
   Header,
 } from '@/src/components/types/restFullTypes';
 import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
+import { MethodSelectInput } from '@/src/components/inputs/methodSelectInput/MethodSelectInput';
 
 export default function RestContent({
   method,
@@ -185,27 +186,7 @@ export default function RestContent({
 
           <Box className={styles.methodUrl}>
             {/* выбор метода */}
-            <FormControl
-              fullWidth
-              size="small"
-              className={styles.customSelect}
-              sx={{ mb: 2, width: 130 }}
-            >
-              <InputLabel>Method</InputLabel>
-              <Controller
-                name="method"
-                control={methods.control}
-                render={({ field }) => (
-                  <Select {...field} label="Method" sx={{ color: 'white', borderColor: 'white' }}>
-                    <MenuItem value="GET">GET</MenuItem>
-                    <MenuItem value="POST">POST</MenuItem>
-                    <MenuItem value="PUT">PUT</MenuItem>
-                    <MenuItem value="DELETE">DELETE</MenuItem>
-                    <MenuItem value="PATCH">PATCH</MenuItem>
-                  </Select>
-                )}
-              />
-            </FormControl>
+            <MethodSelectInput label="Method" name="method" control={methods.control} />
 
             {/* эндпоинт */}
             <TextFieldInput
@@ -402,7 +383,9 @@ export default function RestContent({
 
         {/* ответ */}
         <div className={`${pages.response} ${pages.restResponse}`}>
-          <p>Status: {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}</p>
+          <p className={styles.responseText}>
+            Status: {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}
+          </p>
           <RequestTextField
             response={responseBody ? JSON.parse(responseBody) : ''}
             client="restFull"
