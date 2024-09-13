@@ -94,7 +94,10 @@ const GraphQLClient = ({
               rows={20}
               onBlur={handlePushUrl}
               prettier={'query'}
-              defaultValue={(defaultParams && defaultParams.query) || DEFAULT_QUERY_JSON}
+              defaultValue={
+                (defaultParams && typeof defaultParams.query === 'string' && defaultParams.query) ||
+                DEFAULT_QUERY_JSON
+              }
             />
             <div className={pages.response}>
               <p>

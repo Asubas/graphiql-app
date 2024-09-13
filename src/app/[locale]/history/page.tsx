@@ -1,9 +1,9 @@
 'use client';
 import styles from './history.module.scss';
+import Link from 'next/link';
 import { FormDataHistory } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -15,7 +15,7 @@ function HistorySection() {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const target = event.currentTarget.getAttribute('data-type');
     if (target === 'restFull') {
-      router.push('/');
+      router.push('http://localhost:3000/rest');
     } else {
       router.push('http://localhost:3000/graphql');
     }
@@ -54,6 +54,7 @@ function HistorySection() {
             {history.map((element, index) => {
               return (
                 <div className={styles.historyElement} key={index}>
+                  {/* {element.methods && <span>{element.methods}</span>} */}
                   <span>{formatDate(element.timestamp)}</span>
                   <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
                 </div>

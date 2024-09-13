@@ -16,18 +16,8 @@ interface DecodeUrlParams {
 }
 
 export function encodeBase64(data: string): string {
-  console.log('encode', btoa(unescape(encodeURIComponent(data))));
   return btoa(unescape(encodeURIComponent(data)));
 }
-// export function decodeBase64(data: string): string {
-//   try {
-//     return decodeURIComponent(escape(atob(data)));
-//   } catch (error) {
-//     console.error('Error decoding Base64 string:', error);
-//     return '';
-//   }
-// }
-
 export function encodeUrl({
   method,
   endpointUrl,
@@ -41,46 +31,15 @@ export function encodeUrl({
   const filteredHeaders = headers.filter((header) => header.key && header.value);
   const encodedHeaders = filteredHeaders.length
     ? encodeBase64(JSON.stringify(filteredHeaders))
-    : '';
+    : encodeBase64(' ');
   const filteredQueries = queries.filter((query) => query.key && query.value);
   const encodedQueries = filteredQueries.length
     ? encodeBase64(JSON.stringify(filteredQueries))
-    : '';
+    : encodeBase64(' ');
   const filteredVariables = variables.filter((variable) => variable.key && variable.value);
   const encodedVariables = filteredVariables.length
     ? encodeBase64(JSON.stringify(filteredVariables))
-    : '';
+    : encodeBase64(' ');
 
-  return `/rest/${method}/${encodedUrl}/${encodedBody}/${encodedHeaders}/${encodedQueries}`;
+  return `/rest/${method}/${encodedUrl}/${encodedBody}/${encodedQueries}/${encodedVariables}/${encodedHeaders}`;
 }
-
-// export function decodeUrl(params: string[]): DecodeUrlParams {
-//   const [method, encodedUrl, encodedBody, encodedHeaders, encodedQueries] = params as string[];
-
-//   const url = decodeBase64(encodedUrl);
-//   const body = encodedBody ? decodeBase64(encodedBody) : '';
-//   let headers: { key: string; value: string }[];
-//   let queries: { key: string; value: string }[];
-
-//   try {
-//     headers = encodedHeaders ? JSON.parse(decodeBase64(encodedHeaders)) : [];
-//   } catch (error) {
-//     console.error('Error decoding headers:', error);
-//     headers = [];
-//   }
-
-//   try {
-//     queries = encodedQueries ? JSON.parse(decodeBase64(encodedQueries)) : [];
-//   } catch (error) {
-//     console.error('Error decoding queries:', error);
-//     queries = [];
-//   }
-
-//   return {
-//     method,
-//     url,
-//     body,
-//     headers,
-//     queries,
-//   };
-// }

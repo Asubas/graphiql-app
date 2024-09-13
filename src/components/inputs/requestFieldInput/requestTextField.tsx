@@ -22,7 +22,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function RequestTextField({ response }: { response: unknown }) {
+function RequestTextField({ response, client }: { response: unknown; client?: string }) {
   const t = useTranslations('RequestTextField');
   return (
     <StyledTextField

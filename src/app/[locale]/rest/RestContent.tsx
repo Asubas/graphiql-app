@@ -28,22 +28,29 @@ import {
 } from '@/src/components/types/restFullTypes';
 import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
 import { MethodSelectInput } from '@/src/components/inputs/methodSelectInput/MethodSelectInput';
+import { DefaultParams } from '@/src/interfaces/graphQlInterface';
 
 export default function RestContent({
-  method,
-  endpointUrl,
-  body,
-  headers,
-  queries,
-}: RestContentProps) {
+  defaultParams,
+  decodingHeaders,
+}: {
+  defaultParams?: DefaultParams;
+  decodingHeaders?: { key: string; value: string }[];
+}) {
   const methods = useForm<FormData>({
     defaultValues: {
-      method: 'GET',
-      endpointUrl: 'https://api.restful-api.dev/objects',
-      headers: [{ key: 'Content-Type', value: 'application/json' }],
-      queries: [{ key: '', value: '' }],
-      variables: [{ key: '', value: '' }],
-      body: '',
+      method: defaultParams?.method ? defaultParams?.method : 'GET',
+      endpointUrl: defaultParams?.endpointUrl
+        ? defaultParams.endpointUrl
+        : 'https://api.restful-api.dev/objects',
+      headers: decodingHeaders
+        ? decodingHeaders
+        : [{ key: 'Content-Type', value: 'application/json' }],
+      queries: defaultParams?.queries ? defaultParams?.queries : [{ key: '', value: '' }],
+      variables: Array.isArray(defaultParams?.variables)
+        ? defaultParams.variables
+        : [{ key: '', value: '' }],
+      body: defaultParams?.body && defaultParams.body !== '{}' ? defaultParams?.body : '',
     },
   });
 
@@ -79,9 +86,9 @@ export default function RestContent({
       method: currentData.method,
       endpointUrl: currentData.endpointUrl,
       body: currentData.body,
-      variables: currentData.variables,
       headers: currentData.headers,
       queries: currentData.queries,
+      variables: currentData.variables,
     });
     setEncodedHistoryUrl(newUrl);
     router.replace(newUrl);

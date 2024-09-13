@@ -42,7 +42,7 @@ export default function Welcome() {
       ) : (
         <>
           <div className={styles.btnPrivate}>
-            <PrivateBtn className="btnPrivate rest-btn" label={t('restLabel')} />
+            <PrivateBtn className="btnPrivate rest-btn" label={t('restLabel')} path="rest" />
             <PrivateBtn
               className="btnPrivate graphql-btn"
               label={t('graphQLLabel')}

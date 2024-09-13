@@ -46,11 +46,15 @@ export interface FormDataHistory {
         key: string;
         value: string;
       }[];
+  methods?: string;
 }
 
 export interface DefaultParams {
   endpointUrl: string;
-  headers: string;
-  query: string;
-  variables: string;
+  headers?: string | never[];
+  query?: string | never[];
+  variables?: string | never[] | { key: string; value: string }[];
+  method?: string;
+  queries?: { key: string; value: string }[];
+  body?: string;
 }
