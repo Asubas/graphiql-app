@@ -2,10 +2,12 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { request } from 'graphql-request';
 import { DocSection } from '@/src/components/documentation/docSection';
+import { NextIntlClientProvider } from 'next-intl';
 
 jest.mock('graphql-request', () => ({
   request: jest.fn(),
 }));
+const messages = {};
 
 describe('DocSection', () => {
   test('renders and opens drawer with fetched schema', async () => {
@@ -21,13 +23,17 @@ describe('DocSection', () => {
       },
     });
 
-    render(<DocSection endpointSdl="http://mocked-endpoint/graphql" />);
+    render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <DocSection endpointSdl="http://mocked-endpoint/graphql" />
+      </NextIntlClientProvider>,
+    );
 
-    const button = screen.getByText(/Show documentation/i);
+    const button = screen.getByText(/DocSection.showButton/i);
     expect(button).toBeInTheDocument();
 
     fireEvent.click(button);
 
-    expect(screen.getByText(/Loading documentation.../i)).toBeInTheDocument();
+    expect(screen.getByText(/DocSection.loadingDocumentation/i)).toBeInTheDocument();
   });
 });

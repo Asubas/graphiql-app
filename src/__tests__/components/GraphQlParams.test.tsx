@@ -4,6 +4,7 @@ import * as nextRouter from 'next/navigation';
 import { decodingUrl } from '@/src/utils/decodingUrl';
 import GraphQlParams from '@/src/app/[locale]/graphql/[...params]/page';
 import '@testing-library/jest-dom';
+import { NextIntlClientProvider } from 'next-intl';
 
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
@@ -17,6 +18,7 @@ jest.mock('../../utils/decodingUrl', () => ({
 jest.mock('graphql-request', () => ({
   request: jest.fn().mockResolvedValue({}),
 }));
+const messages = {};
 
 describe('GraphQlParams', () => {
   const mockedDecodingPath = 'decoded/path';
@@ -35,10 +37,14 @@ describe('GraphQlParams', () => {
   });
 
   it('renders GraphQlContent with decoded params', () => {
-    const { getByText } = render(<GraphQlParams />);
+    const { getByText } = render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <GraphQlParams />
+      </NextIntlClientProvider>,
+    );
 
     expect(decodingUrl).toHaveBeenCalledWith('/some/path');
 
-    expect(getByText(/GraphQL Client/i)).toBeInTheDocument();
+    expect(getByText(/GraphQLContent.pageTitle/i)).toBeInTheDocument();
   });
 });
