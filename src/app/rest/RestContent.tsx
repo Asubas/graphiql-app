@@ -120,9 +120,25 @@ export default function RestContent({
     setJsonError(null);
   };
 
+  function replaceVariablesInBody(body: string, variables: Record<string, string>): string {
+    return body.replace(/\{\{(.*?)\}\}/g, (_, varName) => variables[varName.trim()] || '');
+  }
+
   const onSubmit = async (data: FormData) => {
     try {
       const { method, endpointUrl, headers, variables, queries, body } = data;
+
+      // Преобразуем массив переменных в объект
+      const variablesObject = variables.reduce<Record<string, string>>((acc, variable) => {
+        if (variable.key && variable.value) {
+          acc[variable.key] = variable.value;
+        }
+        return acc;
+      }, {});
+
+      // Заменяем переменные в теле запроса
+      const bodyWithVariables = replaceVariablesInBody(body, variablesObject);
+
       const requestHeaders = headers.reduce<Record<string, string>>((acc, header) => {
         if (header.key && header.value) {
           acc[header.key] = header.value;
@@ -145,8 +161,8 @@ export default function RestContent({
         method,
         headers: requestHeaders,
         body:
-          method !== 'GET' && (body || variables.length > 0)
-            ? JSON.stringify({ body, variables })
+          method !== 'GET' && (bodyWithVariables || variables.length > 0)
+            ? JSON.stringify({ body: bodyWithVariables, variables })
             : undefined,
       });
 
@@ -160,7 +176,7 @@ export default function RestContent({
         endpointUrl,
         headers,
         variables,
-        body,
+        body: bodyWithVariables,
         queryParams,
         timestamp: new Date().toISOString(),
         encodedHistoryUrl,
