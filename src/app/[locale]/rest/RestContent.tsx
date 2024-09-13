@@ -29,6 +29,7 @@ import {
 import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
 import { MethodSelectInput } from '@/src/components/inputs/methodSelectInput/MethodSelectInput';
 import { DefaultParams } from '@/src/interfaces/graphQlInterface';
+import { HistoryButton } from '@/src/components/history/historySection';
 
 export default function RestContent({
   defaultParams,
@@ -398,6 +399,7 @@ export default function RestContent({
             >
               Reset Form
             </Button>
+            <HistoryButton />
           </Box>
         </form>
 
