@@ -26,16 +26,16 @@ describe('PrivateBtn Component', () => {
 
   it('navigates to the correct route when clicked', () => {
     const label = 'Private Area';
-    const route = '/private-area';
+    const path = '/private-area';
     const mockPush = jest.fn();
 
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
 
-    render(<PrivateBtn label={label} className="custom-class" route={route} />);
+    render(<PrivateBtn label={label} className="custom-class" path={path} />);
 
     const button = screen.getByRole('button', { name: label });
     fireEvent.click(button);
 
-    expect(mockPush).toHaveBeenCalledWith(route);
+    expect(mockPush).toHaveBeenCalledWith(path);
   });
 });
