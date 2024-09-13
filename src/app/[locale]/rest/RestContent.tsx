@@ -194,7 +194,12 @@ export default function RestContent({
 
           <Box className={styles.methodUrl}>
             {/* выбор метода */}
-            <MethodSelectInput label="Method" name="method" control={methods.control} />
+            <MethodSelectInput
+              label="Method"
+              name="method"
+              control={methods.control}
+              onBlur={updateUrl}
+            />
 
             {/* эндпоинт */}
             <TextFieldInput
