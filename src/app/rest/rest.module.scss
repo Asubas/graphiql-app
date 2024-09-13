@@ -2,7 +2,6 @@
   margin: 120px auto 40px;
   padding: 1rem;
   width: 100%;
-  // max-width: 1024px;
   min-height: calc(100svh - 269px);
   color: azure;
   display: flex;
@@ -58,4 +57,16 @@
       border-color: white !important;
     }
   }
+}
+
+.radioErrorJson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.formatButton {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }

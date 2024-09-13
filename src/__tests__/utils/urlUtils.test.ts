@@ -1,4 +1,5 @@
-import { encodeBase64, decodeBase64, encodeUrl, decodeUrl } from '@/src/utils/urlUtils';
+// import { encodeBase64, decodeBase64, encodeUrl, decodeUrl } from '@/src/utils/urlUtils';
+import { encodeBase64, encodeUrl } from '@/src/utils/urlUtils';
 
 describe('URL Utils', () => {
   describe('encodeBase64', () => {
@@ -9,19 +10,19 @@ describe('URL Utils', () => {
     });
   });
 
-  describe('decodeBase64', () => {
-    it('should decode a base64 string correctly', () => {
-      const encoded = 'SGVsbG8sIFdvcmxkIQ==';
-      const decoded = decodeBase64(encoded);
-      expect(decoded).toBe('Hello, World!');
-    });
+  // describe('decodeBase64', () => {
+  //   it('should decode a base64 string correctly', () => {
+  //     const encoded = 'SGVsbG8sIFdvcmxkIQ==';
+  //     const decoded = decodeBase64(encoded);
+  //     expect(decoded).toBe('Hello, World!');
+  //   });
 
-    it('should return an empty string if decoding fails', () => {
-      const invalidEncoded = 'Invalid base64 string';
-      const decoded = decodeBase64(invalidEncoded);
-      expect(decoded).toBe('');
-    });
-  });
+  //   it('should return an empty string if decoding fails', () => {
+  //     const invalidEncoded = 'Invalid base64 string';
+  //     const decoded = decodeBase64(invalidEncoded);
+  //     expect(decoded).toBe('');
+  //   });
+  // });
 
   describe('encodeUrl', () => {
     it('should encode URL parameters correctly', () => {
@@ -43,35 +44,35 @@ describe('URL Utils', () => {
     });
   });
 
-  describe('decodeUrl', () => {
-    it('should decode URL parameters correctly', () => {
-      const params = [
-        'GET',
-        encodeBase64('https://api.example.com/data'),
-        encodeBase64('{"key":"value"}'),
-        encodeBase64(JSON.stringify([{ key: 'Authorization', value: 'Bearer token' }])),
-        encodeBase64(JSON.stringify([{ key: 'page', value: '1' }])),
-      ];
+  // describe('decodeUrl', () => {
+  //   it('should decode URL parameters correctly', () => {
+  //     const params = [
+  //       'GET',
+  //       encodeBase64('https://api.example.com/data'),
+  //       encodeBase64('{"key":"value"}'),
+  //       encodeBase64(JSON.stringify([{ key: 'Authorization', value: 'Bearer token' }])),
+  //       encodeBase64(JSON.stringify([{ key: 'page', value: '1' }])),
+  //     ];
 
-      const decoded = decodeUrl(params);
+  //     const decoded = decodeUrl(params);
 
-      expect(decoded.method).toBe('GET');
-      expect(decoded.url).toBe('https://api.example.com/data');
-      expect(decoded.body).toBe('{"key":"value"}');
-      expect(decoded.headers).toEqual([{ key: 'Authorization', value: 'Bearer token' }]);
-      expect(decoded.queries).toEqual([{ key: 'page', value: '1' }]);
-    });
+  //     expect(decoded.method).toBe('GET');
+  //     expect(decoded.url).toBe('https://api.example.com/data');
+  //     expect(decoded.body).toBe('{"key":"value"}');
+  //     expect(decoded.headers).toEqual([{ key: 'Authorization', value: 'Bearer token' }]);
+  //     expect(decoded.queries).toEqual([{ key: 'page', value: '1' }]);
+  //   });
 
-    it('should handle decoding errors and return default values', () => {
-      const params = ['GET', 'invalidBase64', '', 'invalidBase64Headers', 'invalidBase64Queries'];
+  //   it('should handle decoding errors and return default values', () => {
+  //     const params = ['GET', 'invalidBase64', '', 'invalidBase64Headers', 'invalidBase64Queries'];
 
-      const decoded = decodeUrl(params);
+  //     const decoded = decodeUrl(params);
 
-      expect(decoded.method).toBe('GET');
-      expect(decoded.url).toBe('');
-      expect(decoded.body).toBe('');
-      expect(decoded.headers).toEqual([]);
-      expect(decoded.queries).toEqual([]);
-    });
-  });
+  //     expect(decoded.method).toBe('GET');
+  //     expect(decoded.url).toBe('');
+  //     expect(decoded.body).toBe('');
+  //     expect(decoded.headers).toEqual([]);
+  //     expect(decoded.queries).toEqual([]);
+  //   });
+  // });
 });

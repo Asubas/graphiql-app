@@ -31,6 +31,7 @@ import {
   QueryParam,
   Header,
 } from '@/src/components/types/restFullTypes';
+import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
 
 export default function RestContent({
   method,
@@ -177,10 +178,11 @@ export default function RestContent({
   };
 
   return (
-    <section className={styles.restCont}>
+    <section className={`${styles.restCont} hide-formatting`}>
       <FormProvider {...methods}>
         <form className={styles.form} onSubmit={methods.handleSubmit(onSubmit)}>
           <h2 className={styles.head}>RESTfull Client</h2>
+
           <Box className={styles.methodUrl}>
             {/* выбор метода */}
             <FormControl
@@ -204,6 +206,7 @@ export default function RestContent({
                 )}
               />
             </FormControl>
+
             {/* эндпоинт */}
             <TextFieldInput
               customClass={pages.query}
@@ -214,6 +217,7 @@ export default function RestContent({
               onBlur={updateUrl}
             />
           </Box>
+
           <Box className={styles.headersParams}>
             {/* добавление хэдэров */}
             <Box sx={{ mb: 2 }}>
@@ -257,6 +261,7 @@ export default function RestContent({
                 Add Header
               </Button>
             </Box>
+
             {/* добавление кверей */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
@@ -299,6 +304,7 @@ export default function RestContent({
                 Add Query Parameter
               </Button>
             </Box>
+
             {/*Добавление вариаблес */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
@@ -342,16 +348,24 @@ export default function RestContent({
               </Button>
             </Box>
           </Box>
+
           {/* ввод боди */}
           {/* Переключатель режимов ввода */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Input Mode:</Typography>
-            <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
-              <FormControlLabel value="json" control={<Radio />} label="JSON" />
-              <FormControlLabel value="text" control={<Radio />} label="Text" />
-            </RadioGroup>
+            <div className={styles.radioErrorJson}>
+              <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
+                <FormControlLabel value="json" control={<Radio />} label="JSON" />
+                <FormControlLabel value="text" control={<Radio />} label="Text" />
+              </RadioGroup>
+              {jsonError && (
+                <Typography variant="body2" color="error">
+                  {jsonError}
+                </Typography>
+              )}
+            </div>
           </Box>
-          <TextFieldInput
+          <BodyFieldInput
             customClass={`${pages.query} ${pages.bodyRestful}`}
             label="Body"
             register={methods.register('body')}
@@ -362,7 +376,7 @@ export default function RestContent({
           />
           {inputMode === 'json' && (
             <Button
-              className={pages.queryButton}
+              className={`${pages.queryButton} ${styles.formatButton}`}
               variant="contained"
               type="button"
               onClick={handleFormatJson}
@@ -370,6 +384,7 @@ export default function RestContent({
               Format Body
             </Button>
           )}
+
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button type="submit" className={pages.queryButton} variant="contained">
               Send Request
@@ -384,10 +399,10 @@ export default function RestContent({
             </Button>
           </Box>
         </form>
+
         {/* ответ */}
         <div className={`${pages.response} ${pages.restResponse}`}>
-          {' '}
-          <p>Status: {responseStatus ? responseStatus.code : ''}</p>
+          <p>Status: {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}</p>
           <RequestTextField
             response={responseBody ? JSON.parse(responseBody) : ''}
             client="restFull"
