@@ -1,19 +1,18 @@
 import input from './bodyFieldInput.module.scss';
-// import pages from '../../../app/graphql/graphql.module.scss';
-import { styled, useTheme } from '@mui/material';
+import pages from './bodyFieldInput.module.scss';
+import { styled } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';
-// import { Button } from '@mui/material';
-// import { useEffect, useState } from 'react';
-// import beautify from 'js-beautify';
-// import { formatJson } from '@/src/utils/formatJson';
-// const options = {
-//   indent_size: 4,
-//   indent_with_tabs: false,
-//   space_in_empty_paren: true,
-//   preserve_newlines: true,
-//   max_preserve_newlines: 2,
-// };
+import { Button } from '@mui/material';
+import { useState } from 'react';
+import beautify from 'js-beautify';
+const options = {
+  indent_size: 4,
+  indent_with_tabs: false,
+  space_in_empty_paren: true,
+  preserve_newlines: true,
+  max_preserve_newlines: 2,
+};
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   color: 'wheat',
@@ -56,20 +55,19 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
   defaultValue?: string;
 }) {
   const { getValues, setValue } = useFormContext();
-  // const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // const handleFormat = () => {
-  //   const body = getValues('query'); // предположим, что поле называется 'query', замените на нужное
-  //   if (body) {
-  //     const formattedText = formatJson(body);
-  //     if (formattedText) {
-  //       setValue('query', formattedText);
-  //       setErrorMessage(''); // Очистить ошибку, если форматирование прошло успешно
-  //     } else {
-  //       setErrorMessage('Invalid JSON format');
-  //     }
-  //   }
-  // };
+  const handleFormat = async () => {
+    const query = getValues(prettier);
+    console.log('get value from form', query);
+    if (query) {
+      const TextToJson = JSON.stringify(query);
+      console.log('TextToJson', TextToJson);
+      const formattedText = beautify.js(JSON.parse(TextToJson), options);
+      console.log('formattedText', formattedText);
+      setValue('body', formattedText);
+    }
+  };
 
   return (
     <>
@@ -87,8 +85,7 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
         placeholder={placeholder}
         defaultValue={defaultValue}
       />
-      {/* {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {prettier && prettier === 'query' && (
+      {prettier && (
         <Button
           className={`${pages.queryButton} ${pages.formattingButton}`}
           variant="contained"
@@ -97,7 +94,7 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
         >
           formatting
         </Button>
-      )} */}
+      )}
     </>
   );
 }

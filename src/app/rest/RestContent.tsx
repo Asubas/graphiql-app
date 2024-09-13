@@ -5,10 +5,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller, FormProvider } from 'react-hook-form';
 import {
   Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   Box,
   Typography,
   IconButton,
@@ -21,7 +17,6 @@ import styles from './rest.module.scss';
 import { statusMessages } from '@/src/services/constant';
 import { useRouter } from 'next/navigation';
 import { encodeUrl } from '@/src/utils/urlUtils';
-import { formatJson } from '@/src/utils/formatJson';
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
@@ -75,6 +70,7 @@ export default function RestContent({
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [inputMode, setInputMode] = useState<'json' | 'text'>('json');
   const [encodedHistoryUrl, setEncodedHistoryUrl] = useState('');
+  const [showVariables, setShowVariables] = useState<boolean>(false);
   const router = useRouter();
 
   const updateUrl = useCallback(() => {
@@ -102,18 +98,6 @@ export default function RestContent({
     return () => subscription.unsubscribe();
   }, [updateUrl, methods]);
 
-  const handleFormatJson = () => {
-    const currentBody = methods.getValues('body');
-    const formattedJson = formatJson(currentBody);
-
-    if (formattedJson) {
-      methods.setValue('body', formattedJson);
-      setJsonError(null);
-    } else {
-      setJsonError('Invalid JSON format');
-    }
-  };
-
   const handleInputModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputMode(event.target.value as 'json' | 'text');
     methods.setValue('body', '');
@@ -128,7 +112,7 @@ export default function RestContent({
     try {
       const { method, endpointUrl, headers, variables, queries, body } = data;
 
-      // Преобразуем массив переменных в объект
+      // преобразуем массив переменных в объект
       const variablesObject = variables.reduce<Record<string, string>>((acc, variable) => {
         if (variable.key && variable.value) {
           acc[variable.key] = variable.value;
@@ -136,7 +120,7 @@ export default function RestContent({
         return acc;
       }, {});
 
-      // Заменяем переменные в теле запроса
+      // заменяем переменные в теле запроса
       const bodyWithVariables = replaceVariablesInBody(body, variablesObject);
 
       const requestHeaders = headers.reduce<Record<string, string>>((acc, header) => {
@@ -192,6 +176,7 @@ export default function RestContent({
     methods.reset();
     setResponseBody(null);
     setJsonError(null);
+    setShowVariables(false);
   };
 
   return (
@@ -302,52 +287,64 @@ export default function RestContent({
               </Button>
             </Box>
 
-            {/*Добавление вариаблес */}
+            {/* Добавление переменных */}
             <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
-                Variables:
-              </Typography>
-              {variablesFields.map((field, index) => (
-                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
-                  <TextFieldInput
-                    customClass={pages.query}
-                    label="Variable Key"
-                    register={methods.register(`variables.${index}.key`)}
-                    multilineArea
-                    rows={1}
-                    onBlur={updateUrl}
-                  />
-
-                  <TextFieldInput
-                    customClass={pages.query}
-                    label="Variable Value"
-                    register={methods.register(`variables.${index}.value`)}
-                    multilineArea
-                    rows={1}
-                    onBlur={updateUrl}
-                  />
-                  <IconButton
-                    onClick={() => removeVariables(index)}
-                    color="error"
-                    aria-label="delete variables"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              ))}
               <Button
                 className={pages.queryButton}
                 variant="contained"
                 type="button"
-                onClick={() => appendVariables({ key: '', value: '' })}
+                onClick={() => setShowVariables(!showVariables)}
               >
-                Add Variables
+                {showVariables ? 'Hide Variables' : 'Show Variables'}
               </Button>
+
+              {showVariables && (
+                <>
+                  <Typography variant="h6" sx={{ mb: 1, mt: 2 }}>
+                    Variables:
+                  </Typography>
+                  {variablesFields.map((field, index) => (
+                    <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                      <TextFieldInput
+                        customClass={pages.query}
+                        label="Variable Key"
+                        register={methods.register(`variables.${index}.key`)}
+                        multilineArea
+                        rows={1}
+                        onBlur={updateUrl}
+                      />
+
+                      <TextFieldInput
+                        customClass={pages.query}
+                        label="Variable Value"
+                        register={methods.register(`variables.${index}.value`)}
+                        multilineArea
+                        rows={3}
+                        onBlur={updateUrl}
+                      />
+                      <IconButton
+                        onClick={() => removeVariables(index)}
+                        color="error"
+                        aria-label="delete variables"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  ))}
+                  <Button
+                    className={pages.queryButton}
+                    variant="contained"
+                    type="button"
+                    onClick={() => appendVariables({ key: '', value: '' })}
+                  >
+                    Add Variables
+                  </Button>
+                </>
+              )}
             </Box>
           </Box>
 
           {/* ввод боди */}
-          {/* Переключатель режимов ввода */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Input Mode:</Typography>
             <div className={styles.radioErrorJson}>
@@ -369,18 +366,8 @@ export default function RestContent({
             multilineArea
             rows={20}
             onBlur={updateUrl}
-            prettier={'query'}
+            prettier={'body'}
           />
-          {inputMode === 'json' && (
-            <Button
-              className={`${pages.queryButton} ${styles.formatButton}`}
-              variant="contained"
-              type="button"
-              onClick={handleFormatJson}
-            >
-              Format Body
-            </Button>
-          )}
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button type="submit" className={pages.queryButton} variant="contained">
