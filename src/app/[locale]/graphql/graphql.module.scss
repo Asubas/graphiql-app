@@ -29,6 +29,7 @@
 
     div {
       width: 100%;
+      display: block;
     }
   }
 
@@ -124,6 +125,10 @@ form {
     display: none;
     pointer-events: none;
     user-select: none;
+  }
+
+  label {
+    display: none;
   }
 }
 
