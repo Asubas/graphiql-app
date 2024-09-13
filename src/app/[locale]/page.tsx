@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      {!user && !token ? (
+      {!token ? (
         <About />
       ) : (
         <p>
