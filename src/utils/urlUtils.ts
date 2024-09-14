@@ -35,7 +35,7 @@ export function encodeUrl({
     : encodeBase64('{}');
 
   const urlParts = [
-    `/rest/${method}`,
+    `/${method}`,
     encodedUrl,
     encodedBody,
     encodedQueries,

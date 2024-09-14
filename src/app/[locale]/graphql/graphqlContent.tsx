@@ -1,7 +1,7 @@
 'use client';
 import pages from './graphql.module.scss';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GraphQLResponse, FormData, DefaultParams } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
@@ -16,6 +16,7 @@ import { HistoryButton } from '@/src/components/history/historySection';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { sendRequest } from '@/src/services/requests/sendRequest';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
 const GraphQLClient = ({
   defaultParams,
@@ -30,7 +31,7 @@ const GraphQLClient = ({
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const t = useTranslations('GraphQLContent');
-
+  const path = usePathname();
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headers, query, variables } = data;
     const response = (await sendRequest(endpointUrl, headers, query, variables)) || {
@@ -61,6 +62,13 @@ const GraphQLClient = ({
     const { endpointUrl, headers, query, variables } = methods.getValues();
     if (status) handlerBlurInput(endpointUrl, headers, query, variables);
   };
+
+  useEffect(() => {
+    if (path.startsWith('/graphql') && path.split('/').length > 2) {
+      const newPath = path.replace('/graphql', '/GRAPHQL');
+      window.history.pushState(null, '', newPath);
+    }
+  }, [path]);
 
   return (
     <section className={pages.graphql}>

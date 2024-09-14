@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/src/utils/cookies';
+import { useEffect, useState } from 'react';
 
 export default function Welcome() {
   const router = useRouter();
-  const token = typeof window !== 'undefined' && document.cookie.includes('token=');
+  const tokenExist = typeof window !== 'undefined' && document.cookie.includes('token=');
   const locale = getLocale();
   const t = useTranslations('Welcome');
+  const [token, setToken] = useState(false);
 
   const handleSignInClick = () => {
     if (token) {
@@ -27,6 +29,10 @@ export default function Welcome() {
       router.push(`/${locale}/signUp`);
     }
   };
+
+  useEffect(() => {
+    if (tokenExist) setToken(tokenExist);
+  }, [tokenExist]);
 
   return (
     <div className={styles.welcome}>

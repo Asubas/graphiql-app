@@ -40,12 +40,12 @@ function HistorySection() {
   };
 
   const getMethodOrType = (encodedUrl: string) => {
-    if (encodedUrl.includes('/rest/')) {
+    if (encodedUrl.includes('rest')) {
       const match = encodedUrl.match(/\/rest\/([A-Z]+)\//);
       return match ? match[1] : null;
     }
 
-    if (encodedUrl.includes('/graphql/')) {
+    if (encodedUrl.includes('/graphql/') || encodedUrl.includes('/GRAPHQL/')) {
       return 'GraphQL';
     }
 

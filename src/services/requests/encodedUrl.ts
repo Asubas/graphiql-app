@@ -12,7 +12,7 @@ function encodedUrl(
   const encodedBody = btoa(JSON.stringify(body));
   const encodedHeaders = headersValue ? btoa(headersValue) : '';
 
-  const encodedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${encodedHeaders}`;
+  const encodedUrl = `http://localhost:3000/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${encodedHeaders}`;
 
   window.history.pushState({}, '', encodedUrl);
 

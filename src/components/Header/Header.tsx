@@ -19,7 +19,6 @@ export default function Header() {
   const locale = getLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) setShrink(true);
@@ -155,7 +154,7 @@ export default function Header() {
               </>
             )}
           </div>
-          {token && (
+          {/* {token && (
             <div className={styles.btnsPrivateBurger}>
               <PrivateBtn
                 className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}
@@ -170,7 +169,7 @@ export default function Header() {
                 label="History"
               />
             </div>
-          )}
+          )} */}
         </nav>
       </div>
 
