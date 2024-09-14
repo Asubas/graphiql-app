@@ -97,29 +97,6 @@ export default function RestContent({
     window.history.pushState(null, '', newUrl);
   }, [methods, router]);
 
-  useEffect(() => {
-    if (encodedHistoryUrl) {
-      saveGetHistory({
-        endpointUrl: methods.getValues().endpointUrl,
-        headers: methods.getValues().headers,
-        variables: methods.getValues().variables,
-        body: methods.getValues().body,
-        queryParams: methods.getValues().queries,
-        timestamp: new Date().toISOString(),
-        encodedHistoryUrl,
-      });
-    }
-  }, [encodedHistoryUrl, methods]);
-
-  useEffect(() => {
-    const subscription = methods.watch((_, { type }) => {
-      if (type === 'blur') {
-        updateUrl();
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [updateUrl, methods]);
-
   const handleInputModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputMode(event.target.value as 'json' | 'text');
     methods.setValue('body', '');
@@ -132,6 +109,8 @@ export default function RestContent({
 
   const onSubmit = async (data: FormData) => {
     try {
+      updateUrl();
+
       const { method, endpointUrl, headers, variables, queries, body } = data;
 
       const variablesObject = variables.reduce<Record<string, string>>((acc, variable) => {
@@ -176,7 +155,15 @@ export default function RestContent({
       setResponseBody(JSON.stringify(result, null, 2));
       setJsonError(null);
 
-      updateUrl();
+      saveGetHistory({
+        endpointUrl: methods.getValues().endpointUrl,
+        headers: methods.getValues().headers,
+        variables: methods.getValues().variables,
+        body: methods.getValues().body,
+        queryParams: methods.getValues().queries,
+        timestamp: new Date().toISOString(),
+        encodedHistoryUrl,
+      });
     } catch (error) {
       setJsonError(t('jsonError'));
       console.error('Error sending request:', error);

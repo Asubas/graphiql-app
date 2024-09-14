@@ -2,6 +2,13 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { useForm, FormProvider } from 'react-hook-form';
 import '@testing-library/jest-dom';
 import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
+import { IntlProvider } from 'next-intl';
+
+const messages = {
+  BodyFieldInput: {
+    bodyFieldButton: 'Format',
+  },
+};
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm({
@@ -10,7 +17,13 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     },
   });
 
-  return <FormProvider {...methods}>{children}</FormProvider>;
+  return (
+    <FormProvider {...methods}>
+      <IntlProvider locale="en" messages={messages}>
+        {children}
+      </IntlProvider>
+    </FormProvider>
+  );
 };
 
 describe('BodyFieldInput', () => {
@@ -50,7 +63,7 @@ describe('BodyFieldInput', () => {
     );
 
     const textField = screen.getByLabelText('Test Label');
-    const formatButton = screen.getByRole('button', { name: /formatting/i });
+    const formatButton = screen.getByRole('button', { name: /format/i });
 
     fireEvent.change(textField, { target: { value: '{ "foo": "bar" }' } });
 
