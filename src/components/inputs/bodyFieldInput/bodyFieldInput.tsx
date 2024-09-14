@@ -6,6 +6,7 @@ import { FieldValues, UseFormRegister, useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import beautify from 'js-beautify';
+import { useTranslations } from 'next-intl';
 const options = {
   indent_size: 4,
   indent_with_tabs: false,
@@ -56,6 +57,7 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
 }) {
   const { getValues, setValue } = useFormContext();
   const [errorMessage, setErrorMessage] = useState('');
+  const t = useTranslations('BodyFieldInput');
 
   const handleFormat = async () => {
     const query = getValues(prettier);
@@ -90,7 +92,7 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
           type="button"
           onClick={handleFormat}
         >
-          formatting
+          {t('bodyFieldButton')}
         </Button>
       )}
     </>

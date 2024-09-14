@@ -25,6 +25,7 @@ import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyField
 import { MethodSelectInput } from '@/src/components/inputs/methodSelectInput/MethodSelectInput';
 import { DefaultParams } from '@/src/interfaces/graphQlInterface';
 import { HistoryButton } from '@/src/components/history/historySection';
+import { useTranslations } from 'next-intl';
 
 export default function RestContent({
   defaultParams,
@@ -79,6 +80,7 @@ export default function RestContent({
   const [encodedHistoryUrl, setEncodedHistoryUrl] = useState('');
   const [showVariables, setShowVariables] = useState<boolean>(false);
   const router = useRouter();
+  const t = useTranslations('RestContent');
 
   const updateUrl = useCallback(() => {
     const currentData = methods.getValues();
@@ -167,7 +169,7 @@ export default function RestContent({
         body: method !== 'GET' ? JSON.stringify({ body: bodyWithVariables, variables }) : undefined,
       });
 
-      const statusText = res.statusText || statusMessages[res.status] || 'Unknown Status';
+      const statusText = res.statusText || statusMessages[res.status] || t('unknownStatus');
       setResponseStatus({ code: res.status, text: statusText });
 
       const result = await res.json();
@@ -176,7 +178,7 @@ export default function RestContent({
 
       updateUrl();
     } catch (error) {
-      setJsonError('Invalid JSON in request body');
+      setJsonError(t('jsonError'));
       console.error('Error sending request:', error);
     }
   };
@@ -192,11 +194,11 @@ export default function RestContent({
     <section className={`${styles.restCont} hide-formatting`}>
       <FormProvider {...methods}>
         <form className={styles.form} onSubmit={methods.handleSubmit(onSubmit)}>
-          <h2 className={styles.head}>RESTfull Client</h2>
+          <h2 className={styles.head}>{t('restClientTitle')}</h2>
 
           <Box className={styles.methodUrl}>
             <MethodSelectInput
-              label="Method"
+              label={t('methodLabel')}
               name="method"
               control={methods.control}
               onBlur={updateUrl}
@@ -204,7 +206,7 @@ export default function RestContent({
 
             <TextFieldInput
               customClass={pages.query}
-              label="Endpoint URL"
+              label={t('endPointURL')}
               register={methods.register('endpointUrl')}
               multilineArea
               rows={1}
@@ -215,13 +217,13 @@ export default function RestContent({
           <Box className={styles.headersParams}>
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
-                Headers:
+                {t('headers')}
               </Typography>
               {headerFields.map((field, index) => (
                 <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
                   <TextFieldInput
                     customClass={pages.query}
-                    label="Header key"
+                    label={t('headerKeyLabel')}
                     register={methods.register(`headers.${index}.key`)}
                     multilineArea
                     rows={1}
@@ -229,7 +231,7 @@ export default function RestContent({
                   />
                   <TextFieldInput
                     customClass={pages.query}
-                    label="Header Value"
+                    label={t('headerValueLabel')}
                     register={methods.register(`headers.${index}.value`)}
                     multilineArea
                     rows={1}
@@ -251,19 +253,19 @@ export default function RestContent({
                 type="button"
                 onClick={() => appendHeader({ key: '', value: '' })}
               >
-                Add Header
+                {t('addHeaderButton')}
               </Button>
             </Box>
 
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
-                Query Parameters:
+                {t('queryParameters')}
               </Typography>
               {queryFields.map((field, index) => (
                 <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
                   <TextFieldInput
                     customClass={pages.query}
-                    label="Query Key"
+                    label={t('queryKeyLabel')}
                     register={methods.register(`queries.${index}.key`)}
                     multilineArea
                     rows={1}
@@ -272,7 +274,7 @@ export default function RestContent({
 
                   <TextFieldInput
                     customClass={pages.query}
-                    label="Query Value"
+                    label={t('queryValueLabel')}
                     register={methods.register(`queries.${index}.value`)}
                     multilineArea
                     rows={1}
@@ -293,7 +295,7 @@ export default function RestContent({
                 type="button"
                 onClick={() => appendQuery({ key: '', value: '' })}
               >
-                Add Query Parameter
+                {t('queryButton')}
               </Button>
             </Box>
 
@@ -304,19 +306,19 @@ export default function RestContent({
                 type="button"
                 onClick={() => setShowVariables(!showVariables)}
               >
-                {showVariables ? 'Hide Variables' : 'Show Variables'}
+                {showVariables ? t('hideVariablesButton') : t('showVariablesButton')}
               </Button>
 
               {showVariables && (
                 <>
                   <Typography variant="h6" sx={{ mb: 1, mt: 2 }}>
-                    Variables:
+                    {t('variablesTitle')}
                   </Typography>
                   {variablesFields.map((field, index) => (
                     <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
                       <TextFieldInput
                         customClass={pages.query}
-                        label="Variable Key"
+                        label={t('variableKeyLabel')}
                         register={methods.register(`variables.${index}.key`)}
                         multilineArea
                         rows={1}
@@ -325,7 +327,7 @@ export default function RestContent({
 
                       <TextFieldInput
                         customClass={pages.query}
-                        label="Variable Value"
+                        label={t('variableValueLabel')}
                         register={methods.register(`variables.${index}.value`)}
                         multilineArea
                         rows={3}
@@ -346,7 +348,7 @@ export default function RestContent({
                     type="button"
                     onClick={() => appendVariables({ key: '', value: '' })}
                   >
-                    Add Variables
+                    {t('addVariableButton')}
                   </Button>
                 </>
               )}
@@ -354,11 +356,11 @@ export default function RestContent({
           </Box>
 
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Input Mode:</Typography>
+            <Typography variant="subtitle1">{t('inputModeTitle')}</Typography>
             <div className={styles.radioErrorJson}>
               <RadioGroup row value={inputMode} onChange={handleInputModeChange}>
                 <FormControlLabel value="json" control={<Radio />} label="JSON" />
-                <FormControlLabel value="text" control={<Radio />} label="Text" />
+                <FormControlLabel value="text" control={<Radio />} label={t('textLabel')} />
               </RadioGroup>
               {jsonError && (
                 <Typography variant="body2" color="error">
@@ -369,7 +371,7 @@ export default function RestContent({
           </Box>
           <BodyFieldInput
             customClass={`${pages.query} ${pages.bodyRestful}`}
-            label="Body"
+            label={t('bodyLabel')}
             register={methods.register('body')}
             multilineArea
             rows={20}
@@ -379,7 +381,7 @@ export default function RestContent({
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button type="submit" className={pages.queryButton} variant="contained">
-              Send Request
+              {t('sendRequestButton')}
             </Button>
             <Button
               className={pages.queryButton}
@@ -387,7 +389,7 @@ export default function RestContent({
               type="button"
               onClick={onReset}
             >
-              Reset Form
+              {t('resetFormButton')}
             </Button>
             <HistoryButton />
           </Box>
@@ -395,7 +397,8 @@ export default function RestContent({
 
         <div className={`${pages.response} ${pages.restResponse}`}>
           <p className={styles.responseText}>
-            Status: {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}
+            {t('statusText')}{' '}
+            {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}
           </p>
           <RequestTextField
             response={responseBody ? JSON.parse(responseBody) : ''}
