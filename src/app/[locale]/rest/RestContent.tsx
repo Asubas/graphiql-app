@@ -207,7 +207,7 @@ export default function RestContent({
                 {t('headers')}
               </Typography>
               {headerFields.map((field, index) => (
-                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1, alignItems: 'start' }}>
                   <TextFieldInput
                     customClass={pages.query}
                     label={t('headerKeyLabel')}
@@ -229,6 +229,7 @@ export default function RestContent({
                     color="error"
                     aria-label="delete header"
                     size="small"
+                    sx={{ mt: 0.7 }}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -249,7 +250,7 @@ export default function RestContent({
                 {t('queryParameters')}
               </Typography>
               {queryFields.map((field, index) => (
-                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1, alignItems: 'start' }}>
                   <TextFieldInput
                     customClass={pages.query}
                     label={t('queryKeyLabel')}
@@ -302,7 +303,10 @@ export default function RestContent({
                     {t('variablesTitle')}
                   </Typography>
                   {variablesFields.map((field, index) => (
-                    <Box key={field.id} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                    <Box
+                      key={field.id}
+                      sx={{ display: 'flex', gap: 2, mb: 1, alignItems: 'start' }}
+                    >
                       <TextFieldInput
                         customClass={pages.query}
                         label={t('variableKeyLabel')}
