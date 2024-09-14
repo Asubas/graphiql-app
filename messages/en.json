@@ -101,9 +101,9 @@
     "docsTitleText": "If response ok, this should be link to documentation",
     "submitButton": "Submit",
     "variablesLabel": "Variables (JSON format):",
-    "variablesPlaceholder": "{ variables }",
+    "variablesPlaceholder": "variables",
     "headersLabel": "Headers (JSON format):",
-    "headersPlaceholder": "{ headers }"
+    "headersPlaceholder": "headers"
   },
   "History": {
     "clearButton": "Clear History",
