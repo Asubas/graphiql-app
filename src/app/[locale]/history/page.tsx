@@ -39,6 +39,19 @@ function HistorySection() {
     return date.toLocaleString('ru-RU', options).replace(',', '');
   };
 
+  const getMethodOrType = (encodedUrl: string) => {
+    if (encodedUrl.includes('/rest/')) {
+      const match = encodedUrl.match(/\/rest\/([A-Z]+)\//);
+      return match ? match[1] : null;
+    }
+
+    if (encodedUrl.includes('/graphql/')) {
+      return 'GraphQL';
+    }
+
+    return null;
+  };
+
   useEffect(() => {
     const storedHistory = localStorage.getItem('history');
     if (storedHistory) {
@@ -52,10 +65,11 @@ function HistorySection() {
         <>
           <div className={styles.historyList}>
             {history.map((element, index) => {
+              const methodOrType = getMethodOrType(element.encodedHistoryUrl);
               return (
                 <div className={styles.historyElement} key={index}>
-                  {/* {element.methods && <span>{element.methods}</span>} */}
                   <span>{formatDate(element.timestamp)}</span>
+                  {methodOrType && <span>{methodOrType}</span>}
                   <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
                 </div>
               );
