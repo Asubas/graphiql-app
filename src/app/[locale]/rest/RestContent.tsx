@@ -101,6 +101,20 @@ export default function RestContent({
     window.history.pushState(null, '', newUrl);
   }, [methods, router]);
 
+  useEffect(() => {
+    if (encodedHistoryUrl) {
+      saveGetHistory({
+        endpointUrl: methods.getValues().endpointUrl,
+        headers: methods.getValues().headers,
+        variables: methods.getValues().variables,
+        body: methods.getValues().body,
+        queryParams: '',
+        timestamp: new Date().toISOString(),
+        encodedHistoryUrl,
+      });
+    }
+  }, [encodedHistoryUrl, methods]);
+
   // смотрим обновление url
   useEffect(() => {
     const subscription = methods.watch((_, { type }) => {
@@ -125,7 +139,6 @@ export default function RestContent({
     try {
       const { method, endpointUrl, headers, variables, queries, body } = data;
 
-      // преобразуем массив переменных в объект
       const variablesObject = variables.reduce<Record<string, string>>((acc, variable) => {
         if (variable.key && variable.value) {
           acc[variable.key] = variable.value;
@@ -133,7 +146,6 @@ export default function RestContent({
         return acc;
       }, {});
 
-      // заменяем переменные в теле запроса
       const bodyWithVariables = replaceVariablesInBody(body, variablesObject);
 
       const requestHeaders = headers.reduce<Record<string, string>>((acc, header) => {
@@ -157,10 +169,7 @@ export default function RestContent({
       const res = await fetch(fullUrl, {
         method,
         headers: requestHeaders,
-        body:
-          method !== 'GET' && (bodyWithVariables || variables.length > 0)
-            ? JSON.stringify({ body: bodyWithVariables, variables })
-            : undefined,
+        body: method !== 'GET' ? JSON.stringify({ body: bodyWithVariables, variables }) : undefined,
       });
 
       const statusText = res.statusText || statusMessages[res.status] || 'Unknown Status';
@@ -169,15 +178,7 @@ export default function RestContent({
       const result = await res.json();
       setResponseBody(JSON.stringify(result, null, 2));
       setJsonError(null);
-      saveGetHistory({
-        endpointUrl,
-        headers,
-        variables,
-        body: bodyWithVariables,
-        queryParams,
-        timestamp: new Date().toISOString(),
-        encodedHistoryUrl,
-      });
+
       updateUrl();
     } catch (error) {
       setJsonError('Invalid JSON in request body');
