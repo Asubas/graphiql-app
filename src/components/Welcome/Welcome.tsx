@@ -8,7 +8,7 @@ import { getLocale } from '@/src/utils/cookies';
 
 export default function Welcome() {
   const router = useRouter();
-  const token = document.cookie.includes('token=');
+  const token = typeof window !== 'undefined' && document.cookie.includes('token=');
   const locale = getLocale();
   const t = useTranslations('Welcome');
 

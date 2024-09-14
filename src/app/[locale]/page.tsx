@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 
 export default function Home() {
   const { user } = useAuth();
-  const token = document.cookie.includes('token=');
+  const token = typeof window !== 'undefined' && document.cookie.includes('token=');
   const t = useTranslations('HomePage');
 
   return (
