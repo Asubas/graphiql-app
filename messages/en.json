@@ -113,7 +113,8 @@
   },
   "DocSection": {
     "showButton": "Show documentation",
-    "loadingDocumentation": "Loading documentation..."
+    "loadingDocumentation": "Loading documentation...",
+    "emptyButton": "If response ok, this should be link to documentation"
   },
   "HistoryButton": {
     "historyButton": "History"

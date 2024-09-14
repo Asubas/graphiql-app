@@ -22,14 +22,14 @@ function decodingUrl(pathname: string) {
       variables,
     };
   } else if ((parts[1] === 'GRAPHQL' && parts[2]) || (parts[1] === 'graphql' && parts[2])) {
-    const encodedEndPointUrl = parts[parts.length - 1];
-    const encodedBody = parts[parts.length].split('?')[0];
+    const encodedEndPointUrl = parts[parts.length - 2];
+    const encodedBody = parts[parts.length - 1].split('?')[0];
     const endpointUrl = decodeURIComponent(atob(encodedEndPointUrl));
     const decodedBody = atob(encodedBody);
     const body = JSON.parse(decodedBody);
     const query = body.query;
     const variables = body.variables;
-    const encodedHeaders = parts[parts.length].split('?')[1];
+    const encodedHeaders = parts[parts.length - 1].split('?')[1];
     const headers = encodedHeaders ? JSON.parse(atob(encodedHeaders)) : {};
     return {
       endpointUrl,

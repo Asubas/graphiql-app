@@ -154,22 +154,6 @@ export default function Header() {
               </>
             )}
           </div>
-          {/* {token && (
-            <div className={styles.btnsPrivateBurger}>
-              <PrivateBtn
-                className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}
-                label="REST Client"
-              />
-              <PrivateBtn
-                className={`btnPrivate graphql-btn ${styles.btnBurgerGraphql}`}
-                label="GraphQL Client"
-              />
-              <PrivateBtn
-                className={`btnPrivate history-btn ${styles.btnBurgerHistory}`}
-                label="History"
-              />
-            </div>
-          )} */}
         </nav>
       </div>
 

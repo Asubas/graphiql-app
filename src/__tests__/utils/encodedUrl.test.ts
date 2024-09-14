@@ -20,7 +20,7 @@ describe('encodedUrl', () => {
     };
     const encodedBody = btoa(JSON.stringify(body));
     const encodedHeaders = btoa(headersValue);
-    const expectedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${encodedHeaders}`;
+    const expectedUrl = `http://localhost:3000/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${encodedHeaders}`;
 
     expect(result).toBe(expectedUrl);
     expect(window.history.pushState).toHaveBeenCalledTimes(1);
@@ -40,7 +40,7 @@ describe('encodedUrl', () => {
       variables: JSON.parse(variables),
     };
     const encodedBody = btoa(JSON.stringify(body));
-    const expectedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${btoa('')}`;
+    const expectedUrl = `http://localhost:3000/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${btoa('')}`;
 
     expect(result).toBe(expectedUrl);
     expect(window.history.pushState).toHaveBeenCalledTimes(2);
@@ -61,7 +61,7 @@ describe('encodedUrl', () => {
     };
     const encodedBody = btoa(JSON.stringify(body));
     const encodedHeaders = btoa(headersValue);
-    const expectedUrl = `http://localhost:3000/graphql/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${encodedHeaders}`;
+    const expectedUrl = `http://localhost:3000/GRAPHQL/${encodedEndpointUrl}/${encodedBody}?${encodedHeaders}`;
 
     expect(result).toBe(expectedUrl);
     expect(window.history.pushState).toHaveBeenCalledTimes(3);

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { toast } from 'react-toastify';
 
 export async function POST(request: Request) {
   const { endpointUrl, headersObj, query, variables } = await request.json();
@@ -16,6 +17,6 @@ export async function POST(request: Request) {
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    return NextResponse.json({ error: 'Error response for API' }, { status: 500 });
+    toast.error(`${error}`);
   }
 }

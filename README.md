@@ -3,11 +3,13 @@
 This project is a universal client designed to handle REST and GraphQL API requests efficiently. It supports the entry of headers, queries, variables, and body parameters for REST requests. The client also offers a convenient feature to store the history of requests and allows restoring previous requests with all their associated data.
 
 This application was created as part of the RSSchool React course by
+
 1. [Asubas](https://github.com/Asubas) (team lead)
 2. [lipan4836](https://github.com/lipan4836)
 3. [pdasya](https://github.com/pdasya)
 
 ## Features
+
 - Universal API Client: Make requests to any REST or GraphQL API.
 - Custom Input Support: Easily input headers, query parameters, variables, and body data for requests.
 - Request History: Automatically stores request histories and allows users to restore previously made requests by loading all previously entered data.
@@ -19,6 +21,7 @@ This application was created as part of the RSSchool React course by
 Node.js and npm installed on your machine.
 
 ### Installation
+
 - Clone the repository
 - Navigate to the project directory
 - Install the dependencies:

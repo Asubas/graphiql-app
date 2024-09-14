@@ -113,7 +113,8 @@
   },
   "DocSection": {
     "showButton": "Показать документацию",
-    "loadingDocumentation": "Загрузка документации..."
+    "loadingDocumentation": "Загрузка документации...",
+    "emptyButton": "Если ответ нормальный, это должна быть ссылка на документацию"
   },
   "HistoryButton": {
     "historyButton": "История"

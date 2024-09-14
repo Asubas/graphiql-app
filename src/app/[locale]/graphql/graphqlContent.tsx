@@ -43,10 +43,11 @@ const GraphQLClient = ({
     if (result) {
       setResponse(result as GraphQLResponse);
     } else {
-      setResponse({ errors: [{ message: t('errorMessage') }] });
+      return;
     }
     setStatus(status);
-    methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
+    if (methods.getValues('sdlUrl') === '')
+      methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
