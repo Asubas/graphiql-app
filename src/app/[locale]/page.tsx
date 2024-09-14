@@ -19,10 +19,9 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      {!token ? (
-        <About />
-      ) : (
-        <p>
+      <About />
+      {token && (
+        <p className={styles.user}>
           {t('title')} {token && user && user.displayName ? user?.displayName : 'User'}!
         </p>
       )}{' '}

@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# REST/GraphQL Client <img src="./public/client-rest.svg" alt="Image 1 Description" style="margin-left: 10px; margin-right: 10px;" width="30"> <img src="./public/client-graphql.svg" alt="Image 2 Description" width="30">
+
+This project is a universal client designed to handle REST and GraphQL API requests efficiently. It supports the entry of headers, queries, variables, and body parameters for REST requests. The client also offers a convenient feature to store the history of requests and allows restoring previous requests with all their associated data.
+
+This application was created as part of the RSSchool React course by
+1. [Asubas](https://github.com/Asubas) (team lead)
+2. [lipan4836](https://github.com/lipan4836)
+3. [pdasya](https://github.com/pdasya)
+
+## Features
+- Universal API Client: Make requests to any REST or GraphQL API.
+- Custom Input Support: Easily input headers, query parameters, variables, and body data for requests.
+- Request History: Automatically stores request histories and allows users to restore previously made requests by loading all previously entered data.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Node.js and npm installed on your machine.
+
+### Installation
+- Clone the repository
+- Navigate to the project directory
+- Install the dependencies:
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Running the Development Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To start the development server, run the following command:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+npm run dev
+```
 
-## Learn More
+This will launch the application in development mode. Open your browser and navigate to http://localhost:3000.
 
-To learn more about Next.js, take a look at the following resources:
+### Build the Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To build the application for production, use:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+npm run build
+```
 
-## Deploy on Vercel
+This command will generate an optimized build in the .next directory.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Start the Application
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To start the application in production mode, execute:
+
+```
+npm run start
+```
+
+### Linting and Formatting
+
+- ESLint: Ensure code quality and consistency with:
+
+```
+npm run lint
+```
+
+- Prettier: Automatically format your code with:
+
+```
+npm run format:fix
+```
+
+### Testing
+
+- Run Tests: Run the test suite and collect coverage:
+
+```
+npm run test
+```
+
+- Watch Tests: To run tests in watch mode:
+
+```
+npm run test:watch
+```

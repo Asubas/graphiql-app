@@ -84,6 +84,8 @@ export function useAuth() {
         } else {
           toast.error(t('unexpectedError'));
         }
+      } else {
+        toast.error('An unexpected error occurred.');
       }
     } finally {
       setLoading(false);
