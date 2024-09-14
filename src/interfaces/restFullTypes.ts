@@ -9,11 +9,3 @@ export type FormData = {
   variables: { key: string; value: string }[];
   body: string;
 };
-
-export type RestContentProps = {
-  method?: string;
-  endpointUrl?: string;
-  body?: string;
-  headers?: Header[];
-  queries?: QueryParam[];
-};

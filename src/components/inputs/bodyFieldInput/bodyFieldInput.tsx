@@ -59,12 +59,10 @@ function BodyFieldInput<TFieldValues extends FieldValues>({
 
   const handleFormat = async () => {
     const query = getValues(prettier);
-    console.log('get value from form', query);
+
     if (query) {
       const TextToJson = JSON.stringify(query);
-      console.log('TextToJson', TextToJson);
       const formattedText = beautify.js(JSON.parse(TextToJson), options);
-      console.log('formattedText', formattedText);
       setValue('body', formattedText);
     }
   };

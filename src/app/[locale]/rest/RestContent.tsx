@@ -2,7 +2,7 @@
 
 import pages from '../graphql/graphql.module.scss';
 import { useCallback, useEffect, useState } from 'react';
-import { useForm, useFieldArray, Controller, FormProvider } from 'react-hook-form';
+import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 import {
   Button,
   Box,
@@ -20,12 +20,7 @@ import { encodeUrl } from '@/src/utils/urlUtils';
 import { saveGetHistory } from '@/src/utils/saveGetHistory';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
-import {
-  RestContentProps,
-  FormData,
-  QueryParam,
-  Header,
-} from '@/src/components/types/restFullTypes';
+import { FormData } from '@/src/interfaces/restFullTypes';
 import { BodyFieldInput } from '@/src/components/inputs/bodyFieldInput/bodyFieldInput';
 import { MethodSelectInput } from '@/src/components/inputs/methodSelectInput/MethodSelectInput';
 import { DefaultParams } from '@/src/interfaces/graphQlInterface';
@@ -34,9 +29,11 @@ import { HistoryButton } from '@/src/components/history/historySection';
 export default function RestContent({
   defaultParams,
   decodingHeaders,
+  decodingQuery,
 }: {
   defaultParams?: DefaultParams;
   decodingHeaders?: { key: string; value: string }[];
+  decodingQuery?: { key: string; value: string }[];
 }) {
   const methods = useForm<FormData>({
     defaultValues: {
@@ -48,10 +45,7 @@ export default function RestContent({
         decodingHeaders && decodingHeaders.length > 0
           ? decodingHeaders
           : [{ key: 'Content-Type', value: 'application/json' }],
-      queries:
-        defaultParams?.queries && defaultParams?.queries.length > 0
-          ? defaultParams?.queries
-          : [{ key: '', value: '' }],
+      queries: decodingQuery && decodingQuery.length > 0 ? decodingQuery : [{ key: '', value: '' }],
       variables:
         Array.isArray(defaultParams?.variables) && defaultParams.variables.length > 0
           ? defaultParams.variables
@@ -108,14 +102,13 @@ export default function RestContent({
         headers: methods.getValues().headers,
         variables: methods.getValues().variables,
         body: methods.getValues().body,
-        queryParams: '',
+        queryParams: methods.getValues().queries,
         timestamp: new Date().toISOString(),
         encodedHistoryUrl,
       });
     }
   }, [encodedHistoryUrl, methods]);
 
-  // смотрим обновление url
   useEffect(() => {
     const subscription = methods.watch((_, { type }) => {
       if (type === 'blur') {
@@ -155,13 +148,15 @@ export default function RestContent({
         return acc;
       }, {});
 
-      const queryParams = queries
-        .reduce<string[]>((acc, query) => {
-          if (query.key && query.value) {
-            acc.push(`${encodeURIComponent(query.key)}=${encodeURIComponent(query.value)}`);
-          }
-          return acc;
-        }, [])
+      const queryParamsObj = queries.reduce<Record<string, string>>((acc, query) => {
+        if (query.key && query.value) {
+          acc[query.key] = query.value;
+        }
+        return acc;
+      }, {});
+
+      const queryParams = Object.entries(queryParamsObj)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');
 
       const fullUrl = queryParams ? `${endpointUrl}?${queryParams}` : endpointUrl;
@@ -200,7 +195,6 @@ export default function RestContent({
           <h2 className={styles.head}>RESTfull Client</h2>
 
           <Box className={styles.methodUrl}>
-            {/* выбор метода */}
             <MethodSelectInput
               label="Method"
               name="method"
@@ -208,7 +202,6 @@ export default function RestContent({
               onBlur={updateUrl}
             />
 
-            {/* эндпоинт */}
             <TextFieldInput
               customClass={pages.query}
               label="Endpoint URL"
@@ -220,7 +213,6 @@ export default function RestContent({
           </Box>
 
           <Box className={styles.headersParams}>
-            {/* добавление хэдэров */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
                 Headers:
@@ -263,7 +255,6 @@ export default function RestContent({
               </Button>
             </Box>
 
-            {/* добавление кверей */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>
                 Query Parameters:
@@ -306,7 +297,6 @@ export default function RestContent({
               </Button>
             </Box>
 
-            {/* Добавление переменных */}
             <Box sx={{ mb: 2 }}>
               <Button
                 className={pages.queryButton}
@@ -363,7 +353,6 @@ export default function RestContent({
             </Box>
           </Box>
 
-          {/* ввод боди */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Input Mode:</Typography>
             <div className={styles.radioErrorJson}>
@@ -404,7 +393,6 @@ export default function RestContent({
           </Box>
         </form>
 
-        {/* ответ */}
         <div className={`${pages.response} ${pages.restResponse}`}>
           <p className={styles.responseText}>
             Status: {responseStatus ? `${responseStatus.code} - ${responseStatus.text}` : ''}

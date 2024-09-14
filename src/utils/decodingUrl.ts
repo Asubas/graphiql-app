@@ -9,9 +9,10 @@ function decodingUrl(pathname: string) {
     const encodedHeaders = parts[7];
     const endpointUrl = decodeURIComponent(atob(encodedEndPointUrl));
     const body = encodedBody ? atob(encodedBody) : '';
-    const query = encodedQuery ? atob(encodedQuery) : [];
-    const headers = encodedHeaders ? atob(encodedHeaders) : [];
-    const variables = encodedVariables ? atob(encodedVariables) : [];
+    const query = encodedQuery ? JSON.parse(atob(encodedQuery)) : [];
+    const headers = encodedHeaders ? JSON.parse(atob(encodedHeaders)) : [];
+    const variables = encodedVariables ? JSON.parse(atob(encodedVariables)) : [];
+
     return {
       method,
       endpointUrl,

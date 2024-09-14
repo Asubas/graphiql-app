@@ -17,6 +17,7 @@ const config: Config = {
     '/src/utils/validation.ts',
     'src/interfaces/graphQlInterface.ts',
     'src/interfaces/authFormInterfaces.ts',
+    'src/interfaces/restFullTypes.ts',
   ],
 };
 

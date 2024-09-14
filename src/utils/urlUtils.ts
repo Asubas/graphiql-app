@@ -7,17 +7,10 @@ interface EncodeUrlParams {
   variables?: { key: string; value: string }[];
 }
 
-interface DecodeUrlParams {
-  method: string;
-  url: string;
-  body: string;
-  headers: { key: string; value: string }[];
-  queries: { key: string; value: string }[];
-}
-
 export function encodeBase64(data: string): string {
   return btoa(unescape(encodeURIComponent(data)));
 }
+
 export function encodeUrl({
   method,
   endpointUrl,
