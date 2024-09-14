@@ -101,9 +101,9 @@
     "docsTitleText": "Если ответ нормальный, это должна быть ссылка на документацию",
     "submitButton": "Отправить",
     "variablesLabel": "Переменные (JSON формат):",
-    "variablesPlaceholder": "{ переменные }",
+    "variablesPlaceholder": "переменные",
     "headersLabel": "Заголовки (JSON формат):",
-    "headersPlaceholder": "{ заголовки }"
+    "headersPlaceholder": "заголовки"
   },
   "History": {
     "clearButton": "Очистить историю",

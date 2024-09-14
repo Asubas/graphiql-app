@@ -143,7 +143,7 @@ const GraphQLClient = ({
               multilineArea
               rows={5}
               customClass={showVariables ? pages.show : pages.hidden}
-              placeholder={t('variablesPlaceholder')}
+              placeholder={`{ ${t('variablesPlaceholder')} }`}
               onBlur={handlePushUrl}
               defaultValue={
                 defaultParams?.variables && Object.keys(defaultParams.variables).length > 0
@@ -157,7 +157,7 @@ const GraphQLClient = ({
               multilineArea
               rows={5}
               customClass={showHeaders ? pages.show : pages.hidden}
-              placeholder={t('headersPlaceholder')}
+              placeholder={`{ ${t('headersPlaceholder')} }`}
               onBlur={handlePushUrl}
               defaultValue={decodingHeaders ? decodingHeaders : ''}
             />
