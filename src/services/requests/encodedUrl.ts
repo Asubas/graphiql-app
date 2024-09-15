@@ -15,7 +15,7 @@ function encodedUrl(
     const encodedBody = btoa(JSON.stringify(body));
     const encodedHeaders = headersValue ? btoa(headersValue) : '';
 
-    const encodedUrl = `http://localhost:3000/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${encodedHeaders}`;
+    const encodedUrl = `https://rss-graphiql-client.netlify.app/GRAPHQL/${encodedEndPointUrl}/${encodedBody}?${encodedHeaders}`;
 
     window.history.pushState({}, '', encodedUrl);
 
