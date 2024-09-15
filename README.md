@@ -1,6 +1,6 @@
 # REST/GraphQL Client <img src="./public/client-rest.svg" alt="Image 1 Description" style="margin-left: 10px; margin-right: 10px;" width="30"> <img src="./public/client-graphql.svg" alt="Image 2 Description" width="30">
 
-This project is a universal client designed to handle REST and GraphQL API requests efficiently. It supports the entry of headers, queries, variables, and body parameters for REST requests. The client also offers a convenient feature to store the history of requests and allows restoring previous requests with all their associated data.
+This project is a universal client designed to handle REST and GraphQL API requests efficiently. It supports the entry of headers, queries, variables, and body parameters. The client also offers a convenient feature to store the history of requests and allows restoring previous requests with all their associated data.
 
 This application was created as part of the RSSchool React course by
 
@@ -13,6 +13,17 @@ This application was created as part of the RSSchool React course by
 - Universal API Client: Make requests to any REST or GraphQL API.
 - Custom Input Support: Easily input headers, query parameters, variables, and body data for requests.
 - Request History: Automatically stores request histories and allows users to restore previously made requests by loading all previously entered data.
+- JSON/text input mode for body request, prettifying it.
+
+## Technology Stack
+<img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original-wordmark.svg" title="React" alt="React" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/nextjs/nextjs-original.svg" title="NextJS" alt="NextJS" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-original.svg" title="TypeScript" alt="TypeScript" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain-wordmark.svg" title="Firebase" alt="Firebase" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/materialui/materialui-original.svg" title="Material UI" alt="Material UI" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/jest/jest-plain.svg" title="Jest" alt="Jest" width="50" height="50"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/eslint/eslint-original.svg" title="ESLint" alt="ESLint" width="50" height="50"/>&nbsp;
+<img src="/public/stack-prettier.svg" title="Prettier" alt="Prettier" width="50" height="50"/>&nbsp;
 
 ## Getting Started
 
