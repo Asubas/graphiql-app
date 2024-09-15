@@ -3,11 +3,6 @@ import styles from '@/src/components/About/About.module.scss';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-function ErrorThrower() {
-  throw new Error('Это тестовая ошибка!');
-  return null;
-}
-
 export default function About() {
   const [showError, setShowError] = useState(false);
   const t = useTranslations('AboutPage');
@@ -99,12 +94,6 @@ export default function About() {
           </a>
         </div>
       </div>
-
-      {/* тест выброса ошибки для улова */}
-      <button className="btnErrorTest" onClick={() => setShowError(true)}>
-        {t('throwError')}
-      </button>
-      {showError && <ErrorThrower />}
     </div>
   );
 }

@@ -95,6 +95,8 @@ export default function RestContent({
     setEncodedHistoryUrl(newUrl);
     router.replace(newUrl);
     window.history.pushState(null, '', newUrl);
+
+    return newUrl;
   }, [methods, router]);
 
   const handleInputModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +111,7 @@ export default function RestContent({
 
   const onSubmit = async (data: FormData) => {
     try {
-      updateUrl();
+      const url = updateUrl();
 
       const { method, endpointUrl, headers, variables, queries, body } = data;
 
@@ -162,7 +164,7 @@ export default function RestContent({
         body: methods.getValues().body,
         queryParams: methods.getValues().queries,
         timestamp: new Date().toISOString(),
-        encodedHistoryUrl,
+        encodedHistoryUrl: url,
       });
     } catch (error) {
       setJsonError(t('jsonError'));

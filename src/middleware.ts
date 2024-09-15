@@ -9,7 +9,6 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith('/GRAPHQL')) {
-    // Заменить '/GRAPHQL' на '/graphql' в URL
     const newPath = pathname.replace('/GRAPHQL', '/graphql');
     return NextResponse.redirect(new URL(newPath, request.url));
   }

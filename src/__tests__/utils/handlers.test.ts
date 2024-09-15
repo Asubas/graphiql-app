@@ -21,9 +21,9 @@ describe('handlerBlurInput', () => {
     const query = '{ users { id name } }';
     const variables = '{ "id": 1 }';
 
-    handlerBlurInput(endpointUrl, undefined, query, variables);
+    handlerBlurInput(endpointUrl, null, query, variables);
 
-    // expect(encodedUrl).toHaveBeenCalledTimes(2);
-    expect(encodedUrl).toHaveBeenCalledWith(endpointUrl, undefined, query, variables);
+    expect(encodedUrl).toHaveBeenCalledTimes(2);
+    expect(encodedUrl).toHaveBeenCalledWith(endpointUrl, null, query, variables);
   });
 });
