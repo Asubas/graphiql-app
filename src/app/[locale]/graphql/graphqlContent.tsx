@@ -86,15 +86,7 @@ const GraphQLClient = ({
               prettier={'endpoint'}
               defaultValue={(defaultParams && defaultParams.endpointUrl) || DEFAULT_URL_ENDPOINT}
             />
-            <TextFieldInput
-              label={t('sdlUrlLabel')}
-              register={methods.register('sdlUrl')}
-              defaultValue={
-                defaultParams && defaultParams.endpointUrl
-                  ? `${defaultParams.endpointUrl}?sdl`
-                  : DEFAULT_SDL_ENDPOINT
-              }
-            />
+            <TextFieldInput label={t('sdlUrlLabel')} register={methods.register('sdlUrl')} />
           </div>
           <div className={pages.area}>
             <TextFieldInput
