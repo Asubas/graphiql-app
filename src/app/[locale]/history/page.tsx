@@ -15,9 +15,9 @@ function HistorySection() {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const target = event.currentTarget.getAttribute('data-type');
     if (target === 'restFull') {
-      router.push('http://localhost:3000/rest');
+      router.push('https://rss-graphiql-client.netlify.app/rest');
     } else {
-      router.push('http://localhost:3000/graphql');
+      router.push('https://rss-graphiql-client.netlify.app/graphql');
     }
   };
 
