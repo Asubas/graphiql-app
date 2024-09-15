@@ -1,0 +1,164 @@
+.graphql {
+  h2 {
+    margin-top: 50px;
+  }
+}
+
+.graphql,
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 80px;
+
+  .response-container {
+    border: 1px solid white;
+    border-radius: 5px;
+    gap: 20px;
+    flex: 1 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .endpoints {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+
+    div {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .queryButton,
+  .addHeader {
+    color: #a64c01;
+    background-color: #000000;
+    border: 1px solid #f5deb3;
+    width: max-content;
+    align-self: center;
+
+    &:hover {
+      color: #f5deb3;
+    }
+  }
+}
+
+.headers,
+.headersContainer {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.headers {
+  max-width: 950px;
+  max-height: 100px;
+  overflow-y: scroll;
+  margin: 0 auto;
+  position: relative;
+  left: 10px;
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerTitle {
+  text-align: center;
+}
+
+.header {
+  display: block;
+  width: max-content;
+
+  & * {
+    width: 100%;
+  }
+}
+
+form {
+  .area {
+    position: relative;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+
+    .pages,
+    .response {
+      width: 50%;
+    }
+
+    .response {
+      position: relative;
+
+      p {
+        position: absolute;
+        top: -32px;
+      }
+    }
+  }
+
+  .variables,
+  .additionally {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .documentation {
+    width: max-content;
+  }
+}
+
+.hidden {
+  display: none;
+
+  div {
+    display: none;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  label {
+    display: none;
+  }
+}
+
+.graphql {
+  margin-top: 88px;
+}
+
+.restResponse {
+  width: 50%;
+}
+
+Button.queryButton {
+  color: #a64c01;
+  background-color: #000000;
+  border: 1px solid #f5deb3;
+  width: max-content;
+  align-self: center;
+
+  &:hover {
+    color: #f5deb3;
+    background-color: #000000;
+  }
+}
+
+div.bodyRestful {
+  width: 100%;
+}

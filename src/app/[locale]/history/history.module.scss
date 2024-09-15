@@ -1,0 +1,91 @@
+.container {
+  width: 100%;
+  background: #2a272c;
+  height: auto;
+  text-align: center;
+  margin: auto 0;
+  height: 90vh;
+  max-height: 70%;
+  overflow-y: auto;
+
+  .emptyHistory {
+    color: #ffa500;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+
+  .historyElement {
+    color: #ffa500;
+    border: 1px solid;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 650px;
+    max-width: 70%;
+    padding: 10px;
+
+    span {
+      margin-right: 10px;
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    a {
+      color: #ffa500;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover {
+        color: #000000;
+      }
+    }
+
+    &:hover {
+      background-color: #f5deb3;
+      color: #000000;
+
+      a {
+        color: #000000;
+      }
+    }
+  }
+
+  .historyList {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    position: relative;
+    top: 80px;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+
+  button {
+    color: #a64c01;
+    background-color: #000000;
+    border: 1px solid #f5deb3;
+    width: max-content;
+
+    &:hover {
+      color: #f5deb3;
+      background-color: #000000;
+    }
+  }
+}
