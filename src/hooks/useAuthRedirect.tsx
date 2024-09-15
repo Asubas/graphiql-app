@@ -140,6 +140,7 @@ export function useAuth() {
       toast.success('You have successfully logged out.');
       document.cookie = 'token=; path=/; max-age=0;';
       router.push('/');
+      location.reload();
     } catch (error) {
       toast.error('Failed to log out. Please try again.');
     }

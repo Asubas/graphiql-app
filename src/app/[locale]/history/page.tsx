@@ -68,9 +68,11 @@ function HistorySection() {
               const methodOrType = getMethodOrType(element.encodedHistoryUrl);
               return (
                 <div className={styles.historyElement} key={index}>
-                  <span>{formatDate(element.timestamp)}</span>
-                  {methodOrType && <span>{methodOrType}</span>}
-                  <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
+                  <Link href={`${element.encodedHistoryUrl}`}>
+                    <span>{formatDate(element.timestamp)}</span>
+                    {methodOrType && <span>{methodOrType}</span>}
+                    {element.endpointUrl}
+                  </Link>
                 </div>
               );
             })}
