@@ -18,6 +18,18 @@ const config: Config = {
     'src/interfaces/graphQlInterface.ts',
     'src/interfaces/authFormInterfaces.ts',
     'src/interfaces/restFullTypes.ts',
+    'src/app/[^/]*/DELETE/.*',
+    'src/app/[^/]*/PUT/.*',
+    'src/app/[^/]*/PATCH/.*',
+    'src/app/[^/]*/POST/.*',
+    'src/app/[^/]*/GET/.*',
+  ],
+  testPathIgnorePatterns: [
+    'src/app/[^/]*/DELETE/.*',
+    'src/app/[^/]*/PUT/.*',
+    'src/app/[^/]*/PATCH/.*',
+    'src/app/[^/]*/POST/.*',
+    'src/app/[^/]*/GET/.*',
   ],
 };
 

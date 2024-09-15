@@ -47,7 +47,7 @@ describe('HistorySection Component', () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText('GET')).toBeInTheDocument();
+    expect(screen.getByText('rest')).toBeInTheDocument();
     expect(screen.getByText('http://test.com/api')).toBeInTheDocument();
   });
 
