@@ -1,7 +1,7 @@
 'use client';
 import pages from './graphql.module.scss';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GraphQLResponse, FormData, DefaultParams } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { TextFieldInput } from '@/src/components/inputs/textFieldInput/textFieldInput';
@@ -10,12 +10,14 @@ import {
   DEFAULT_QUERY_JSON,
   DEFAULT_SDL_ENDPOINT,
   DEFAULT_URL_ENDPOINT,
+  statusMessages,
 } from '@/src/services/constant';
 import { DocSection } from '@/src/components/documentation/docSection';
 import { HistoryButton } from '@/src/components/history/historySection';
 import { RequestTextField } from '@/src/components/inputs/requestFieldInput/requestTextField';
 import { sendRequest } from '@/src/services/requests/sendRequest';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
 const GraphQLClient = ({
   defaultParams,
@@ -30,6 +32,7 @@ const GraphQLClient = ({
   const [response, setResponse] = useState<GraphQLResponse | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const t = useTranslations('GraphQLContent');
+  const path = usePathname();
 
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headers, query, variables } = data;
@@ -42,10 +45,11 @@ const GraphQLClient = ({
     if (result) {
       setResponse(result as GraphQLResponse);
     } else {
-      setResponse({ errors: [{ message: t('errorMessage') }] });
+      return;
     }
     setStatus(status);
-    methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
+    if (methods.getValues('sdlUrl') === '')
+      methods.setValue('sdlUrl', `${methods.getValues('endpointUrl')}?sdl`);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,9 +66,16 @@ const GraphQLClient = ({
     if (status) handlerBlurInput(endpointUrl, headers, query, variables);
   };
 
+  useEffect(() => {
+    if (path.startsWith('/graphql') && path.split('/').length > 2) {
+      const newPath = path.replace('/graphql', '/GRAPHQL');
+      window.history.pushState(null, '', newPath);
+    }
+  }, [path]);
+
   return (
     <section className={pages.graphql}>
-      <p>{t('pageTitle')}</p>
+      <h2>{t('pageTitle')}</h2>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={pages.form}>
           <div className={pages.endpoints}>
@@ -94,11 +105,15 @@ const GraphQLClient = ({
               rows={20}
               onBlur={handlePushUrl}
               prettier={'query'}
-              defaultValue={(defaultParams && defaultParams.query) || DEFAULT_QUERY_JSON}
+              defaultValue={
+                (defaultParams && typeof defaultParams.query === 'string' && defaultParams.query) ||
+                DEFAULT_QUERY_JSON
+              }
             />
             <div className={pages.response}>
               <p>
-                {t('status')} {status ? status : ''}
+                {t('status')} {status ? status : ''}{' '}
+                {status !== null ? statusMessages[status] || t('unknownStatus') : ''}
               </p>
               <RequestTextField response={response ? response : ''} />
             </div>

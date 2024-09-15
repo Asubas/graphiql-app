@@ -12,7 +12,7 @@ export async function sendRequest(
   try {
     parsedHeaders = headers ? JSON.parse(headers) : {};
   } catch (error) {
-    toast.error(error instanceof Error ? error.message : 'Unknown Error');
+    toast.error(`${error}`);
     return;
   }
   const parsedVariables = variables ?? null;
@@ -30,9 +30,13 @@ export async function sendRequest(
       },
       body: JSON.stringify(body),
     });
+    if (!res.ok) {
+      toast.error(`Error request, please check the form`);
+      return;
+    }
     const responseText = await res.text();
     const result = responseText ? JSON.parse(responseText) : {};
-    const encodedHistoryUrl = encodedUrl(endpointUrl, headers, query, parsedVariables);
+    const encodedHistoryUrl = encodedUrl(endpointUrl, headers, query, parsedVariables) as string;
     saveGetHistory({
       endpointUrl,
       headers,
@@ -43,6 +47,6 @@ export async function sendRequest(
     });
     return { result, status: res.status };
   } catch (error) {
-    if (error instanceof Error) toast.error(`${error.message}`);
+    toast.error(`${error}`);
   }
 }

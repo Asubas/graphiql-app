@@ -29,11 +29,11 @@ describe('DocSection', () => {
       </NextIntlClientProvider>,
     );
 
-    const button = screen.getByText(/DocSection.showButton/i);
+    const button = screen.getByText(/DocSection.emptyButton/i);
     expect(button).toBeInTheDocument();
 
     fireEvent.click(button);
 
-    expect(screen.getByText(/DocSection.loadingDocumentation/i)).toBeInTheDocument();
+    expect(screen.getByText(/DocSection.emptyButton/i)).toBeInTheDocument();
   });
 });

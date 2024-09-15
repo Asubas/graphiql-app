@@ -1,0 +1,39 @@
+.area {
+  width: 50%;
+}
+
+.buttonBodyWrap {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.formattingButton {
+  position: static;
+}
+
+.queryButton {
+  color: #a64c01;
+  background-color: #000000;
+  border: 1px solid #f5deb3;
+  width: max-content;
+  align-self: center;
+
+  &:hover {
+    color: #f5deb3;
+  }
+}
+
+Button.queryButton {
+  color: #a64c01;
+  background-color: #000000;
+  border: 1px solid #f5deb3;
+  width: max-content;
+  align-self: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  &:hover {
+    color: #f5deb3;
+    background-color: #000000;
+  }
+}

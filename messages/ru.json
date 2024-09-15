@@ -113,7 +113,8 @@
   },
   "DocSection": {
     "showButton": "Показать документацию",
-    "loadingDocumentation": "Загрузка документации..."
+    "loadingDocumentation": "Загрузка документации...",
+    "emptyButton": "Если ответ нормальный, это должна быть ссылка на документацию"
   },
   "HistoryButton": {
     "historyButton": "История"
@@ -123,5 +124,35 @@
   },
   "TextFieldInput": {
     "textFieldButton": "Форматирование"
+  },
+  "RestContent": {
+    "unknownStatus": "Неизвестный статус",
+    "jsonError": "Некорректный JSON в теле запроса",
+    "restClientTitle": "RESTfull Клиент",
+    "methodLabel": "Метод",
+    "endPointURL": "Эндпойнт URL",
+    "headers": "Заголовки:",
+    "headerKeyLabel": "Ключ заголовка",
+    "headerValueLabel": "Значение заголовка",
+    "addHeaderButton": "Добавить заголовок",
+    "queryParameters": "Параметры запроса:",
+    "queryKeyLabel": "Ключ запроса",
+    "queryValueLabel": "Значение запроса",
+    "queryButton": "Добавить параметр запроса",
+    "hideVariablesButton": "Скрыть переменные",
+    "showVariablesButton": "Показать переменные",
+    "variablesTitle": "Переменные:",
+    "variableKeyLabel": "Ключ переменной",
+    "variableValueLabel": "Значение переменной",
+    "addVariableButton": "Добавить переменные",
+    "inputModeTitle": "Режим ввода:",
+    "textLabel": "Текст",
+    "bodyLabel": "Тело запроса",
+    "sendRequestButton": "Отправить запрос",
+    "resetFormButton": "Сбросить форму",
+    "statusText": "Статус: "
+  },
+  "BodyFieldInput": {
+    "bodyFieldButton": "Форматирование"
   }
 }

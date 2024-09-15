@@ -1,3 +1,9 @@
+.graphql {
+  h2 {
+    margin-top: 50px;
+  }
+}
+
 .graphql,
 .form {
   display: flex;
@@ -7,6 +13,7 @@
   gap: 20px;
   padding: 10px;
   width: 100%;
+  margin-top: 80px;
 
   .response-container {
     border: 1px solid white;
@@ -98,8 +105,7 @@ form {
 
       p {
         position: absolute;
-        top: 2%;
-        right: 20%;
+        top: -32px;
       }
     }
   }
@@ -134,4 +140,25 @@ form {
 
 .graphql {
   margin-top: 88px;
+}
+
+.restResponse {
+  width: 50%;
+}
+
+Button.queryButton {
+  color: #a64c01;
+  background-color: #000000;
+  border: 1px solid #f5deb3;
+  width: max-content;
+  align-self: center;
+
+  &:hover {
+    color: #f5deb3;
+    background-color: #000000;
+  }
+}
+
+div.bodyRestful {
+  width: 100%;
 }

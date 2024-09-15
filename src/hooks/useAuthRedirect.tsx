@@ -73,6 +73,7 @@ export function useAuth() {
       const idTokenResult = await user.getIdTokenResult();
       const token = idTokenResult.token;
       document.cookie = `token=${token}; path=/; max-age=3600;`;
+      localStorage.getItem('history') ? localStorage.removeItem('history') : '';
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
@@ -84,6 +85,8 @@ export function useAuth() {
         } else {
           toast.error(t('unexpectedError'));
         }
+      } else {
+        toast.error('An unexpected error occurred.');
       }
     } finally {
       setLoading(false);

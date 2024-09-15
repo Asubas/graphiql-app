@@ -81,6 +81,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ title, onSubmit }) => {
                 startIcon={<EmailRounded />}
                 error={methods.formState.errors.email?.message || ''}
                 register={methods.register('email')}
+                autocomplete={'email'}
               />
             </Grid>
             <Grid item xs={12}>

@@ -1,0 +1,65 @@
+.restCont {
+  margin: 120px auto 40px;
+  padding: 1rem;
+  width: 100%;
+  min-height: calc(100svh - 269px);
+  color: azure;
+  display: flex;
+  justify-content: space-between;
+
+  .form {
+    width: 48%;
+
+    .head {
+      margin-bottom: 32px;
+    }
+  }
+}
+
+.responseText {
+  margin-bottom: 16px;
+}
+
+.methodUrl {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.headersParams {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.customInput {
+  input,
+  label {
+    color: white;
+  }
+  fieldset {
+    border-color: white !important;
+  }
+}
+
+.customSelect {
+  .MuiOutlinedInput-root {
+    color: white;
+    fieldset {
+      border-color: white !important;
+    }
+  }
+}
+
+.radioErrorJson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.formatButton {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}

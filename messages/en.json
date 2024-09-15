@@ -113,7 +113,8 @@
   },
   "DocSection": {
     "showButton": "Show documentation",
-    "loadingDocumentation": "Loading documentation..."
+    "loadingDocumentation": "Loading documentation...",
+    "emptyButton": "If response ok, this should be link to documentation"
   },
   "HistoryButton": {
     "historyButton": "History"
@@ -123,5 +124,35 @@
   },
   "TextFieldInput": {
     "textFieldButton": "formatting"
+  },
+  "RestContent": {
+    "unknownStatus": "Unknown Status",
+    "jsonError": "Invalid JSON in request body",
+    "restClientTitle": "RESTfull Client",
+    "methodLabel": "Method",
+    "endPointURL": "Endpoint URL",
+    "headers": "Headers:",
+    "headerKeyLabel": "Header key",
+    "headerValueLabel": "Header value",
+    "addHeaderButton": "Add Header",
+    "queryParameters": "Query Parameters:",
+    "queryKeyLabel": "Query Key",
+    "queryValueLabel": "Query Value",
+    "queryButton": "Add Query Parameter",
+    "hideVariablesButton": "Hide Variables",
+    "showVariablesButton": "Show Variables",
+    "variablesTitle": "Variables:",
+    "variableKeyLabel": "Variable Key",
+    "variableValueLabel": "Variable Value",
+    "addVariableButton": "Add Variables",
+    "inputModeTitle": "Input Mode:",
+    "textLabel": "Text",
+    "bodyLabel": "Body",
+    "sendRequestButton": "Send Request",
+    "resetFormButton": "Reset Form",
+    "statusText": "Status: "
+  },
+  "BodyFieldInput": {
+    "bodyFieldButton": "formatting"
   }
 }

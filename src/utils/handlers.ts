@@ -2,7 +2,7 @@ import { encodedUrl } from '../services/requests/encodedUrl';
 
 export const handlerBlurInput = (
   endpointUrl: string,
-  headersValue: string | undefined,
+  headersValue: string | null,
   query: string,
   variables: string,
 ) => {

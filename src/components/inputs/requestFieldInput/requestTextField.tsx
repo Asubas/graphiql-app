@@ -22,7 +22,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function RequestTextField({ response }: { response: unknown }) {
+function RequestTextField({ response, client }: { response: unknown; client?: string }) {
   const t = useTranslations('RequestTextField');
   return (
     <StyledTextField
@@ -32,7 +32,7 @@ function RequestTextField({ response }: { response: unknown }) {
       size="small"
       color="warning"
       multiline
-      rows={20}
+      rows={client ? 48 : 20}
       fullWidth={true}
       value={response ? JSON.stringify(response, null, 2) : ''}
     />

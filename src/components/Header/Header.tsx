@@ -13,13 +13,12 @@ import { getLocale, setLocale } from '@/src/utils/cookies';
 export default function Header() {
   const router = useRouter();
   const { loading, user, signOut } = useAuth();
-  const token = document.cookie.includes('token=');
+  const token = typeof window !== 'undefined' && document.cookie.includes('token=');
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const locale = getLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) setShrink(true);
@@ -155,22 +154,6 @@ export default function Header() {
               </>
             )}
           </div>
-          {token && (
-            <div className={styles.btnsPrivateBurger}>
-              <PrivateBtn
-                className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}
-                label="REST Client"
-              />
-              <PrivateBtn
-                className={`btnPrivate graphql-btn ${styles.btnBurgerGraphql}`}
-                label="GraphQL Client"
-              />
-              <PrivateBtn
-                className={`btnPrivate history-btn ${styles.btnBurgerHistory}`}
-                label="History"
-              />
-            </div>
-          )}
         </nav>
       </div>
 

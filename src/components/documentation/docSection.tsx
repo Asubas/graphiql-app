@@ -5,12 +5,14 @@ import { IntrospectionQuery, buildClientSchema, getIntrospectionQuery, printSche
 import { request } from 'graphql-request';
 import { Button, Drawer } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import { toast } from 'react-toastify';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 function DocSection({ endpointSdl }: { endpointSdl: string }) {
   const [open, setOpen] = useState(false);
   const [sdl, setSDL] = useState<string>('');
+  const [isError, setIsError] = useState(true);
   const anchor: Anchor = 'right';
   const t = useTranslations('DocSection');
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -31,27 +33,39 @@ function DocSection({ endpointSdl }: { endpointSdl: string }) {
         const schema = buildClientSchema(response as IntrospectionQuery);
         const sdl = printSchema(schema);
         setSDL(sdl);
+        setIsError(false);
       } catch (error) {
-        console.error('Error fetching schema:', error);
+        setIsError(true);
+        toast.error(`Error fetching schema:${error}`);
       }
     }
     fetchSchema();
   }, [endpointSdl]);
 
   return (
-    <div>
-      <Button className={`${pages.queryButton} `} onClick={toggleDrawer(true)} variant="contained">
-        {t('showButton')}
-      </Button>
-      <Drawer
-        open={open}
-        anchor={anchor}
-        onClose={toggleDrawer(false)}
-        classes={{ paper: styles.drawer }}
-      >
-        {sdl ? DrawerList : t('loadingDocumentation')}
-      </Drawer>
-    </div>
+    <>
+      {isError ? (
+        <span className={pages.documentationShowTitle}>{t('emptyButton')}</span>
+      ) : (
+        <div>
+          <Button
+            className={`${pages.queryButton} `}
+            onClick={toggleDrawer(true)}
+            variant="contained"
+          >
+            {t('showButton')}
+          </Button>
+          <Drawer
+            open={open}
+            anchor={anchor}
+            onClose={toggleDrawer(false)}
+            classes={{ paper: styles.drawer }}
+          >
+            {sdl ? DrawerList : t('loadingDocumentation')}
+          </Drawer>
+        </div>
+      )}
+    </>
   );
 }
 

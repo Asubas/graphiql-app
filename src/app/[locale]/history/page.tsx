@@ -1,9 +1,9 @@
 'use client';
 import styles from './history.module.scss';
+import Link from 'next/link';
 import { FormDataHistory } from '@/src/interfaces/graphQlInterface';
 import { Button } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -15,7 +15,7 @@ function HistorySection() {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const target = event.currentTarget.getAttribute('data-type');
     if (target === 'restFull') {
-      router.push('/');
+      router.push('http://localhost:3000/rest');
     } else {
       router.push('http://localhost:3000/graphql');
     }
@@ -39,6 +39,19 @@ function HistorySection() {
     return date.toLocaleString('ru-RU', options).replace(',', '');
   };
 
+  const getMethodOrType = (encodedUrl: string) => {
+    if (/\/GET\/|\/POST\/|\/PUT\/|\/PATCH\/|\/DELETE\//.test(encodedUrl)) {
+      const match = encodedUrl.match(/\/(rest|GET|POST|PUT|PATCH|DELETE)\//);
+      return match ? match[1] : null;
+    }
+
+    if (encodedUrl.includes('/graphql/') || encodedUrl.includes('/GRAPHQL/')) {
+      return 'GraphQL';
+    }
+
+    return null;
+  };
+
   useEffect(() => {
     const storedHistory = localStorage.getItem('history');
     if (storedHistory) {
@@ -52,9 +65,11 @@ function HistorySection() {
         <>
           <div className={styles.historyList}>
             {history.map((element, index) => {
+              const methodOrType = getMethodOrType(element.encodedHistoryUrl);
               return (
                 <div className={styles.historyElement} key={index}>
                   <span>{formatDate(element.timestamp)}</span>
+                  {methodOrType && <span>{methodOrType}</span>}
                   <Link href={`${element.encodedHistoryUrl}`}>{element.endpointUrl}</Link>
                 </div>
               );

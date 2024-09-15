@@ -1,5 +1,4 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PrivateBtn from '@/src/components/Buttons/PrivateBtn/PrivateBtn';
 import { useRouter } from 'next/navigation';
@@ -23,5 +22,20 @@ describe('PrivateBtn Component', () => {
     expect(button).toHaveClass('custom-class');
     button.click();
     expect(mockRouter.push).toHaveBeenCalledWith('/private');
+  });
+
+  it('navigates to the correct route when clicked', () => {
+    const label = 'Private Area';
+    const path = '/private-area';
+    const mockPush = jest.fn();
+
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+
+    render(<PrivateBtn label={label} className="custom-class" path={path} />);
+
+    const button = screen.getByRole('button', { name: label });
+    fireEvent.click(button);
+
+    expect(mockPush).toHaveBeenCalledWith(path);
   });
 });

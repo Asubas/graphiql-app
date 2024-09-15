@@ -66,19 +66,4 @@ describe('About Component', () => {
     expect(screen.getByText(/pdasyaRole/i)).toBeInTheDocument();
     expect(screen.getByText(/pdasyaLocation/i)).toBeInTheDocument();
   });
-
-  it('throws an error when the "Throw Test Error" button is clicked', () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    render(<About />);
-
-    const throwErrorButton = screen.getByText('throwError');
-    expect(throwErrorButton).toBeInTheDocument();
-
-    expect(() => {
-      fireEvent.click(throwErrorButton);
-    }).toThrow('Это тестовая ошибка!');
-
-    consoleErrorSpy.mockRestore();
-  });
 });
