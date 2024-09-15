@@ -40,7 +40,6 @@ function HistorySection() {
   };
 
   const getMethodOrType = (encodedUrl: string) => {
-    console.log(encodedUrl);
     if (/\/rest\/|\/GET\/|\/POST\/|\/PUT\/|\/PATCH\/|\/DELETE\//.test(encodedUrl)) {
       const match = encodedUrl.match(/\/(rest|GET|POST|PUT|PATCH|DELETE)\//);
       return match ? match[1] : null;

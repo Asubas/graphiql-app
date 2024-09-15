@@ -10,6 +10,7 @@ import {
   DEFAULT_QUERY_JSON,
   DEFAULT_SDL_ENDPOINT,
   DEFAULT_URL_ENDPOINT,
+  statusMessages,
 } from '@/src/services/constant';
 import { DocSection } from '@/src/components/documentation/docSection';
 import { HistoryButton } from '@/src/components/history/historySection';
@@ -32,6 +33,7 @@ const GraphQLClient = ({
   const [status, setStatus] = useState<number | null>(null);
   const t = useTranslations('GraphQLContent');
   const path = usePathname();
+
   const onSubmit = async (data: FormData) => {
     const { endpointUrl, headers, query, variables } = data;
     const response = (await sendRequest(endpointUrl, headers, query, variables)) || {
@@ -73,7 +75,7 @@ const GraphQLClient = ({
 
   return (
     <section className={pages.graphql}>
-      <p>{t('pageTitle')}</p>
+      <h2>{t('pageTitle')}</h2>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={pages.form}>
           <div className={pages.endpoints}>
@@ -110,7 +112,8 @@ const GraphQLClient = ({
             />
             <div className={pages.response}>
               <p>
-                {t('status')} {status ? status : ''}
+                {t('status')} {status ? status : ''}{' '}
+                {status !== null ? statusMessages[status] || t('unknownStatus') : ''}
               </p>
               <RequestTextField response={response ? response : ''} />
             </div>
