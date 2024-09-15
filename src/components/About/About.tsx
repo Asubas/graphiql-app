@@ -4,12 +4,11 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 function ErrorThrower() {
-  throw new Error('Это тестовая ошибка!'); // Ошибка выбрасывается при рендере компонента
-  return null; // Этот код никогда не будет достигнут
+  throw new Error('Это тестовая ошибка!');
+  return null;
 }
 
 export default function About() {
-  // тест для error boundary
   const [showError, setShowError] = useState(false);
   const t = useTranslations('AboutPage');
 

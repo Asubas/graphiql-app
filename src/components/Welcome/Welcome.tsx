@@ -2,19 +2,18 @@ import AuthBtn from '../Buttons/AuthBtn/AuthBtn';
 import PrivateBtn from '../Buttons/PrivateBtn/PrivateBtn';
 import styles from './Welcome.module.scss';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/src/hooks/useAuthRedirect';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { getLocale } from '@/src/utils/cookies';
 
 export default function Welcome() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
-  const t = useTranslations('Welcome');
+  const token = document.cookie.includes('token=');
   const locale = getLocale();
+  const t = useTranslations('Welcome');
 
   const handleSignInClick = () => {
-    if (user) {
+    if (token) {
       toast.info(t('alreadySignIn'));
     } else {
       router.push(`/${locale}/signIn`);
@@ -22,7 +21,7 @@ export default function Welcome() {
   };
 
   const handleSignUpClick = () => {
-    if (user) {
+    if (token) {
       toast.info(t('alreadySignUp'));
     } else {
       router.push(`/${locale}/signUp`);
@@ -31,7 +30,7 @@ export default function Welcome() {
 
   return (
     <div className={styles.welcome}>
-      {!user ? (
+      {!token ? (
         <>
           <p className={styles.head}>{t('welcome')}</p>
           <p className={styles.disc}>{t('description')}</p>
@@ -44,8 +43,12 @@ export default function Welcome() {
         <>
           <div className={styles.btnPrivate}>
             <PrivateBtn className="btnPrivate rest-btn" label={t('restLabel')} />
-            <PrivateBtn className="btnPrivate graphql-btn" label={t('graphQLLabel')} />
-            <PrivateBtn className="btnPrivate history-btn" label={t('history')} />
+            <PrivateBtn
+              className="btnPrivate graphql-btn"
+              label={t('graphQLLabel')}
+              path="graphql"
+            />
+            <PrivateBtn className="btnPrivate history-btn" label={t('history')} path="history" />
           </div>
         </>
       )}

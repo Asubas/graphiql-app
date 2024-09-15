@@ -4,7 +4,6 @@ import { routing } from '@/src/i18n/routing';
 import enMessages from '../../../messages/en.json';
 import ruMessages from '../../../messages/ru.json';
 
-// Мокаем методы
 jest.mock('next/navigation', () => ({
   notFound: jest.fn(),
 }));

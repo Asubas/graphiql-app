@@ -88,5 +88,40 @@
     "manyRequests": "Слишком много запросов в одно и то же время. Пожалуйста, попробуйте позже.",
     "userLoggedOut": "Вы успешно вышли из системы",
     "logOutFail": "Не удалось выйти из системы. Пожалуйста, попробуйте еще раз."
+  },
+  "GraphQLContent": {
+    "errorMessage": "Ошибка загрузки",
+    "pageTitle": "GraphQL Клиент",
+    "endpointUrlLabel": "Эндпойнт Url",
+    "sdlUrlLabel": "SDL Url:",
+    "queryLabel": "Запрос:",
+    "status": "Статус",
+    "addVariablesButton": "Добавить переменные",
+    "addHeaderButton": "Добавить заголовки",
+    "docsTitleText": "Если ответ нормальный, это должна быть ссылка на документацию",
+    "submitButton": "Отправить",
+    "variablesLabel": "Переменные (JSON формат):",
+    "variablesPlaceholder": "переменные",
+    "headersLabel": "Заголовки (JSON формат):",
+    "headersPlaceholder": "заголовки"
+  },
+  "History": {
+    "clearButton": "Очистить историю",
+    "historyDescription": "Вы еще не выполнили ни одного запроса. Попробуйте эти варианты:",
+    "graphiQLButton": "GraphiQl",
+    "restFullApi": "RestFullApi"
+  },
+  "DocSection": {
+    "showButton": "Показать документацию",
+    "loadingDocumentation": "Загрузка документации..."
+  },
+  "HistoryButton": {
+    "historyButton": "История"
+  },
+  "RequestTextField": {
+    "textFieldLabel": "Ответ: "
+  },
+  "TextFieldInput": {
+    "textFieldButton": "Форматирование"
   }
 }

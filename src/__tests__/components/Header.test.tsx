@@ -76,7 +76,7 @@ describe('Header Component', () => {
       user: { displayName: 'John Doe' },
       signOut: jest.fn(),
     });
-
+    document.cookie = 'token=someToken';
     render(<Header />);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -85,7 +85,14 @@ describe('Header Component', () => {
     expect(screen.queryByTestId('signup-btn')).not.toBeInTheDocument();
   });
 
-  it('changes locale when clicking on language radio buttons', () => {
+  test('renders private buttons in the menu when user is logged in', () => {
+    const mockUseAuth = useAuth as jest.Mock;
+    mockUseAuth.mockReturnValue({
+      loading: false,
+      user: { displayName: 'John Doe' },
+      signOut: jest.fn(),
+    });
+    document.cookie = 'token=someToken';
     render(<Header />);
 
     const enRadio = screen.getByLabelText('EN');

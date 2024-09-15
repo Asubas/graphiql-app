@@ -66,7 +66,7 @@ describe('Welcome Component', () => {
   it('renders private buttons when user is logged in', () => {
     const mockUseAuth = useAuth as jest.Mock;
     mockUseAuth.mockReturnValue({ user: { displayName: 'John Doe' } });
-
+    document.cookie = 'token=someToken';
     render(<Welcome />);
 
     expect(screen.getByText('restLabel')).toBeInTheDocument();
@@ -76,6 +76,8 @@ describe('Welcome Component', () => {
 
   it('navigates to sign-in page when Sign In button is clicked (user not logged in)', () => {
     const mockUseAuth = useAuth as jest.Mock;
+    document.cookie = 'token=someToken; max-age=0';
+
     mockUseAuth.mockReturnValue({ user: null });
 
     render(<Welcome />);
@@ -88,6 +90,7 @@ describe('Welcome Component', () => {
 
   it('navigates to sign-up page when Sign Up button is clicked (user not logged in)', () => {
     const mockUseAuth = useAuth as jest.Mock;
+    document.cookie = 'token=someToken; max-age=0';
     mockUseAuth.mockReturnValue({ user: null });
 
     render(<Welcome />);

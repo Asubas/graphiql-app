@@ -13,7 +13,7 @@ import { getLocale, setLocale } from '@/src/utils/cookies';
 export default function Header() {
   const router = useRouter();
   const { loading, user, signOut } = useAuth();
-
+  const token = document.cookie.includes('token=');
   const [shrink, setShrink] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const locale = getLocale();
@@ -27,7 +27,6 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -131,7 +130,7 @@ export default function Header() {
             <label htmlFor="option-two">RU</label>
           </div>
           <div className={`buttonWrap ${styles.headerBtn}`}>
-            {!loading && !user && (
+            {!loading && !token && (
               <>
                 <HeaderAuthBtn
                   className="btnHeadSignin"
@@ -145,7 +144,7 @@ export default function Header() {
                 />
               </>
             )}
-            {user && (
+            {user && token && (
               <>
                 <span className={styles.userName}>{user.displayName || 'User'}</span>
                 <HeaderAuthBtn
@@ -156,7 +155,7 @@ export default function Header() {
               </>
             )}
           </div>
-          {user && (
+          {token && (
             <div className={styles.btnsPrivateBurger}>
               <PrivateBtn
                 className={`btnPrivate rest-btn ${styles.btnBurgerRest}`}

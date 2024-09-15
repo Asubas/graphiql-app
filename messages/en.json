@@ -88,5 +88,40 @@
     "manyRequests": "Too many requests at the same time. Please try later",
     "userLoggedOut": "You have successfully logged out",
     "logOutFail": "Failed to log out. Please try again"
+  },
+  "GraphQLContent": {
+    "errorMessage": "Error fetch",
+    "pageTitle": "GraphQL Client",
+    "endpointUrlLabel": "Endpoint Url",
+    "sdlUrlLabel": "SDL Url:",
+    "queryLabel": "Query:",
+    "status": "Status",
+    "addVariablesButton": "Add variables",
+    "addHeaderButton": "Add headers",
+    "docsTitleText": "If response ok, this should be link to documentation",
+    "submitButton": "Submit",
+    "variablesLabel": "Variables (JSON format):",
+    "variablesPlaceholder": "variables",
+    "headersLabel": "Headers (JSON format):",
+    "headersPlaceholder": "headers"
+  },
+  "History": {
+    "clearButton": "Clear History",
+    "historyDescription": "You haven't executed any requests yet. Try those options:",
+    "graphiQLButton": "GraphiQl",
+    "restFullApi": "RestFullApi"
+  },
+  "DocSection": {
+    "showButton": "Show documentation",
+    "loadingDocumentation": "Loading documentation..."
+  },
+  "HistoryButton": {
+    "historyButton": "History"
+  },
+  "RequestTextField": {
+    "textFieldLabel": "Response: "
+  },
+  "TextFieldInput": {
+    "textFieldButton": "formatting"
   }
 }
